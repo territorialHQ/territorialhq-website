@@ -1,0 +1,104 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Journal.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="text-4xl mb-5">Journal</h1>
+<h2 class="text-2xl mb-5">Create</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Image" class="control-label"></label>
+        <input type="file" name="imageFile" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Subtitle" class="control-label"></label>
+        <input asp-for="Subtitle" class="form-control" />
+        <span asp-validation-for="Subtitle" class="text-danger"></span>
+    </div>
+
+    <div class="flex flex-row gap-4">
+        <div class="form-group basis-1/2">
+            <label asp-for="PublishFrom" class="control-label"></label>
+            <div class="relative w-full">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                </div>
+                <input asp-for="PublishFrom" datepicker type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+            </div>
+            <span asp-validation-for="PublishFrom" class="text-danger"></span>
+        </div>
+        <div class="form-group basis-1/2">
+            <label asp-for="PublishTo" class="control-label"></label>
+            <div class="relative w-full">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                </div>
+                <input asp-for="PublishTo" datepicker type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+            </div>
+            <span asp-validation-for="PublishTo" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Teaser" class="control-label"></label>
+        <textarea asp-for="Teaser" class="form-control" rows="6"></textarea>
+        <span asp-validation-for="Teaser" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Body" class="control-label"></label>
+        <textarea asp-for="Body" class="form-control" rows="10"></textarea>
+        <span asp-validation-for="Body" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Tags" class="control-label"></label>
+        <input asp-for="Tags" class="form-control" />
+        <span asp-validation-for="Tags" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                <input asp-for="IsSticky" /> @Html.DisplayNameFor(model => model.IsSticky)
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn-admin-primary">Create</button>
+    </div>
+</form>
+
+<div>
+    <a asp-page="Index">Back to list</a>
+</div>
+
+@section Styles {
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 400px;
+        }
+    </style>
+}
+@section Scripts {
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js"></script>
+    <script src="/js/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#Body'), {
+                simpleUpload: {
+                    uploadUrl: '/Ajax/Uploads'
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+}

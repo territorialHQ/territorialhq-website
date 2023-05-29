@@ -1,0 +1,13 @@
+{
+  "name": "territorialhq",
+  "version": "1.0.0",
+  "description": "TerritorialHQ Website",
+  "scripts": {
+    "build-css": "tailwind build -i wwwroot/css/site.css -o wwwroot/dist/site.css",
+    "build-admin-css": "tailwind build -i wwwroot/css/admin.css -o wwwroot/dist/admin.css"
+  },
+  "author": "Theriel",
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  }
+}

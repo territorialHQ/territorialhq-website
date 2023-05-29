@@ -1,0 +1,59 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Clans.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Clans</h1>
+
+<h2>Delete</h2>
+
+<h4 class="text-danger">Are you sure you wish to delete this record? The operation will be logged and cannot be undone.</h4>
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Clan.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Clan.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Clan.GuildId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Clan.GuildId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Clan.LogoFile)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Clan.LogoFile)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Clan.BannerFile)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Clan.BannerFile)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Clan.DiscordLink)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Clan.DiscordLink)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Clan.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Clan.Description)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="Clan.Id" />
+        <button type="submit" class="btn btn-danger"><i class="icon-trash"></i> Delete </button>
+        <p class="mt-20"><a asp-page="./Index">Cancel</a></p>
+    </form>
+</div>

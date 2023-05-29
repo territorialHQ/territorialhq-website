@@ -1,0 +1,47 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.ContentPages.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Content Pages</h1>
+
+<h2>Delete</h2>
+
+<h4 class="text-danger">Are you sure you wish to delete this record? The operation will be logged and cannot be undone.</h4>
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ContentPage.DisplayName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContentPage.DisplayName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContentPage.Content)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContentPage.Content)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContentPage.SidebarContent)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContentPage.SidebarContent)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContentPage.BannerImage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContentPage.BannerImage)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="ContentPage.Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <p class="mt-20"><a asp-page="./Index">Cancel</a></p>
+    </form>
+</div>

@@ -1,0 +1,60 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.ContentPages.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<h1 class="text-4xl mb-5">Content Pages</h1>
+<h2 class="text-2xl mb-5">Create</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="DisplayName" class="control-label"></label>
+        <input asp-for="DisplayName" class="form-control" />
+        <span asp-validation-for="DisplayName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Banner Image</label>
+        <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Content" class="control-label"></label>
+        <textarea asp-for="Content" class="form-control" rows="15"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="SidebarContent" class="control-label"></label>
+        <textarea asp-for="SidebarContent" class="form-control" rows="15"></textarea>
+        <span asp-validation-for="SidebarContent" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn-admin-primary">Create</button>
+    </div>
+</form>
+
+@section Scripts {
+
+    <script src="/js/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#Content'), {
+                simpleUpload: {
+                    uploadUrl: '/Ajax/Uploads'
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        ClassicEditor
+            .create(document.querySelector('#SidebarContent'), {
+                simpleUpload: {
+                    uploadUrl: '/Ajax/Uploads'
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+}

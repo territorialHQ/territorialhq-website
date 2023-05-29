@@ -1,0 +1,95 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Clans.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-4xl mb-5">Clans</h1>
+
+@if (User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-page="Create" class="btn-admin-primary mb-6">
+            <svg class="inline-block w-6 h-6" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Create new Clan
+        </a>
+    </p>
+}
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="admin-table">
+        <thead class="">
+            <tr>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Clan[0].Name)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Clan[0].GuildId)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Clan[0].LogoFile)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Clan[0].BannerFile)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Clan[0].DiscordLink)
+                </th>
+                <th scope="col" class="">
+                    @Html.DisplayNameFor(model => model.Clan[0].IsPublished)
+                </th>
+                <th scope="col" class="">
+                    @Html.DisplayNameFor(model => model.Clan[0].InReview)
+                </th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Clan)
+            {
+                if (!User.IsInRole("Administrator") && !item.ClanUserRelations.Any(r => r.User.UserName == User.Identity.Name))
+                    continue;
+
+                <tr class="">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GuildId)
+                    </td>
+                    <td>
+                        @if (item.LogoFile != null)
+                        {
+                            <img src="/Data/Uploads/System/@item.LogoFile" style="max-width: 120px;">
+                        }
+                    </td>
+                    <td>
+                        @if (item.BannerFile != null)
+                        {
+                            <img src="/Data/Uploads/System/@item.BannerFile" style="max-width: 120px;">
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiscordLink)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsPublished)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InReview)
+                    </td>
+                    <td style="width: 1%; white-space: nowrap">
+                        <a class="btn-admin-secondary-sm" asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                        @if (User.IsInRole("Administrator") && item.ClanUserRelations.Count == 0)
+                        {
+                            <a class="btn-admin-danger-sm" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

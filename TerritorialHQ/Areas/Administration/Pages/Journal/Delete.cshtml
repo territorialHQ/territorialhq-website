@@ -1,0 +1,79 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Journal.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1 class="text-4xl mb-5">Journal</h1>
+
+
+<h2>Delete</h2>
+
+
+<h4 class="text-danger">Are you sure you wish to delete this record? The operation will be logged and cannot be undone.</h4>
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.JournalArticle.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JournalArticle.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.JournalArticle.Subtitle)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JournalArticle.Subtitle)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.JournalArticle.PublishFrom)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JournalArticle.PublishFrom)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.JournalArticle.PublishTo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JournalArticle.PublishTo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.JournalArticle.Teaser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JournalArticle.Teaser)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.JournalArticle.Body)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JournalArticle.Body)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.JournalArticle.Image)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JournalArticle.Image)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.JournalArticle.Tags)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JournalArticle.Tags)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.JournalArticle.IsSticky)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.JournalArticle.IsSticky)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="JournalArticle.Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <p class="mt-20"><a asp-page="./Index">Cancel</a></p>
+    </form>
+</div>

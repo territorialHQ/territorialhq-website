@@ -1,0 +1,56 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Clans.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="text-4xl mb-5">Clans</h1>
+
+
+<h2 class="text-2xl mb-5">Create</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="GuildId" class="control-label"></label>
+        <input asp-for="GuildId" class="form-control" />
+        <span asp-validation-for="GuildId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LogoFile" class="control-label"></label>
+        <input type="file" name="fileLogo" accept=".jpg,.jpeg,.gif,.png" />
+    </div>
+    <div class="form-group">
+        <label asp-for="BannerFile" class="control-label"></label>
+        <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" />
+    </div>
+    <div class="form-group">
+        <label asp-for="DiscordLink" class="control-label"></label>
+        <input asp-for="DiscordLink" class="form-control" />
+        <span asp-validation-for="DiscordLink" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="12"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn-admin-primary">Create</button>
+    </div>
+</form>
+
+<div>
+    <a asp-page="Index">Back to list</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

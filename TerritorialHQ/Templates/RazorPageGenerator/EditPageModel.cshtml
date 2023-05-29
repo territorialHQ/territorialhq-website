@@ -1,0 +1,189 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@using System.Collections.Generic
+@using System.Linq
+using AutoMapper;
+using TerritorialHQ.Models;
+using TerritorialHQ.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+@{
+    var primaryKeyName = Model.ModelMetadata.PrimaryKeys[0].PropertyName;
+    var primaryKeyShortTypeName = Model.ModelMetadata.PrimaryKeys[0].ShortTypeName;
+    var primaryKeyType = Model.ModelMetadata.PrimaryKeys[0].TypeName;
+    var primaryKeyNullableTypeName = GetNullableTypeName(primaryKeyType, primaryKeyShortTypeName);
+    var lambdaVar = Model.ModelVariable[0];
+    var entitySetName = Model.ModelMetadata.EntitySetName;
+    var relatedProperties = new Dictionary<string, dynamic>();
+    foreach (var nav in Model.ModelMetadata.Navigations)
+    {
+        relatedProperties.Add(nav.AssociationPropertyName, nav);
+
+    }
+    var inlineIncludes = "";
+    foreach (var property in relatedProperties.Values)
+    {
+        inlineIncludes += string.Format("{0}                .Include({1} => {1}.{2})", Environment.NewLine, lambdaVar, property.AssociationPropertyName);
+    }
+
+    foreach (var namespaceName in Model.RequiredNamespaces)
+    {
+        @:using @namespaceName;
+    }
+}
+
+namespace @Model.NamespaceName
+{
+    public class @Model.PageModelClassName : PageModel
+    {
+
+    private readonly IMapper _mapper;
+    private readonly LoggerService _logger;
+    private readonly @(Model.ViewDataTypeShortName)Service _service;
+    @foreach (var nav in Model.ModelMetadata.Navigations)
+    {
+        @:private readonly @(nav.AssociationPropertyName)Service _@(nav.AssociationPropertyName.ToString().ToLower())Service;
+    }
+
+    public @(Model.PageModelClassName)(
+    IMapper mapper, LoggerService logger,
+    @(Model.ViewDataTypeShortName)Service service @(Model.ModelMetadata.Navigations.Length > 0 ? "," : "")
+    @foreach (var nav in Model.ModelMetadata.Navigations)
+    {
+        @:@(nav.AssociationPropertyName)Service @(nav.AssociationPropertyName.ToString().ToLower())Service @(nav == Model.ModelMetadata.Navigations[Model.ModelMetadata.Navigations.Length - 1] ? "" : ", ")
+    }
+    )
+    {
+    _mapper = mapper;
+    _logger = logger;
+    _service = service;
+    @foreach (var nav in Model.ModelMetadata.Navigations)
+    {
+        @:_@(nav.AssociationPropertyName.ToString().ToLower())Service = @(nav.AssociationPropertyName.ToString().ToLower())Service;
+    }
+    }
+
+    @*[BindProperty]
+        public @Model.ViewDataTypeShortName @Model.ViewDataTypeShortName { get; set; }*@
+
+    @{
+        foreach (var property in Model.ModelMetadata.Properties)
+        {
+            @:[BindProperty]
+            @:[Display(Name=" ")]
+            @:public @property.ShortTypeName @property.PropertyName { get; set; }
+
+        }
+
+        @*foreach (var property in relatedProperties.Values)
+        {
+            @:[BindProperty]
+            @:[Display(Name="")]
+            @:public @property.ShortTypeName @property.AssociationPropertyName { get; set; }
+        }*@
+    }
+
+    public async Task<IActionResult> OnGetAsync(@primaryKeyNullableTypeName id)
+        {
+        if (id == null)
+        {
+        return NotFound();
+        }
+
+        var item = await _service.FindAsync(id);
+        if (item == null)
+        {
+        return NotFound();
+        }
+
+        _mapper.Map(item, this);
+
+        @*@{
+            foreach (var property in relatedProperties.Values)
+            {
+                @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
+            }
+        }*@
+        @{
+        foreach (var property in relatedProperties.Values)
+        {
+            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(await _@(property.EntitySetName.ToString().ToLower())Service.GetAllAsync(), "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
+        }
+        }
+        return Page();
+        }
+
+        public async Task<IActionResult>
+            OnPostAsync()
+            {
+            if (!ModelState.IsValid)
+            {
+            return Page();
+            }
+
+            var item = await _service.FindAsync(this.Id);
+            _mapper.Map(this, item);
+
+            _service.Update(item);
+
+            try
+            {
+            await _service.SaveChangesAsync(User);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+            var exists = await @(Model.ModelTypeName)Exists(@primaryKeyName);
+            if (!exists)
+            {
+            return NotFound();
+            }
+            else
+            {
+            throw;
+            }
+            }
+
+            return RedirectToPage("./Index");
+            }
+
+            private async Task<bool>
+                @(Model.ModelTypeName)Exists(@primaryKeyShortTypeName id)
+                {
+                return await _service.ExistsAsync(id);
+                }
+                }
+                }
+                @functions
+                {
+                // This function converts the primary key short type name to its nullable equivalent when possible. This is required to make
+                // sure that an HTTP 400 error is thrown when the user tries to access the edit, delete, or details action with null values.
+                string GetNullableTypeName(string typeName, string shortTypeName)
+                {
+                    // The exceptions are caught because if for any reason the type is user defined, then the short type name will be used.
+                    // In that case the user will receive a server error if null is passed to the edit, delete, or details actions.
+                    Type primaryKeyType = null;
+                    try
+                    {
+                        primaryKeyType = Type.GetType(typeName);
+                    }
+                    catch
+                    {
+                    }
+                    if (primaryKeyType != null && (!Microsoft.VisualStudio.Web.CodeGeneration.Templating.TypeUtilities.IsNullable(primaryKeyType) || IsGuid(typeName)))
+                    {
+                        return shortTypeName + "?";
+                    }
+                    return shortTypeName;
+                }
+
+                bool IsGuid(string typeName)
+                {
+                    return String.Equals("System.Guid", typeName, StringComparison.OrdinalIgnoreCase);
+                }
+                }

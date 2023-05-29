@@ -1,0 +1,56 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Navigation.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="text-4xl mb-5">Navigation</h1>
+<h2 class="text-2xl mb-5">Create</h2>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ParentId" />
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Slug" class="control-label"></label>
+        <input asp-for="Slug" class="form-control" />
+        <span asp-validation-for="Slug" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                <input asp-for="Public" /> @Html.DisplayNameFor(model => model.Public)
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Order" class="control-label"></label>
+        <input asp-for="Order" class="form-control" />
+        <span asp-validation-for="Order" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ContentPageId" class="control-label"></label>
+        <select asp-for="ContentPageId" class="form-control" asp-items="ViewBag.ContentPageId">
+            <option value="">(None)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExternalUrl" class="control-label"></label>
+        <input asp-for="ExternalUrl" class="form-control" />
+        <span asp-validation-for="ExternalUrl" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn-admin-primary">Create</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,78 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Journal.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-4xl mb-5">Journal</h1>
+
+@if (User.IsInRole("Administrator") || User.IsInRole("Journalist"))
+{
+    <p>
+        <a asp-page="Create" class="btn-admin-primary mb-6">
+            <svg class="inline-block w-6 h-6" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Create new article
+        </a>
+    </p>
+}
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JournalArticle[0].Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JournalArticle[0].Subtitle)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JournalArticle[0].IsPublished)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JournalArticle[0].PublishFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JournalArticle[0].PublishTo)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.JournalArticle)
+            {
+                <tr>
+                    <td style="width: 1%">
+                        @if (item.Image != null)
+                        {
+                            <img src="/Data/Uploads/System/@item.Image" style="max-width: 120px;">
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subtitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsPublished)
+                    </td>
+                    <td>
+                        @string.Format("{0:dd MMMM yyyy}", item.PublishFrom)
+                    </td>
+                    <td>
+                        @string.Format("{0:dd MMMM yyyy}", item.PublishTo)
+                    </td>
+                    <td style="width: 1%; white-space: nowrap">
+                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn-admin-secondary-sm">Edit</a>
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn-admin-danger-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

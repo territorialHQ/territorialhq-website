@@ -1,0 +1,112 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@using System.Collections.Generic
+@using System.Linq
+using AutoMapper;
+using TerritorialHQ.Models;
+using TerritorialHQ.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+@{
+    var entitySetName = Model.ModelMetadata.EntitySetName;
+    var entitySetVar = Model.EntitySetVariable ??
+        (String.IsNullOrEmpty(entitySetName)
+            ? entitySetName
+            : (entitySetName.Substring(0, length: 1).ToLowerInvariant() + entitySetName.Substring(1)));
+
+    var relatedProperties = new Dictionary<string, dynamic>();
+    foreach (var nav in Model.ModelMetadata.Navigations)
+    {
+        relatedProperties.Add(nav.AssociationPropertyName, nav);
+    }
+
+    foreach (var namespaceName in Model.RequiredNamespaces)
+    {
+        @:using @namespaceName;
+    }
+}
+
+namespace @Model.NamespaceName
+{
+    public class @Model.PageModelClassName : PageModel
+    {
+    private readonly IMapper _mapper;
+    private readonly LoggerService _logger;
+    private readonly @(Model.ViewDataTypeShortName)Service _service;
+    @foreach (var nav in Model.ModelMetadata.Navigations)
+    {
+        @:private readonly @(nav.AssociationPropertyName)Service _@(nav.AssociationPropertyName.ToString().ToLower())Service;
+    }
+
+    public @(Model.PageModelClassName)(
+        IMapper mapper, LoggerService logger,
+        @(Model.ViewDataTypeShortName)Service service @(Model.ModelMetadata.Navigations.Length > 0 ? "," : "")
+        @foreach (var nav in Model.ModelMetadata.Navigations)
+        {
+        @:@(nav.AssociationPropertyName)Service @(nav.AssociationPropertyName.ToString().ToLower())Service @(nav == Model.ModelMetadata.Navigations[Model.ModelMetadata.Navigations.Length - 1] ? "" : ", ")
+        }
+    )
+    {
+    _mapper = mapper;
+    _logger = logger;
+    _service = service;
+    @foreach (var nav in Model.ModelMetadata.Navigations)
+    {
+        @:_@(nav.AssociationPropertyName.ToString().ToLower())Service = @(nav.AssociationPropertyName.ToString().ToLower())Service;
+    }
+    }
+
+    @*[BindProperty]
+        public @Model.ViewDataTypeShortName @Model.ViewDataTypeShortName { get; set; }*@
+
+    @{
+        foreach (var property in Model.ModelMetadata.Properties)
+        {
+            @:[BindProperty]
+            @:[Display(Name=" ")]
+            @:public @property.ShortTypeName @property.PropertyName { get; set; }
+
+        }
+
+        @*foreach (var property in relatedProperties.Values)
+        {
+            @:[BindProperty]
+            @:[Display(Name="")]
+            @:public @property.ShortTypeName @property.AssociationPropertyName { get; set; }
+        }*@
+
+    }
+
+    public async Task<IActionResult> OnGet()
+    {
+    @{
+        foreach (var property in relatedProperties.Values)
+        {
+            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(await _@(property.EntitySetName.ToString().ToLower())Service.GetAllAsync(), "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
+        }
+    }
+    return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+        {
+        if (!ModelState.IsValid)
+        {
+        return Page();
+        }
+
+        var item = new @(Model.ViewDataTypeShortName)();
+        _mapper.Map(this, item);
+
+        _service.Add(item);
+        await _service.SaveChangesAsync(User);
+
+        return RedirectToPage("./Index");
+        }
+        }
+        }

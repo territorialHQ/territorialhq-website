@@ -1,0 +1,179 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Clans.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1 class="text-4xl mb-5">Clans</h1>
+<h2 class="text-2xl mb-5">Edit</h2>
+
+<div class="flex flex-row">
+    <div class="basis-3/4">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="LogoFile" />
+            <input type="hidden" asp-for="BannerFile" />
+
+            @if (User.IsInRole("Administrator"))
+            {
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GuildId" class="control-label"></label>
+                    <input asp-for="GuildId" class="form-control" />
+                    <span asp-validation-for="GuildId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="IsPublished" /> @Html.DisplayNameFor(model => model.IsPublished)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="InReview" /> @Html.DisplayNameFor(model => model.InReview)
+                        </label>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" disabled />
+                    <input type="hidden" asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GuildId" class="control-label"></label>
+                    <input asp-for="GuildId" class="form-control" disabled />
+                    <input type="hidden" asp-for="GuildId" class="form-control" />
+                    <span asp-validation-for="GuildId" class="text-danger"></span>
+                </div>
+            }
+
+            <div class="flex flex-row">
+                <div class="basis-1/2 form-group">
+                    <label asp-for="LogoFile" class="control-label"></label>
+                    @if (!string.IsNullOrEmpty(Model.LogoFile))
+                    {
+                        <img src="/Data/Uploads/System/@Model.LogoFile" style="max-height: 150px" class="block mb-2" />
+                    }
+                    <input type="file" name="fileLogo" accept=".jpg,.jpeg,.gif,.png" />
+                    <label class="block mt-2"><input type="checkbox" asp-for="RemoveLogo" /> Remove logo image on save</label>
+                </div>
+                <div class="basis-1/2  form-group">
+                    <label asp-for="BannerFile" class="control-label"></label>
+                    @if (!string.IsNullOrEmpty(Model.BannerFile))
+                    {
+                        <img src="/Data/Uploads/System/@Model.BannerFile" style="max-height: 150px" class="block mb-2" />
+                    }
+                    <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" />
+                    <label class="block mt-2"><input type="checkbox" asp-for="RemoveBanner" /> Remove banner image on save</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DiscordLink" class="control-label"></label>
+                <input asp-for="DiscordLink" class="form-control" />
+                <span asp-validation-for="DiscordLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="12"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn-admin-primary">Save</button>
+                <a asp-page="Details" class="btn-admin-secondary" asp-route-id="@Model.Id">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="basis-1/4">
+        <div class="ml-6 pl-6 border-l-2 border-l-gray-200">
+            @if (!User.IsInRole("Administrator"))
+            {
+                if (Model.IsPublished)
+                {
+                    <div class="p-3 bg-green-200 text-green-800 rounded text-sm mb-4">
+                        <p class="font-bold mb-3">This page is published.</p>
+                        <p class="mb-3">Saving changes to this page will unpublish the clan listing temporarily until it has been reviewed by an administrator.</p>
+                        <p class="mb-3">This is a security measure to ensure that no content is published that violates TerritorialHQ's community guidelines.</p>
+                        <p><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                    </div>
+                }
+                else
+                {
+                    if (Model.InReview)
+                    {
+                        <div class="p-3 mb-3 bg-blue-100 text-blue-800 rounded text-sm">
+                            <p class="font-bold mb-3">This page is currently in rewiew.</p>
+                            <p class="mb-3">
+                                An administrator will review and publish the listing shortly.
+                            </p>
+                            <p class="mb-3">
+                                You may edit the page at any time. This will stop the review process until you mark the listing for review again.
+                            </p>
+                            <p><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3 bg-yellow-100 text-yellow-800 rounded text-sm">
+                            <p class="font-bold mb-3">This page is currently unlisted.</p>
+                            <p class="pb-3">
+                                When you are done and happy with your edits, mark your clan listing for review on the Details page to have in published.
+                            </p>
+                            <p><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                        </div>
+                    }
+
+                }
+            }
+        </div>
+    </div>
+
+</div>
+
+<dialog id="reviewInfo" class="max-w-[800px]">
+    <h1 class="text-2xl mb-5">Review System for clan listings</h1>
+    <p class="mb-3">
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    </p>
+    <p class="mb-3">
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    </p>
+    <p class="mb-3">
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    </p>
+    <form method="dialog">
+        <p>
+            <button class="btn-admin-secondary">Close</button>
+        </p>
+    </form>
+</dialog>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

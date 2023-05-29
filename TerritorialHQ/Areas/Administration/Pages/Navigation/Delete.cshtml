@@ -1,0 +1,41 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Navigation.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Navigation</h1>
+
+<h2>Delete</h2>
+
+<h4 class="text-danger">Are you sure you wish to delete this record? The operation will be logged and cannot be undone.</h4>
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NavigationEntry.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NavigationEntry.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NavigationEntry.Slug)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NavigationEntry.Slug)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NavigationEntry.Public)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NavigationEntry.Public)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="NavigationEntry.Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <p class="mt-20"><a asp-page="./Index">Cancel</a></p>
+    </form>
+</div>
