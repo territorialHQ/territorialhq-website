@@ -39,10 +39,7 @@
                     @Html.DisplayNameFor(model => model.Clan[0].DiscordLink)
                 </th>
                 <th scope="col" class="">
-                    @Html.DisplayNameFor(model => model.Clan[0].IsPublished)
-                </th>
-                <th scope="col" class="">
-                    @Html.DisplayNameFor(model => model.Clan[0].InReview)
+                    Status
                 </th>
                 <th scope="col"></th>
             </tr>
@@ -76,10 +73,18 @@
                         @Html.DisplayFor(modelItem => item.DiscordLink)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.IsPublished)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.InReview)
+                        @if (item.InReview)
+                        {
+                            <span class="py-1 px-2 bg-yellow-500 text-white text-sm rounded uppercase">Pending Review</span>
+                        }
+                        else if (item.IsPublished)
+                        {
+                            <span class="py-1 px-2 bg-green-500 text-white text-sm rounded uppercase">Published</span>
+                        }
+                        else
+                        {
+                            <span class="py-1 px-2 bg-gray-400 text-white text-sm rounded uppercase">Not Published</span>
+                        }
                     </td>
                     <td style="width: 1%; white-space: nowrap">
                         <a class="btn-admin-secondary-sm" asp-page="./Details" asp-route-id="@item.Id">Details</a>

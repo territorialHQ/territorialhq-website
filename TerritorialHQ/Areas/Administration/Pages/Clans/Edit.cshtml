@@ -107,8 +107,7 @@
                 {
                     <div class="p-3 bg-green-200 text-green-800 rounded text-sm mb-4">
                         <p class="font-bold mb-3">This page is published.</p>
-                        <p class="mb-3">Saving changes to this page will unpublish the clan listing temporarily until it has been reviewed by an administrator.</p>
-                        <p class="mb-3">This is a security measure to ensure that no content is published that violates TerritorialHQ's community guidelines.</p>
+                        <p class="mb-3">Saving changes to this page will unpublish the clan listing until it has been reviewed again by an administrator.</p>
                         <p><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
                     </div>
                 }
@@ -145,29 +144,36 @@
 
 </div>
 
-<dialog id="reviewInfo" class="max-w-[800px]">
+<dialog id="reviewInfo" class="max-w-[800px] p-8 shadow-xl">
     <h1 class="text-2xl mb-5">Review System for clan listings</h1>
     <p class="mb-3">
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        Since the content you create for your clan will be publicly visible, we must ensure that the text and images you provide do not violate the community standards of
+        TerritorialHQ. This means that each clan listing will undergo a quick check before becoming publicly visible. For detailed information check the <a href="#" class="underline">community standards</a>.
+    </p>
+    <div class="mb-3 flex flex-row gap-5">
+        <div class="basis-1/2">
+            <p class="mb-3"><strong>These images are not allowed:</strong></p>
+            <ul class="ml-5 list-disc">
+                <li class="mb-2">Images containing NSFW content, violence, hate speech, symbols of extremist or terrorist organizations or copyrighted material</li>
+            </ul>
+        </div>
+        <div class="basis-1/2">
+            <p class="mb-3"><strong>These texts are now allowed:</strong></p>
+            <ul class="ml-5 list-disc">
+                <li class="mb-2">Texts containing NSFW content, graphic description of violence, hate speech, political messages, misinformation or copyrighted material</li>
+            </ul>
+        </div>
+    </div>
+    <p class="mb-3">
+        Other than that, our administrators <strong>will not interfere with your clan listing</strong>. You are free to describe your clan in any way you like.
     </p>
     <p class="mb-3">
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-    </p>
-    <p class="mb-3">
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        In case your listing can't be published, we will try to get in touch with you via Discord, let you know the reasons for the rejection and give you advice on how to change
+        the content to have it pass the review.
     </p>
     <form method="dialog">
-        <p>
-            <button class="btn-admin-secondary">Close</button>
+        <p class="text-center">
+            <button class="btn-admin-secondary w-full mx-auto">Close</button>
         </p>
     </form>
 </dialog>
