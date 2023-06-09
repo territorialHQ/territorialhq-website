@@ -7,19 +7,20 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Journal
 {
-    [Authorize(Roles ="Administrator, Journalist")]
+    [Authorize(Roles = "Administrator, Journalist")]
     public class EditModel : PageModel
     {
 
         private readonly IMapper _mapper;
         private readonly LoggerService _logger;
-        private readonly JournalArticleService _service;
+        private readonly ApisService _service;
         private readonly IWebHostEnvironment _env;
 
-        public EditModel(IMapper mapper, LoggerService logger, JournalArticleService service, IWebHostEnvironment env)
+        public EditModel(IMapper mapper, LoggerService logger, ApisService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
             _logger = logger;
@@ -80,7 +81,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 return NotFound();
             }
 
-            var item = await _service.FindAsync(id);
+            var item = await _service.FindAsync<JournalArticle>("JournalArticle", id);
             if (item == null)
             {
                 return NotFound();
@@ -99,7 +100,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 return Page();
             }
 
-            var item = await _service.FindAsync(this.Id);
+            var item = await _service.FindAsync<JournalArticle>("JournalArticle", this.Id);
             _mapper.Map(this, item);
 
             if (imageFile != null)
@@ -116,32 +117,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 RemoveImage = false;
             }
 
-            _service.Update(item);
-
-            try
-            {
-                await _service.SaveChangesAsync(User);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                var exists = await JournalArticleExists(Id);
-                if (!exists)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (!(await _service.Update("JournalArticle", item)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");
         }
 
-        private async Task<bool>
-            JournalArticleExists(string id)
-        {
-            return await _service.ExistsAsync(id);
-        }
     }
 }

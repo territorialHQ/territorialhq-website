@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Journal
 {
@@ -11,20 +11,20 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
     {
         private readonly IMapper _mapper;
         private readonly LoggerService _logger;
-        private readonly JournalArticleService _service;
+        private readonly ApisService _service;
 
-        public IndexModel(IMapper mapper, LoggerService logger, JournalArticleService service)
+        public IndexModel(IMapper mapper, LoggerService logger, ApisService service)
         {
             _mapper = mapper;
             _logger = logger;
             _service = service;
         }
 
-        public IList<JournalArticle> JournalArticle { get; set; }
+        public List<JournalArticle> JournalArticle { get; set; }
 
         public async Task OnGetAsync()
         {
-            JournalArticle = await _service.GetAllAsync();
+            JournalArticle = await _service.GetAllAsync<JournalArticle>("JournalArticle");
         }
     }
 }

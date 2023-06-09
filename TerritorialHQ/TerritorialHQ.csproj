@@ -41,4 +41,10 @@
     <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="TerritorialHQ Class Libraries">
+      <HintPath>..\..\territorialhq-lib\TerritorialHQ Class Libraries\bin\Release\net7.0\TerritorialHQ Class Libraries.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

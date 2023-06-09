@@ -53,6 +53,9 @@
             }
         </li>
     }
+    <li>
+        <a href="https://localhost:32772/Authentication/GetToken?client=TerritorialHQ">Sign in</a>
+    </li>
     @if (User.IsInRole("Administrator") || User.IsInRole("Staff") || User.IsInRole("Journalist"))
     {
         <li>
@@ -60,4 +63,4 @@
         </li>
     }
 </ul>
-<partial name="_LoginPartial" />
+@*<partial name="_LoginPartial" />*@

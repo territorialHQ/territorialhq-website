@@ -16,7 +16,6 @@ namespace TerritorialHQ.Services.Base
         {
             _context = context;
             _logger = logger;
-            //_context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
         }
 
         public virtual IQueryable<TEntity> Query => _context.Set<TEntity>();

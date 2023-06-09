@@ -52,7 +52,10 @@ namespace TerritorialHQ
             builder.Services.AddScoped(typeof(ContentPageService));
             builder.Services.AddScoped(typeof(JournalArticleService));
 
+            builder.Services.AddScoped(typeof(ApisService));
+
             builder.Services.AddMemoryCache();
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add controller mapping functions
             var mapperConfig = new AutoMapper.MapperConfiguration(cfg =>
@@ -63,13 +66,21 @@ namespace TerritorialHQ
             builder.Services.AddSingleton(mapper);
 
 
-            // Enable Discord OAth login
-            builder.Services.AddAuthentication().AddDiscord(options =>
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
             {
-                options.ClientId = builder.Configuration.GetValue<string>("DISCORD_CLIENTID") ?? string.Empty;
-                options.ClientSecret = builder.Configuration.GetValue<string>("DISCORD_CLIENTSECRET") ?? string.Empty;
-                options.CallbackPath = "/signin-discord";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.SlidingExpiration = true;
+                options.AccessDeniedPath = "/Forbidden/";
             });
+
+            // Enable Discord OAth login
+            //builder.Services.AddAuthentication().AddDiscord(options =>
+            //{
+            //    options.ClientId = builder.Configuration.GetValue<string>("DISCORD_CLIENTID") ?? string.Empty;
+            //    options.ClientSecret = builder.Configuration.GetValue<string>("DISCORD_CLIENTSECRET") ?? string.Empty;
+            //    options.CallbackPath = "/signin-discord";
+            //});
 
             builder.Services.AddRazorPages(options =>
             {
@@ -90,7 +101,7 @@ namespace TerritorialHQ
             else
             {
                 app.UseExceptionHandler("/Error");
-                app.UseHsts();
+                //app.UseHsts();
             }
 
             app.UseCookiePolicy(new CookiePolicyOptions()
