@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Models.ViewComponents
 {
     public class NavigationViewComponent : ViewComponent
     {
-        private readonly NavigationEntryService _navigationEntryService;
+        private readonly ApisService _service;
 
-        public NavigationViewComponent(NavigationEntryService navigationEntryService) 
+        public NavigationViewComponent(ApisService service) 
         { 
-            _navigationEntryService = navigationEntryService;
+            _service = service;
         }
 
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(await _navigationEntryService.GetTopLevelAsync());
+            return View((await _service.GetAllAsync<NavigationEntry>("NavigationEntry")).Where(e => e.ParentId == null).ToList());
         }
 
     }

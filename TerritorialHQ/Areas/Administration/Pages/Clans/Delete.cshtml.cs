@@ -4,42 +4,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Clans
 {
     [Authorize(Roles = "Administrator")]
     public class DeleteModel : PageModel
     {
-        private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly ClanService _service;
+        private readonly ApisService _service;
         private readonly IWebHostEnvironment _env;
 
-        public DeleteModel(IMapper mapper, LoggerService logger, ClanService service, IWebHostEnvironment env)
+        public DeleteModel(ApisService service, IWebHostEnvironment env)
         {
-            _mapper = mapper;
-            _logger = logger;
             _service = service;
             _env = env;
         }
 
         [BindProperty]
-        public Clan Clan { get; set; }
+        public Clan? Clan { get; set; }
 
-        public async Task<IActionResult>
-            OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            Clan = await _service.FindAsync(id);
+            Clan = await _service.FindAsync<Clan>("Clan", id);
 
             if (Clan == null)
-            {
                 return NotFound();
-            }
+
             return Page();
         }
 
@@ -47,11 +40,12 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
             OnPostAsync(string id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var item = await _service.FindAsync(id);
+            var item = await _service.FindAsync<Clan>("Clan", id);
+            if (item == null)
+                return NotFound();
+
             if (item.LogoFile != null)
             {
                 var oldFilePath = Path.Combine(_env.WebRootPath + "/Data/Uploads/System/", item.LogoFile);
@@ -65,8 +59,8 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                     System.IO.File.Delete(oldFilePath);
             }
 
-            await _service.RemoveAsync(id);
-            await _service.SaveChangesAsync(User);
+            if (!(await _service.Remove<Clan>("Clan", id)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");
         }

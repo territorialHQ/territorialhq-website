@@ -14,14 +14,10 @@ namespace TerritorialHQ.Pages.Authentication
 {
     public class SigninModel : PageModel
     {
-        SignInManager<IdentityUser> _signInManager;
-        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IConfiguration _configuration;
 
-        public SigninModel(SignInManager<IdentityUser> signInManager, IHttpContextAccessor contextAccessor, IConfiguration configuration)
+        public SigninModel(IConfiguration configuration)
         {
-            _signInManager = signInManager;
-            _contextAccessor = contextAccessor;
             _configuration = configuration;
         }
 
@@ -55,29 +51,7 @@ namespace TerritorialHQ.Pages.Authentication
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties
-                {
-                    //AllowRefresh = <bool>,
-                    // Refreshing the authentication session should be allowed.
-
-                    //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                    // The time at which the authentication ticket expires. A 
-                    // value set here overrides the ExpireTimeSpan option of 
-                    // CookieAuthenticationOptions set with AddCookie.
-
-                    //IsPersistent = true,
-                    // Whether the authentication session is persisted across 
-                    // multiple requests. When used with cookies, controls
-                    // whether the cookie's lifetime is absolute (matching the
-                    // lifetime of the authentication ticket) or session-based.
-
-                    //IssuedUtc = <DateTimeOffset>,
-                    // The time at which the authentication ticket was issued.
-
-                    //RedirectUri = <string>
-                    // The full path or absolute URI to be used as an http 
-                    // redirect response value.
-                };
+                var authProperties = new AuthenticationProperties();
 
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
@@ -85,7 +59,7 @@ namespace TerritorialHQ.Pages.Authentication
                     authProperties);
 
                 // Store the token in a cookie  
-                CookieOptions cookieOptions = new CookieOptions()
+                CookieOptions cookieOptions = new()
                 {
                     Expires = DateTime.Now.AddHours(8),
                     HttpOnly = true,
@@ -95,16 +69,12 @@ namespace TerritorialHQ.Pages.Authentication
                 Response.Cookies.Append("BearerToken", token, cookieOptions);
 
             }
-            catch (SecurityTokenValidationException ex)
+            catch (SecurityTokenValidationException)
             {
                 throw new SecurityTokenValidationException("The provided token in invalid");
             }
 
             var jwtToken = tokenHandler.ReadJwtToken(token);
-
-
-            //var c = _contextAccessor.HttpContext;
-            //await c.SignInAsync(principal);
 
             return RedirectToPage("/Index");
         }

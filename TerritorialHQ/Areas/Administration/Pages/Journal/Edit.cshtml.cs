@@ -16,25 +16,25 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
     {
 
         private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
         private readonly ApisService _service;
         private readonly IWebHostEnvironment _env;
 
-        public EditModel(IMapper mapper, LoggerService logger, ApisService service, IWebHostEnvironment env)
+        public EditModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
-            _logger = logger;
             _service = service;
             _env = env;
         }
 
 
         [BindProperty]
-        public string Id { get; set; }
+        [Required]
+        public string? Id { get; set; }
 
         [BindProperty]
+        [Required]
         [Display(Name = "Title / Headline")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [BindProperty]
         [Display(Name = "Subtitle / Subheadline")]
@@ -101,11 +101,14 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
             }
 
             var item = await _service.FindAsync<JournalArticle>("JournalArticle", this.Id);
+            if (item == null)
+                return NotFound();
+
             _mapper.Map(this, item);
 
             if (imageFile != null)
             {
-                item.Image = await ImageHelper.ProcessImage(imageFile, _env.WebRootPath + "/Data/Uploads/System/", true, item.Image, true);
+                item.Image = ImageHelper.ProcessImage(imageFile, _env.WebRootPath + "/Data/Uploads/System/", true, item.Image, true);
             }
             else if (RemoveImage && !string.IsNullOrEmpty(item.Image))
             {
@@ -117,7 +120,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 RemoveImage = false;
             }
 
-            if (!(await _service.Update("JournalArticle", item)))
+            if (!(await _service.Update<JournalArticle>("JournalArticle", item)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

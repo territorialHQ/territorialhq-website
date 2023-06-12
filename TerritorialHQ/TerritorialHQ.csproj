@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\ContentPageService.cs" />
+    <Compile Remove="Services\NavigationEntryService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Discord" Version="7.0.2" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="DSharpPlus" Version="4.4.0" />
@@ -37,7 +42,6 @@
     <Folder Include="wwwroot\Data\" />
     <Folder Include="wwwroot\Data\Uploads\" />
     <Folder Include="wwwroot\dist\" />
-    <Folder Include="wwwroot\Logs\" />
     <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 

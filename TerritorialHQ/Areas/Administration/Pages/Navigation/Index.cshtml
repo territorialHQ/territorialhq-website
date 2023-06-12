@@ -1,4 +1,5 @@
 ﻿@page
+@using TerritorialHQ_Library.Entities;
 @model TerritorialHQ.Areas.Administration.Pages.Navigation.IndexModel
 
 @{
@@ -31,8 +32,10 @@
         <tbody data-accordion="row">
             @{
                 var i = 0;
+
+                List<NavigationEntry> topLevelEntries = Model.NavigationEntries?.Where(e => e.ParentId == null).OrderBy(o => o.Order).ToList() ?? new();
             }
-            @foreach (var item in Model.NavigationEntries)
+            @foreach (var item in topLevelEntries)
             {
                 <tr id="row-head-@i" data-accordion-target="#row-body-@i" aria-expanded="false" aria-controls="row-body-@i" class="focus:bg-gray-200">
                     <td class="w-16">
@@ -44,7 +47,7 @@
                     <td>
                         @if (item.ContentPageId != null)
                         {
-                            @Html.DisplayFor(model => item.ContentPage.DisplayName) <span>(Content Page)</span>
+                            @Html.DisplayFor(model => item.ContentPageDisplayName) <span>(Content Page)</span>
                         }
                         else if (item.ExternalUrl != null)
                         {
@@ -72,35 +75,35 @@
                     <td colspan="6" style="padding: 0 !important">
                         <table class="admin-table">
                             <tbody>
-                                @if (item.SubEntries != null)
+                                @{
+                                    List<NavigationEntry> subEntries = Model.NavigationEntries?.Where(e => e.ParentId == item.Id).OrderBy(o => o.Order).ToList() ?? new();
+                                }
+                                @foreach (var subitem in subEntries)
                                 {
-                                    @foreach (var subitem in item.SubEntries.OrderBy(o => o.Order))
-                                    {
-                                        <tr class="bg-gray-50">
-                                            <td class="w-16"></td>
-                                            <td class="w-1/3">&mdash; @Html.DisplayFor(model => subitem.Name)</td>
-                                            <td>
-                                                @if (subitem.ContentPageId != null)
-                                                {
-                                                    @Html.DisplayFor(model => subitem.ContentPage.DisplayName)  <span>(Content Page)</span>
-                                                }
-                                                else if (subitem.ExternalUrl != null)
-                                                {
-                                                    @Html.DisplayFor(model => subitem.ExternalUrl)
-                                                }
-                                                else
-                                                {
-                                                    <span>(Not linked)</span>
-                                                }
-                                            </td>
-                                            <td class="w-24">@Html.DisplayFor(model => subitem.Public)</td>
-                                            <td class="w-24">@Html.DisplayFor(model => subitem.Order)</td>
-                                            <td class="w-48">
-                                                <a class="btn-admin-secondary-sm" asp-page="./Edit" asp-route-id="@subitem.Id" class="btn btn-sm btn-secondary">Edit</a>
-                                                <a class="btn-admin-danger-sm" asp-page="./Delete" asp-route-id="@subitem.Id" class="btn btn-sm btn-danger">Delete</a>
-                                            </td>
-                                        </tr>
-                                    }
+                                    <tr class="bg-gray-50">
+                                        <td class="w-16"></td>
+                                        <td class="w-1/3">&mdash; @Html.DisplayFor(model => subitem.Name)</td>
+                                        <td>
+                                            @if (subitem.ContentPageId != null)
+                                            {
+                                                @Html.DisplayFor(model => subitem.ContentPageDisplayName) <span>(Content Page)</span>
+                                            }
+                                            else if (subitem.ExternalUrl != null)
+                                            {
+                                                @Html.DisplayFor(model => subitem.ExternalUrl)
+                                            }
+                                            else
+                                            {
+                                                <span>(Not linked)</span>
+                                            }
+                                        </td>
+                                        <td class="w-24">@Html.DisplayFor(model => subitem.Public)</td>
+                                        <td class="w-24">@Html.DisplayFor(model => subitem.Order)</td>
+                                        <td class="w-48">
+                                            <a class="btn-admin-secondary-sm" asp-page="./Edit" asp-route-id="@subitem.Id" class="btn btn-sm btn-secondary">Edit</a>
+                                            <a class="btn-admin-danger-sm" asp-page="./Delete" asp-route-id="@subitem.Id" class="btn btn-sm btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
                                 }
                                 <tr class="bg-gray-50">
                                     <td class="w-16"></td>

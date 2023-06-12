@@ -1186,6 +1186,10 @@ dialog::backdrop {
   width: 2rem;
 }
 
+.w-\[200px\] {
+  width: 200px;
+}
+
 .w-full {
   width: 100%;
 }

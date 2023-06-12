@@ -1,30 +1,26 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Navigation
 {
     [Authorize(Roles = "Administrator")]
     public class IndexModel : PageModel
     {
-        private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly NavigationEntryService _service;
+        private readonly ApisService _service;
 
-        public IndexModel(IMapper mapper, LoggerService logger, NavigationEntryService service)
+        public IndexModel(ApisService service)
         {
-            _mapper = mapper;
-            _logger = logger;
             _service = service;
         }
 
-        public IList<NavigationEntry> NavigationEntries { get; set; }
+        public IList<NavigationEntry>? NavigationEntries { get; set; }
 
         public async Task OnGetAsync()
         {
-            NavigationEntries = await _service.GetTopLevelAsync();
+            NavigationEntries = await _service.GetAllAsync<NavigationEntry>("NavigationEntry");
         }
     }
 }

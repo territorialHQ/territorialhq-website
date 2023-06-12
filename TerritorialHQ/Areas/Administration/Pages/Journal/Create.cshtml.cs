@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Journal
 {
@@ -13,22 +14,21 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
     public class CreateModel : PageModel
     {
         private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly JournalArticleService _service;
+        private readonly ApisService _service;
         private readonly IWebHostEnvironment _env;
 
-        public CreateModel(IMapper mapper, LoggerService logger, JournalArticleService service, IWebHostEnvironment env)
+        public CreateModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
-            _logger = logger;
             _service = service;
             _env = env;
         }
 
 
         [BindProperty]
+        [Required]
         [Display(Name = "Title / Headline")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [BindProperty]
         [Display(Name = "Subtitle / Subheadline")]
@@ -64,7 +64,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
         [Display(Name = "Sticky (keep on top)")]
         public bool IsSticky { get; set; }
 
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
             PublishFrom = DateTime.Today;
             return Page();
@@ -82,11 +82,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
 
             if (imageFile != null)
             {
-                item.Image = await ImageHelper.ProcessImage(imageFile, _env.WebRootPath + "/Data/Uploads/System/", true, null, true);
+                item.Image = ImageHelper.ProcessImage(imageFile, _env.WebRootPath + "/Data/Uploads/System/", true, null, true);
             }
 
-            _service.Add(item);
-            await _service.SaveChangesAsync(User);
+            if (!(await _service.Add<JournalArticle>("JournalArticle", item)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");
         }

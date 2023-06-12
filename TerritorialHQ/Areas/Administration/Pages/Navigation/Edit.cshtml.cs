@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Navigation
 {
@@ -14,20 +15,15 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
     {
 
         private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly NavigationEntryService _service;
-        private readonly ContentPageService _contentpageService;
+        private readonly ApisService _service;
 
         public EditModel(
-        IMapper mapper, LoggerService logger,
-        NavigationEntryService service,
-            ContentPageService contentpageService
+        IMapper mapper,
+        ApisService service
         )
         {
             _mapper = mapper;
-            _logger = logger;
             _service = service;
-            _contentpageService = contentpageService;
         }
 
 
@@ -65,7 +61,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
                 return NotFound();
             }
 
-            var item = await _service.FindAsync(id);
+            var item = await _service.FindAsync<NavigationEntry>("NavigationEntry", id);
             if (item == null)
             {
                 return NotFound();
@@ -73,7 +69,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
 
             _mapper.Map(item, this);
 
-            ViewData["ContentPageId"] = new SelectList(await _contentpageService.GetAllAsync(), "Id", "DisplayName", this.ContentPageId);
+            ViewData["ContentPageId"] = new SelectList(await _service.GetAllAsync<ContentPage>("ContentPage"), "Id", "DisplayName", this.ContentPageId);
             return Page();
         }
 
@@ -82,39 +78,18 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
         {
             if (!ModelState.IsValid)
             {
-                ViewData["ContentPageId"] = new SelectList(await _contentpageService.GetAllAsync(), "Id", "DisplayName", this.ContentPageId);
+                ViewData["ContentPageId"] = new SelectList(await _service.GetAllAsync<ContentPage>("ContentPage"), "Id", "DisplayName", this.ContentPageId);
                 return Page();
             }
 
-            var item = await _service.FindAsync(this.Id);
+            var item = await _service.FindAsync<NavigationEntry>("NavigationEntry", this.Id);
             _mapper.Map(this, item);
 
-            _service.Update(item);
-
-            try
-            {
-                await _service.SaveChangesAsync(User);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                var exists = await NavigationEntryExists(Id);
-                if (!exists)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (!(await _service.Update<NavigationEntry>("NavigationEntry", item)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");
         }
 
-        private async Task<bool>
-            NavigationEntryExists(string id)
-        {
-            return await _service.ExistsAsync(id);
-        }
     }
 }

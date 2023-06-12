@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
 {
@@ -13,18 +14,16 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
     public class CreateModel : PageModel
     {
         private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly ContentPageService _service;
+        private readonly ApisService _service;
         private readonly IWebHostEnvironment _env;
 
         public CreateModel(
-            IMapper mapper, LoggerService logger,
-            ContentPageService service,
+            IMapper mapper,
+            ApisService service,
             IWebHostEnvironment env
         )
         {
             _mapper = mapper;
-            _logger = logger;
             _service = service;
             _env = env;
         }
@@ -40,7 +39,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
         [Display(Name = "HTML Sidebar Content")]
         public string? SidebarContent { get; set; }
 
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
             return Page();
         }
@@ -57,11 +56,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
 
             if (fileBanner != null)
             {
-                item.BannerImage = await ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerImage, false);
+                item.BannerImage = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerImage, false);
             }
 
-            _service.Add(item);
-            await _service.SaveChangesAsync(User);
+            if (!(await _service.Add<ContentPage>("ContentPage", item)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");
         }

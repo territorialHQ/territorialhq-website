@@ -1,9 +1,6 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-
+﻿
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+    @if (User.Identity!.IsAuthenticated)
     {
         <li>
             <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
@@ -12,15 +9,13 @@
             </a>
         </li>
         <li>
-            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit">Logout</button>
-            </form>
+            <a asp-page="/Authentication/Logout">Logout</a>
         </li>
     }
     else
     {
-        <li >
-            <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <li>
+            <a asp-page="/Authentication/Login">Login</a>
         </li>
     }
 </ul>

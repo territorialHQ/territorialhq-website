@@ -4,35 +4,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Journal
 {
     [Authorize(Roles ="Administrator, Journalist")]
     public class DeleteModel : PageModel
     {
-        private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly JournalArticleService _service;
+        private readonly ApisService _service;
+        private readonly IWebHostEnvironment _env;
 
-        public DeleteModel(IMapper mapper, LoggerService logger, JournalArticleService service)
+        public DeleteModel(ApisService service, IWebHostEnvironment env)
         {
-            _mapper = mapper;
-            _logger = logger;
             _service = service;
+            _env = env;
         }
 
-        [BindProperty]
-        public JournalArticle JournalArticle { get; set; }
+        public JournalArticle? JournalArticle { get; set; }
 
-        public async Task<IActionResult>
-            OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            JournalArticle = await _service.FindAsync(id);
+            JournalArticle = await _service.FindAsync<JournalArticle>("JournalArticle", id);
 
             if (JournalArticle == null)
             {
@@ -49,8 +46,20 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 return NotFound();
             }
 
-            await _service.RemoveAsync(id);
-            await _service.SaveChangesAsync(User);
+            var item = await _service.FindAsync<JournalArticle>("JournalArticle", id);
+            if (item == null)
+                return NotFound();
+
+            if (item.Image != null)
+            {
+                var oldFilePath = Path.Combine(_env.WebRootPath + "/Data/Uploads/System/", item.Image);
+                if (System.IO.File.Exists(oldFilePath))
+                    System.IO.File.Delete(oldFilePath);
+            }
+
+
+            if (!(await _service.Remove<JournalArticle>("JournalArticle", id)))
+                throw new Exception("Error while saving data set.");
 
 
             return RedirectToPage("./Index");

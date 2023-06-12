@@ -3,30 +3,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
 {
     [Authorize(Roles = "Administrator")]
     public class IndexModel : PageModel
     {
-        private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly ContentPageService _service;
+        private readonly ApisService _service;
 
-        public IndexModel(IMapper mapper, LoggerService logger, ContentPageService service)
+        public IndexModel(ApisService service)
         {
-            _mapper = mapper;
-            _logger = logger;
             _service = service;
         }
 
-        public IList<ContentPage>
-            ContentPage
-        { get; set; }
+        public IList<ContentPage>? ContentPage { get; set; }
 
         public async Task OnGetAsync()
         {
-            ContentPage = await _service.GetAllAsync();
+            ContentPage = await _service.GetAllAsync<ContentPage>("ContentPage");
         }
     }
 }

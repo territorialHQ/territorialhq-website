@@ -4,24 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
 {
     [Authorize(Roles = "Administrator")]
     public class DetailsModel : PageModel
     {
-        private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly ContentPageService _service;
+        private readonly ApisService _service;
 
-        public DetailsModel(IMapper mapper, LoggerService logger, ContentPageService service)
+        public DetailsModel(ApisService service)
         {
-            _mapper = mapper;
-            _logger = logger;
             _service = service;
         }
 
-        public ContentPage ContentPage { get; set; }
+        public ContentPage? ContentPage { get; set; }
 
         public async Task<IActionResult>
             OnGetAsync(string id)
@@ -31,7 +28,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 return NotFound();
             }
 
-            ContentPage = await _service.FindAsync(id);
+            ContentPage = await _service.FindAsync<ContentPage>("ContentPage", id);
 
             if (ContentPage == null)
             {

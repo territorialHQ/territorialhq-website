@@ -10,7 +10,7 @@ namespace TerritorialHQ.Services
         private readonly IConfiguration _configuration;
         private readonly DiscordClient _discordClient;
 
-        public DiscordBotService(IConfiguration configuration, IWebHostEnvironment env)
+        public DiscordBotService(IConfiguration configuration)
         {
             _configuration = configuration;
 
@@ -21,12 +21,7 @@ namespace TerritorialHQ.Services
                 Intents = DiscordIntents.AllUnprivileged
             });
 
-            Initialize();
-        }
-
-        private async Task Initialize()
-        {
-            await _discordClient.ConnectAsync();
+            _discordClient.ConnectAsync();
         }
 
         public async Task<DiscordUser> GetDiscordUserAsync(ulong id)
@@ -35,7 +30,7 @@ namespace TerritorialHQ.Services
             return user;
         }
 
-        public async Task SendReviewNotificationAsync(string userId, string clanId)
+        public async Task SendReviewNotificationAsync(string? userId, string? clanId)
         {
             try
             {
@@ -49,7 +44,7 @@ namespace TerritorialHQ.Services
 #endif
                 await _discordClient.SendMessageAsync(channel, "User " + userId + " has marked a clan listing for review: " + link);
             }
-            catch (Exception ex)
+            catch
             {
 
             }

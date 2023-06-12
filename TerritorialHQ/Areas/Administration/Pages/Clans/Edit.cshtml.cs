@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Clans
 {
@@ -20,26 +21,25 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
     {
 
         private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly ClanService _service;
+        private readonly ApisService _service;
         private readonly IWebHostEnvironment _env;
 
-        public EditModel(IMapper mapper, LoggerService logger, ClanService service, IWebHostEnvironment env)
+        public EditModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
-            _logger = logger;
             _service = service;
             _env = env;
         }
 
 
         [BindProperty]
-        public string Id { get; set; }
+        [Required]
+        public string? Id { get; set; }
 
         [BindProperty]
         [Required]
         [Display(Name = "Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [BindProperty]
         [Display(Name = "Discord Guild ID")]
         public ulong? GuildId { get; set; }
@@ -77,16 +77,18 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                 return NotFound();
             }
 
-            var item = await _service.FindAsync(id);
+            var item = await _service.FindAsync<Clan>("Clan", id);
             if (item == null)
             {
                 return NotFound();
             }
 
-            if (!User.IsInRole("Administrator") && !item.ClanUserRelations.Any(r => r.User.UserName == User.Identity.Name))
+            var userRelations = await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>();
+
+            if (!User.IsInRole("Administrator") && !userRelations.Any(r => r.AppUser.UserName == User.Identity?.Name))
                 return Forbid();
 
-            if (User.IsInRole("Administrator") && item.ClanUserRelations.Count > 0)
+            if (User.IsInRole("Administrator") && userRelations.Count > 0)
                 return Forbid();
             
             _mapper.Map(item, this);
@@ -96,7 +98,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
         public async Task<IActionResult> OnPostAsync(IFormFile? fileLogo, IFormFile? fileBanner)
         {
-            var item = await _service.FindAsync(this.Id);
+            var item = await _service.FindAsync<Clan>("Clan", this.Id!);
+            if (item == null)
+            {
+                return NotFound();
+            }
 
             if (!ModelState.IsValid)
             {
@@ -114,7 +120,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
             if (fileLogo != null)
             {
-                item.LogoFile = await ImageHelper.ProcessImage(fileLogo, _env.WebRootPath + "/Data/Uploads/System/", true, item.LogoFile, false);
+                item.LogoFile = ImageHelper.ProcessImage(fileLogo, _env.WebRootPath + "/Data/Uploads/System/", true, item.LogoFile, false);
             }
             else if (RemoveLogo && !string.IsNullOrEmpty(item.LogoFile))
             {
@@ -128,7 +134,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
             if (fileBanner != null)
             {
-                item.BannerFile = await ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerFile, false);
+                item.BannerFile = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerFile, false);
             }
             else if (RemoveBanner && !string.IsNullOrEmpty(item.BannerFile))
             {
@@ -146,34 +152,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                 item.InReview = false;
             }
 
-            _service.Update(item);
-
-            try
-            {
-                await _service.SaveChangesAsync(User);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                var exists = await ClanExists(Id);
-                if (!exists)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (!(await _service.Update<Clan>("Clan", item)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Details", new { id = item.Id });
         }
 
-        
-
-
-        private async Task<bool> ClanExists(string id)
-        {
-            return await _service.ExistsAsync(id);
-        }
     }
 }

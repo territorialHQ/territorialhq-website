@@ -12,14 +12,14 @@
     <div class="basis-3/4">
         <div class="flex flex-row">
             <div class="basis-1/2 form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.Clan.LogoFile)</label>
+                <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.LogoFile)</label>
                 @if (!string.IsNullOrEmpty(Model.Clan.LogoFile))
                 {
                     <img src="/Data/Uploads/System/@Model.Clan.LogoFile" style="max-height: 150px" class="block mb-2" />
                 }
             </div>
             <div class="basis-1/2  form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.Clan.BannerFile)</label>
+                <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.BannerFile)</label>
                 @if (!string.IsNullOrEmpty(Model.Clan.BannerFile))
                 {
                     <img src="/Data/Uploads/System/@Model.Clan.BannerFile" style="max-height: 150px" class="block mb-2" />
@@ -27,11 +27,11 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label">@Html.DisplayNameFor(model => model.Clan.DiscordLink)</label>
-            @Html.DisplayFor(model => model.Clan.DiscordLink)
+            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.DiscordLink)</label>
+            @Html.DisplayFor(model => model.Clan!.DiscordLink)
         </div>
         <div class="form-group">
-            <label class="control-label">@Html.DisplayNameFor(model => model.Clan.Description)</label>
+            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Description)</label>
             @Html.Raw(Model.Clan.Description)
         </div>
         <div class="form-group">
@@ -80,7 +80,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.UserRelations.Count == 0)
+                            @if (Model.UserRelations!.Count == 0)
                             {
                                 <tr>
                                     <td colspan="2">
@@ -94,13 +94,13 @@
                                 {
                                     <tr>
                                         <td>
-                                            <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(item.User.UserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.User.UserName)" />
-                                            <span class="name-@(item.User.UserName)">@item.User.UserName</span>
+                                            <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(item.AppUser?.UserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.AppUser?.UserName)" />
+                                            <span class="name-@(item.AppUser?.UserName)">@item.AppUser?.UserName</span>
                                         </td>
                                         <td style="width: 1%">
                                             <form method="post" asp-page-handler="RemoveUser">
                                                 <input type="hidden" name="id" value="@Model.Clan.Id" />
-                                                <input type="hidden" name="userId" value="@item.UserId" />
+                                                <input type="hidden" name="userId" value="@item.AppUserId" />
                                                 <button type="submit" class="btn-admin-danger-sm">Remove</button>
                                             </form>
                                         </td>

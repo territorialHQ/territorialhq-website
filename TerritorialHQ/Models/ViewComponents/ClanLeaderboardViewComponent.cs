@@ -18,31 +18,30 @@ namespace TerritorialHQ.Models.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = new List<LeaderboardEntry>();
-            if (_memoryCache.TryGetValue("clanleaderboard", out List<LeaderboardEntry> cachedLaderboard))
+            if (_memoryCache.TryGetValue("clanleaderboard", out List<LeaderboardEntry>? cachedLaderboard))
             {
                 model = cachedLaderboard;
             }
             else
             {
-                using (HttpClient client = new HttpClient())
+                using HttpClient client = new();
+
+                var request = await client.GetAsync("https://territorial.io/clans");
+                if (request.IsSuccessStatusCode)
                 {
-                    var request = await client.GetAsync("https://territorial.io/clans");
-                    if (request.IsSuccessStatusCode)
+                    var content = await request.Content.ReadAsStringAsync();
+                    var lines = content.Split(System.Environment.NewLine);
+
+                    for (int i = 4; i <= 24; i++)
                     {
-                        var content = await request.Content.ReadAsStringAsync();
-                        var lines = content.Split(System.Environment.NewLine);
+                        var fields = lines[i].Split(',');
+                        if (fields.Length != 3)
+                            continue;
 
-                        for (int i = 4; i <= 24; i++)
-                        {
-                            var fields = lines[i].Split(',');
-                            if (fields.Length != 3)
-                                continue;
-
-                            model.Add(new LeaderboardEntry { Rank = int.Parse(fields[0]), Name = fields[1], Points = decimal.Parse(fields[2]) });
-                        }
-
-                        _memoryCache.Set<List<LeaderboardEntry>>("clanleaderboard", model, new TimeSpan(0, 0, 5, 0));
+                        model.Add(new LeaderboardEntry { Rank = int.Parse(fields[0]), Name = fields[1], Points = decimal.Parse(fields[2]) });
                     }
+
+                    _memoryCache.Set<List<LeaderboardEntry>>("clanleaderboard", model, new TimeSpan(0, 0, 5, 0));
                 }
 
             }

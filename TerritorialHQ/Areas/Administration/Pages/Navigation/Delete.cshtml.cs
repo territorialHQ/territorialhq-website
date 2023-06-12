@@ -4,20 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Navigation
 {
     [Authorize(Roles = "Administrator")]
     public class DeleteModel : PageModel
     {
-        private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly NavigationEntryService _service;
+        private readonly ApisService _service;
 
-        public DeleteModel(IMapper mapper, LoggerService logger, NavigationEntryService service)
+        public DeleteModel(ApisService service)
         {
-            _mapper = mapper;
-            _logger = logger;
             _service = service;
         }
 
@@ -32,7 +29,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
                 return NotFound();
             }
 
-            NavigationEntry = await _service.FindAsync(id);
+            NavigationEntry = await _service.FindAsync<NavigationEntry>("NavigationEntry", id);
 
             if (NavigationEntry == null)
             {
@@ -41,17 +38,15 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
             return Page();
         }
 
-        public async Task<IActionResult>
-            OnPostAsync(string id)
+        public async Task<IActionResult> OnPostAsync(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            await _service.RemoveAsync(id);
-            await _service.SaveChangesAsync(User);
-
+            if (!(await _service.Remove<NavigationEntry>("NavigationEntry", id)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");
         }

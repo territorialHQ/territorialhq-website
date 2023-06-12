@@ -9,18 +9,14 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
     [Authorize(Roles ="Administrator, Journalist")]
     public class IndexModel : PageModel
     {
-        private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
         private readonly ApisService _service;
 
-        public IndexModel(IMapper mapper, LoggerService logger, ApisService service)
+        public IndexModel(ApisService service)
         {
-            _mapper = mapper;
-            _logger = logger;
             _service = service;
         }
 
-        public List<JournalArticle> JournalArticle { get; set; }
+        public List<JournalArticle>? JournalArticle { get; set; }
 
         public async Task OnGetAsync()
         {

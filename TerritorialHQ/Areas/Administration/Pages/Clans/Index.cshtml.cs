@@ -3,28 +3,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Clans
 {
     [Authorize(Roles = "Administrator, Staff")]
     public class IndexModel : PageModel
     {
-        private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly ClanService _service;
+        private readonly ApisService _service;
 
-        public IndexModel(IMapper mapper, LoggerService logger, ClanService service)
+        public IndexModel(ApisService service)
         {
-            _mapper = mapper;
-            _logger = logger;
             _service = service;
         }
 
-        public IList<Clan> Clan { get; set; }
+        public List<Clan>? Clan { get; set; }
 
         public async Task OnGetAsync()
         {
-            Clan = await _service.GetAllAsync();
+            Clan = await _service.GetAllAsync<Clan>("Clan");
         }
     }
 }

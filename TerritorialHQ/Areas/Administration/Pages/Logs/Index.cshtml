@@ -1,0 +1,31 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Logs.IndexModel
+@{
+}
+
+<h1 class="text-4xl mb-5">Log Files & Backups</h1>
+
+
+<div class="mb-3">
+    <a asp-page="./Index" asp-page-handler="FileBackup" class="btn-admin-secondary">Download File Backup</a>
+</div>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>File</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in Model.Files)
+            {
+                <tr>
+                    <td>
+                        <a href="~/Data/Logs/@file" target="_blank">@file</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

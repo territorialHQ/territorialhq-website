@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
 {
@@ -14,21 +15,20 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
     {
 
         private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly ContentPageService _service;
+        private readonly ApisService _service;
         private readonly IWebHostEnvironment _env;
 
-        public EditModel(IMapper mapper, LoggerService logger, ContentPageService service, IWebHostEnvironment env)
+        public EditModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
-            _logger = logger;
             _service = service;
             _env = env;
         }
 
 
         [BindProperty]
-        public string Id { get; set; }
+        [Required]
+        public string? Id { get; set; }
 
         [BindProperty]
         [Required]
@@ -55,7 +55,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 return NotFound();
             }
 
-            var item = await _service.FindAsync(id);
+            var item = await _service.FindAsync<ContentPage>("ContentPage", id);
             if (item == null)
             {
                 return NotFound();
@@ -73,12 +73,15 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 return Page();
             }
 
-            var item = await _service.FindAsync(this.Id);
+            var item = await _service.FindAsync<ContentPage>("ContentPage", this.Id!);
+            if (item == null)
+                return NotFound();
+
             _mapper.Map(this, item);
 
             if (fileBanner != null)
             {
-                item.BannerImage = await ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerImage, false);
+                item.BannerImage = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerImage, false);
             }
             else if (RemoveBanner && !string.IsNullOrEmpty(item.BannerImage))
             {
@@ -90,32 +93,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 RemoveBanner = false;
             }
 
-            _service.Update(item);
-
-            try
-            {
-                await _service.SaveChangesAsync(User);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                var exists = await ContentPageExists(Id);
-                if (!exists)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (!(await _service.Update<ContentPage>("ContentPage", item)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");
         }
 
-        private async Task<bool>
-            ContentPageExists(string id)
-        {
-            return await _service.ExistsAsync(id);
-        }
     }
 }

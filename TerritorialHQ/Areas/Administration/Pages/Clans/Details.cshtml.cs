@@ -5,49 +5,41 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Clans
 {
     [Authorize(Roles = "Administrator, Staff")]
     public class DetailsModel : PageModel
     {
-        private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly ClanService _service;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApisService _service;
+        private readonly AppUserService _userService;
         private readonly DiscordBotService _discordBotService;
 
-        public DetailsModel(IMapper mapper, LoggerService logger, ClanService service, UserManager<IdentityUser> userManager, DiscordBotService discordBotService)
+        public DetailsModel(ApisService service,  DiscordBotService discordBotService, AppUserService userService)
         {
-            _mapper = mapper;
-            _logger = logger;
             _service = service;
-            _userManager = userManager;
             _discordBotService = discordBotService;
+            _userService = userService;
         }
 
-        public Clan Clan { get; set; }
-
-        public List<ClanUserRelation> UserRelations { get; set; }
+        public Clan? Clan { get; set; }
+        public List<ClanUserRelation>? UserRelations { get; set; }
 
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            Clan = await _service.FindAsync(id);
-
+            Clan = await _service.FindAsync<Clan>("Clan", id);
             if (Clan == null)
-            {
                 return NotFound();
-            }
 
-            UserRelations = Clan.ClanUserRelations ?? new List<ClanUserRelation>();
+            UserRelations = await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>();
 
             await FillStaffUserSelect();
 
@@ -56,66 +48,80 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
         public async Task<IActionResult> OnPostAddUser(string id, string userId)
         {
-            Clan = await _service.FindAsync(id);
+            Clan = await _service.FindAsync<Clan>("Clan", id);
+            if (Clan == null)
+                return NotFound(); 
+            
+            UserRelations = await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>();
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _service.FindAsync<AppUser>("AppUser", userId);
             if (user != null)
             {
-                if (!Clan.ClanUserRelations.Any(r => r.UserId == user.Id))
+                if (!UserRelations.Any(r => r.AppUserId == user.Id))
                 {
-                    Clan.ClanUserRelations.Add(new ClanUserRelation() { UserId = user.Id });
-                    _service.Update(Clan);
+                    var relation = new ClanUserRelation() { ClanId = Clan.Id, AppUserId = user.Id };
 
-                    await _service.SaveChangesAsync(User);
+                    if (!(await _service.Add<ClanUserRelation>("ClanUserRelation", relation)))
+                        throw new Exception("Error while saving relation data set.");
                 }
             }
-            UserRelations = Clan.ClanUserRelations ?? new List<ClanUserRelation>();
 
-            await FillStaffUserSelect();
-
-            return Page();
+            return RedirectToPage("./Details", new { id = Clan.Id });
         }
 
 
         public async Task<IActionResult> OnPostRemoveUser(string id, string userId)
         {
-            Clan = await _service.FindAsync(id);
+            Clan = await _service.FindAsync<Clan>("Clan", id);
+            if (Clan == null)
+                return NotFound();
 
-            Clan.ClanUserRelations.RemoveAll(r => r.UserId == userId);
-            _service.Update(Clan);
-            await _service.SaveChangesAsync(User);
-            UserRelations = Clan.ClanUserRelations ?? new List<ClanUserRelation>();
+            var relationToRemove = await _service.FindAsync<ClanUserRelation>("ClanUserRelation", userId);
+            if (relationToRemove != null)
+                if(!(await _service.Remove<ClanUserRelation>("ClanUserRelation", relationToRemove.Id)))
+                        throw new Exception("Error while saving relation data set.");
 
+            UserRelations = await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>();
             await FillStaffUserSelect();
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostMarkForReview(string id)
+        public async Task<IActionResult> OnPostMarkForReview(string? id)
         {
-            Clan = await _service.FindAsync(id);
+            Clan = await _service.FindAsync<Clan>("Clan", id);
+            if (Clan == null)
+                return NotFound();
 
             Clan.InReview = true;
-            _service.Update(Clan);
-            await _service.SaveChangesAsync(User);
 
-            await _discordBotService.SendReviewNotificationAsync(User.Identity.Name, id);
+            if (!(await _service.Update<Clan>("Clan", Clan)))
+                throw new Exception("Error while saving data set.");
 
-            return RedirectToPage("./Details", new { id = id });
+            UserRelations = await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>();
+            await FillStaffUserSelect();
+
+            await _discordBotService.SendReviewNotificationAsync(User.Identity?.Name, id);
+
+            return RedirectToPage("./Details", new { id });
         }
 
         public async Task<IActionResult> OnPostPublish(string id)
         {
-            Clan = await _service.FindAsync(id);
+            Clan = await _service.FindAsync<Clan>("Clan", id);
+            if (Clan == null)
+                return NotFound();
 
             if (User.IsInRole("Administrator"))
             {
                 Clan.InReview = false;
                 Clan.IsPublished = true;
-                _service.Update(Clan);
-                await _service.SaveChangesAsync(User);
+
+                if (!(await _service.Update<Clan>("Clan", Clan)))
+                    throw new Exception("Error while saving data set.");
             }
 
+            UserRelations = await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>();
             await FillStaffUserSelect();
 
             return Page();
@@ -125,8 +131,10 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         {
             if (User.IsInRole("Administrator"))
             {
-                var staffUsers = await _userManager.GetUsersInRoleAsync("Staff");
-                staffUsers = staffUsers.Except(UserRelations.Select(s => s.User)).ToList();
+                var assignedStaffUsersIds = UserRelations?.Select(s => s.AppUserId).ToList() ?? new List<string?>();
+                var staffUsers = await _userService.GetUsersInRoleAsync(AppUserRole.Staff);
+
+                staffUsers!.RemoveAll(u => assignedStaffUsersIds.Contains(u.Id));
 
                 ViewData["UserId"] = new SelectList(staffUsers, "Id", "UserName");
             }

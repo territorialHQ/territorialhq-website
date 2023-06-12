@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Navigation
 {
@@ -14,20 +15,14 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
     public class CreateModel : PageModel
     {
         private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly NavigationEntryService _service;
-        private readonly ContentPageService _contentpageService;
+        private readonly ApisService _service;
 
         public CreateModel(
-            IMapper mapper, LoggerService logger,
-            NavigationEntryService service,
-            ContentPageService contentpageService
-        )
+            IMapper mapper,
+            ApisService service)
         {
             _mapper = mapper;
-            _logger = logger;
             _service = service;
-            _contentpageService = contentpageService;
         }
 
         [BindProperty]
@@ -58,7 +53,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
         {
             ParentId = parentId;
 
-            ViewData["ContentPageId"] = new SelectList(await _contentpageService.GetAllAsync(), "Id", "DisplayName");
+            ViewData["ContentPageId"] = new SelectList(await _service.GetAllAsync<ContentPage>("ContentPage"), "Id", "DisplayName");
             return Page();
         }
 
@@ -66,15 +61,15 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
         {
             if (!ModelState.IsValid)
             {
-                ViewData["ContentPageId"] = new SelectList(await _contentpageService.GetAllAsync(), "Id", "DisplayName");
+                ViewData["ContentPageId"] = new SelectList(await _service.GetAllAsync<ContentPage>("ContentPage"), "Id", "DisplayName");
                 return Page();
             }
 
             var item = new NavigationEntry();
             _mapper.Map(this, item);
 
-            _service.Add(item);
-            await _service.SaveChangesAsync(User);
+            if (!(await _service.Add<NavigationEntry>("NavigationEntry", item)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");
         }

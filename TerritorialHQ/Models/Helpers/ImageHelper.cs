@@ -21,65 +21,61 @@ namespace TerritorialHQ.Helpers
         private const int _quality = 80;
         private const float _crop_ratio = 1.5f;
 
-        public static async Task<string> ProcessImage(IFormFile imageFile, string uploadDir, bool autoFileName = true, string? oldFile = null, bool crop = false)
+        public static string ProcessImage(IFormFile imageFile, string uploadDir, bool autoFileName = true, string? oldFile = null, bool crop = false)
         {
-            using (var stream = imageFile.OpenReadStream())
+            using var stream = imageFile.OpenReadStream();
+            if (!String.IsNullOrEmpty(oldFile))
             {
-                if (!String.IsNullOrEmpty(oldFile))
-                {
-                    var oldFilePath = Path.Combine(uploadDir, oldFile);
-                    if (System.IO.File.Exists(oldFilePath))
-                        System.IO.File.Delete(oldFilePath);
-                }
-
-                var ext = Path.GetExtension(imageFile.FileName).ToLower();
-                //await imageFile.CopyToAsync(ms);
-                //ms.Flush();
-
-                var i = Image.Load(stream);
-
-                if (crop)
-                {
-                    i = AutoCrop(i);
-                }
-                i = AutoResize(i);
-
-                var path = uploadDir;
-                if (!System.IO.Directory.Exists(path))
-                    System.IO.Directory.CreateDirectory(path);
-
-                var filename = imageFile.FileName;
-                if (autoFileName)
-                {
-                    filename = Guid.NewGuid().ToString() + ext;
-                }
-                var filepath = Path.Combine(path, filename);
-
-                if (!System.IO.File.Exists(filepath))
-                    System.IO.File.Delete(filepath);
-
-                using (FileStream fs = new FileStream(filepath, FileMode.Create))
-                {
-                    switch (ext)
-                    {
-                        case ".png":
-                            i.SaveAsPng(fs);
-                            break;
-                        case ".gif":
-                            i.SaveAsGif(fs);
-                            break;
-                        default:
-                            JpegEncoder encoder = new JpegEncoder()
-                            {
-                                Quality = _quality
-                            };
-                            i.SaveAsJpeg(fs, encoder);
-                            break;
-                    }
-                }
-
-                return filename;
+                var oldFilePath = Path.Combine(uploadDir, oldFile);
+                if (System.IO.File.Exists(oldFilePath))
+                    System.IO.File.Delete(oldFilePath);
             }
+
+            var ext = Path.GetExtension(imageFile.FileName).ToLower();
+
+            var i = Image.Load(stream);
+
+            if (crop)
+            {
+                i = AutoCrop(i);
+            }
+            i = AutoResize(i);
+
+            var path = uploadDir;
+            if (!System.IO.Directory.Exists(path))
+                System.IO.Directory.CreateDirectory(path);
+
+            var filename = imageFile.FileName;
+            if (autoFileName)
+            {
+                filename = Guid.NewGuid().ToString() + ext;
+            }
+            var filepath = Path.Combine(path, filename);
+
+            if (!System.IO.File.Exists(filepath))
+                System.IO.File.Delete(filepath);
+
+            using (FileStream fs = new(filepath, FileMode.Create))
+            {
+                switch (ext)
+                {
+                    case ".png":
+                        i.SaveAsPng(fs);
+                        break;
+                    case ".gif":
+                        i.SaveAsGif(fs);
+                        break;
+                    default:
+                        JpegEncoder encoder = new()
+                        {
+                            Quality = _quality
+                        };
+                        i.SaveAsJpeg(fs, encoder);
+                        break;
+                }
+            }
+
+            return filename;
         }
 
         public static Image AutoResize(Image image)

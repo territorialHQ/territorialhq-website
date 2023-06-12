@@ -1,4 +1,5 @@
 ﻿@page
+@using TerritorialHQ_Library.Entities;
 @model TerritorialHQ.Areas.Administration.Pages.Users.IndexModel
 @{
 }
@@ -11,9 +12,9 @@
 
 <div class="flex flex-row">
     <div class="basis-1/2">
-        @foreach (var keyVauePair in Model.UsersWithRoles)
+        @foreach (var keyVauePair in Model.UsersInRoles)
         {
-            <h3 class="text-xl mb-3">@keyVauePair.Key</h3>
+            <h3 class="text-xl mb-3">@Enum.GetName(typeof(AppUserRole), keyVauePair.Key)</h3>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-5">
                 <table class="admin-table">
                     <thead>
@@ -41,9 +42,17 @@
                                         <span class="name-@(item.UserName)">@item.UserName</span>
                                     </td>
                                     <td style="width: 1%; white-space: nowrap">
-                                        <form asp-page="./Remove" asp-route-id="@item.Id" method="post">
+                                        @if (keyVauePair.Key == AppUserRole.Administrator && keyVauePair.Value.Count == 1)
+                                        {
+                                            <span>(Cannot remove last remaining Administrator)</span>
+                                        }
+                                        else
+                                        {
+                                            <form asp-page="./Remove" asp-route-id="@item.Id" method="post">
                                             <button type="submit" class="btn-admin-danger-sm" onclick="return confirm('Remove user from role? The user will be signed out automatically.')">Remove</button>
                                         </form>
+                                        }
+                                        
                                     </td>
                                 </tr>
                             }
@@ -71,28 +80,40 @@
 
             @if (Model.QueryResult != null)
             {
-            <h3 class="text-xl mb-2">Search Result</h3>
-            <div>
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(Model.QueryResult.UserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(Model.QueryResult.UserName)" />
-                                <span class="name-@(Model.QueryResult.UserName)">@Model.QueryResult.UserName</span>
-                            </td>
-                            <td style="width: 1%; white-space: nowrap">
-                                <a class="btn-admin-secondary-sm" asp-page="./Edit" asp-route-id="@Model.QueryResult.Id">Edit role</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                <h3 class="text-xl mb-2">Search Result</h3>
+                <div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(Model.QueryResult.UserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(Model.QueryResult.UserName)" />
+                                    <span class="name-@(Model.QueryResult.UserName)">@Model.QueryResult.UserName</span>
+                                </td>
+                                <td style="white-space: nowrap; text-align: right">
+                                    @if (Model.QueryResult.Role != null)
+                                    {
+                                        <span>(User is already in another role)</span>
+                                    }
+                                    else
+                                    {
+                                        <form asp-page="./Add">
+                                        <input type="hidden" name="userId" value="@Model.QueryResult.Id" />
+                                        <select class="form-control inline-block w-[200px]" name="role" asp-items="@Html.GetEnumSelectList<AppUserRole>()"></select>
+                                        <button class="btn-admin-primary" type="submit">Add to role</button>
+                                    </form>
+                                    }
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             }
         </div>
     </div>

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Clans
 {
@@ -13,14 +14,12 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
     public class CreateModel : PageModel
     {
         private readonly IMapper _mapper;
-        private readonly LoggerService _logger;
-        private readonly ClanService _service;
+        private readonly ApisService _service;
         private readonly IWebHostEnvironment _env;
 
-        public CreateModel(IMapper mapper, LoggerService logger, ClanService service, IWebHostEnvironment env)
+        public CreateModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
-            _logger = logger;
             _service = service;
             _env = env;
         }
@@ -28,7 +27,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         [BindProperty]
         [Required]
         [Display(Name = "Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [BindProperty]
         [Display(Name = "Discord Guild ID")]
         public ulong? GuildId { get; set; }
@@ -46,7 +45,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         public string? Description { get; set; }
 
 
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
             return Page();
         }
@@ -63,16 +62,16 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
             if (fileLogo != null)
             {
-                item.LogoFile = await ImageHelper.ProcessImage(fileLogo, _env.WebRootPath + "/Data/Uploads/System/", true, item.LogoFile, false);
+                item.LogoFile = ImageHelper.ProcessImage(fileLogo, _env.WebRootPath + "/Data/Uploads/System/", true, item.LogoFile, false);
             }
 
             if (fileBanner != null)
             {
-                item.BannerFile = await ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerFile, false);
+                item.BannerFile = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerFile, false);
             }
 
-            _service.Add(item);
-            await _service.SaveChangesAsync(User);
+            if (!(await _service.Add<Clan>("Clan", item)))
+                throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Details", new { id = item.Id });
         }

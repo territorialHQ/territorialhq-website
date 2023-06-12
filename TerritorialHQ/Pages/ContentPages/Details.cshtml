@@ -3,19 +3,19 @@
 @{
 }
 
-@if (!string.IsNullOrEmpty(Model.ContentPage.BannerImage))
+@if (!string.IsNullOrEmpty(Model.ContentPage!.BannerImage))
 {
     <div style="background-image: url(/Data/Uploads/System/@Model.ContentPage.BannerImage)"></div>
 }
 
-<ul>
+@*<ul>
     <li><a href="/">Home</a></li>
     @if (@Model.NavEntry.Parent != null)
     {
         <li>@Model.NavEntry.Parent.Name</li>
     }
     <li><a href="/@Model.NavEntry.Slug">@Model.NavEntry.Name</a></li>
-</ul>
+</ul>*@
 
 <div>
     @if (Model.ContentPage == null)

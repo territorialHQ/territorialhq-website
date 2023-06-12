@@ -17,13 +17,13 @@ namespace TerritorialHQ.Pages.Ajax
             _discordBotService = discordBotService;
         }
 
-        public async Task<IActionResult> OnGetDiscordUserData(ulong id)
+        public IActionResult OnGetDiscordUserData(ulong id)
         {
             var rnd = new Random();
 
-            DiscordCacheModel model = new DiscordCacheModel();
+            DiscordCacheModel? model = new();
 
-            if (_memoryCache.TryGetValue(id, out DiscordCacheModel discordCache))
+            if (_memoryCache.TryGetValue(id, out DiscordCacheModel? discordCache))
             {
                 model = discordCache;
             }

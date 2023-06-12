@@ -3,29 +3,29 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using TerritorialHQ.Services;
+using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Users
 {
     [Authorize(Roles ="Administrator")]
     public class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly AppUserService _userService;
 
-        public IndexModel(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public IndexModel(AppUserService userService)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
+            _userService = userService;
         }
 
-        public Dictionary<string, IList<IdentityUser>> UsersWithRoles { get; set; } = new();
+        public Dictionary<AppUserRole, List<AppUser>> UsersInRoles { get; set; } = new();
 
         [BindProperty]
         [MinLength(16)]
         [Display(Name = "Search for Discord ID")]
         public string? UserQuery { get; set; }
 
-        public IdentityUser QueryResult { get; set; }
+        public AppUser? QueryResult { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -37,7 +37,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Users
         {
             if (!string.IsNullOrEmpty(UserQuery))
             {
-                QueryResult = await _userManager.FindByNameAsync(UserQuery);
+                QueryResult = await _userService.FindAsync<AppUser>("AppUser", UserQuery);
             }
 
             await GetCurrentUsers();
@@ -46,14 +46,12 @@ namespace TerritorialHQ.Areas.Administration.Pages.Users
 
         private async Task GetCurrentUsers()
         {
-            var roles = _roleManager.Roles.ToList();
-
-            foreach (var role in roles)
+            foreach (var role in (AppUserRole[])Enum.GetValues(typeof(AppUserRole)))
             {
-                var users = await _userManager.GetUsersInRoleAsync(role.Name);
+                var users = await _userService.GetUsersInRoleAsync(role) ?? new List<AppUser>();
                 if (users.Count > 0)
                 {
-                    UsersWithRoles.Add(role.Name, users);
+                    UsersInRoles.Add(role, users);
                 }
             }
         }

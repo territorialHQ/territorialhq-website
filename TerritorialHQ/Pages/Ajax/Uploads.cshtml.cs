@@ -29,10 +29,10 @@ namespace TerritorialHQ.Pages.Ajax
             {
                 try
                 {
-                    var filename = await ImageHelper.ProcessImage(upload, _env.WebRootPath + "/Data/Uploads/Pages/", false, null, false);
+                    var filename = ImageHelper.ProcessImage(upload, _env.WebRootPath + "/Data/Uploads/Pages/", false, null, false);
                     var response = new { url = "/Data/Uploads/Pages/" + filename };
 
-                    _logger.Log.Information("{User} uploaded file {File} with CKEditor.", User.Identity.Name, filename);
+                    _logger.Log.Information("{User} uploaded file {File} with CKEditor.", User.Identity?.Name, filename);
 
                     return new JsonResult(response);
                 }
