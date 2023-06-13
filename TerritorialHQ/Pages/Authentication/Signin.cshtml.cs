@@ -46,8 +46,9 @@ namespace TerritorialHQ.Pages.Authentication
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, jwtClaims.Claims.FirstOrDefault(c => c.Type == System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub)?.Value),
-                    new Claim(ClaimTypes.Role, jwtClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value)
+                    new Claim("Id", jwtClaims.Claims.FirstOrDefault(c => c.Type == "Id")?.Value ?? string.Empty),
+                    new Claim(ClaimTypes.Name, jwtClaims.Claims.FirstOrDefault(c => c.Type == "DiscordId")?.Value ?? string.Empty),
+                    new Claim(ClaimTypes.Role, jwtClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? string.Empty)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

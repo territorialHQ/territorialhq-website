@@ -43,7 +43,7 @@ namespace TerritorialHQ.Services
             List<T>? result = new();
             HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
 
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 result = await response.Content.ReadFromJsonAsync<List<T>>();
             }
@@ -58,7 +58,7 @@ namespace TerritorialHQ.Services
             T? result = default;
             HttpResponseMessage response = await _httpClient.GetAsync(endpoint + "/" + id);
 
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 result = await response.Content.ReadFromJsonAsync<T>();
             }
@@ -72,7 +72,7 @@ namespace TerritorialHQ.Services
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(endpoint, item);
 
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 return true;
             else
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
@@ -89,7 +89,7 @@ namespace TerritorialHQ.Services
 
             HttpResponseMessage response = await _httpClient.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 return true;
             else
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
@@ -103,7 +103,7 @@ namespace TerritorialHQ.Services
             
             HttpResponseMessage response = await _httpClient.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 return true;
             else
                 throw new Exception(response.Content.ReadAsStringAsync().Result);

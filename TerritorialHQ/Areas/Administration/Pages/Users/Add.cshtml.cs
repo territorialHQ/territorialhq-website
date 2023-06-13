@@ -28,7 +28,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Users
 
             user.Role = role;
 
-            if (!(await _userService.Update("Users", user)))
+            if (!(await _userService.Update("AppUser", user)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

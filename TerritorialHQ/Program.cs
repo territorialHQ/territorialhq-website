@@ -23,6 +23,7 @@ namespace TerritorialHQ
             builder.Services.AddSingleton(typeof(DiscordBotService));
             builder.Services.AddSingleton(typeof(LoggerService));
 
+            builder.Services.AddScoped(typeof(BotEndpointService));
             builder.Services.AddScoped(typeof(ApisService));
             builder.Services.AddScoped(typeof(AppUserService));
 
@@ -48,6 +49,7 @@ namespace TerritorialHQ
 
             builder.Services.AddRazorPages(options =>
             {
+                options.Conventions.AddPageRoute("/Profiles/Index", "/Profiles/{id?}");
                 options.Conventions.AddPageRoute("/ContentPages/Details", "{*url}");
             })
             .AddRazorRuntimeCompilation();

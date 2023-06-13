@@ -31,6 +31,32 @@
         <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" />
     </div>
     <div class="form-group">
+        <label asp-for="Motto" class="control-label"></label>
+        <input asp-for="Motto" class="form-control" />
+        <span asp-validation-for="Motto" class="text-danger"></span>
+    </div>
+    <div class="flex flex-row gap-4">
+        <div class="basis-1/2 form-group">
+            <div class="form-group">
+                <label asp-for="Foundation" class="control-label"></label>
+                <input asp-for="Foundation" class="form-control" />
+                <span asp-validation-for="Foundation" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="basis-1/2 form-group">
+            <div class="form-group">
+                <label asp-for="Founders" class="control-label"></label>
+                <input asp-for="Founders" class="form-control" />
+                <span asp-validation-for="Founders" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="BotEndpoint" class="control-label"></label>
+        <input asp-for="BotEndpoint" class="form-control" />
+        <span asp-validation-for="BotEndpoint" class="text-danger"></span>
+    </div>
+    <div class="form-group">
         <label asp-for="DiscordLink" class="control-label"></label>
         <input asp-for="DiscordLink" class="form-control" />
         <span asp-validation-for="DiscordLink" class="text-danger"></span>

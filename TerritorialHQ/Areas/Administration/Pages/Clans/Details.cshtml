@@ -26,6 +26,27 @@
                 }
             </div>
         </div>
+
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Motto)</label>
+            @Html.DisplayFor(model => model.Clan!.Motto)
+        </div>
+        <div class="flex flex-row gap-4">
+            <div class="basis-1/2 form-group">
+                <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Foundation)</label>
+                @Html.DisplayFor(model => model.Clan!.Foundation)
+            </div>
+            <div class="basis-1/2 form-group">
+                <div class="form-group">
+                    <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Founders)</label>
+                    @Html.DisplayFor(model => model.Clan!.Founders)
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.BotEndpoint)</label>
+            @Html.DisplayFor(model => model.Clan!.BotEndpoint)
+        </div>
         <div class="form-group">
             <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.DiscordLink)</label>
             @Html.DisplayFor(model => model.Clan!.DiscordLink)

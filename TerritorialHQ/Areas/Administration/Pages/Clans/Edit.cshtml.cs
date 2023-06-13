@@ -44,6 +44,18 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         [Display(Name = "Discord Guild ID")]
         public ulong? GuildId { get; set; }
         [BindProperty]
+        [Display(Name = "Date / Period of Foundation")]
+        public string? Foundation { get; set; }
+        [BindProperty]
+        [Display(Name = "Founder(s)")]
+        public string? Founders { get; set; }
+        [BindProperty]
+        [Display(Name = "Clan Motto")]
+        public string? Motto { get; set; }
+        [BindProperty]
+        [Display(Name = "Custom Bot HttpGet Endpoint")]
+        public string? BotEndpoint { get; set; }
+        [BindProperty]
         [Display(Name = "Logo file")]
         public string? LogoFile { get; set; }
         [BindProperty]
