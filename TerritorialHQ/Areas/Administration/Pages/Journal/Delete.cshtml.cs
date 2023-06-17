@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Journal
@@ -11,16 +13,16 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
     [Authorize(Roles ="Administrator, Journalist")]
     public class DeleteModel : PageModel
     {
-        private readonly ApisService _service;
+        private readonly JournalArticleService _service;
         private readonly IWebHostEnvironment _env;
 
-        public DeleteModel(ApisService service, IWebHostEnvironment env)
+        public DeleteModel(JournalArticleService service, IWebHostEnvironment env)
         {
             _service = service;
             _env = env;
         }
 
-        public JournalArticle? JournalArticle { get; set; }
+        public DTOJournalArticle? JournalArticle { get; set; }
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -29,7 +31,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 return NotFound();
             }
 
-            JournalArticle = await _service.FindAsync<JournalArticle>("JournalArticle", id);
+            JournalArticle = await _service.FindAsync<DTOJournalArticle>("JournalArticle", id);
 
             if (JournalArticle == null)
             {
@@ -46,7 +48,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 return NotFound();
             }
 
-            var item = await _service.FindAsync<JournalArticle>("JournalArticle", id);
+            var item = await _service.FindAsync<DTOJournalArticle>("JournalArticle", id);
             if (item == null)
                 return NotFound();
 
@@ -58,7 +60,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
             }
 
 
-            if (!(await _service.Remove<JournalArticle>("JournalArticle", id)))
+            if (!(await _service.Remove("JournalArticle", id)))
                 throw new Exception("Error while saving data set.");
 
 

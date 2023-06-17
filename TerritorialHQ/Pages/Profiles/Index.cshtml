@@ -5,8 +5,34 @@
 
 
 <h1>User Profile</h1>
-
-@foreach (var keyValuePair in Model.ClanPoints)
+@*
+@if (!Model.IsPrivate || Model.IsOwnProfile)
 {
-    <p><strong>@keyValuePair.Key</strong> - @string.Format("{0:#,0}", @keyValuePair.Value) points</p>
+    if (Model.IsOwnProfile)
+    {
+        if (Model.AppUser.Public)
+        {
+            <p>Your profile is set to public.</p>
+            <form method="post" asp-page-handler="TogglePublic">
+                <button type="submit">Click here to switch it to private</button>
+            </form>
+        }
+        else
+        {
+            <p>Your profile is set to private.</p>
+            <form method="post" asp-page-handler="TogglePublic">
+                <button type="submit">Click here to switch it to public</button>
+            </form>
+        }
+    }
+
+
+    @foreach (var keyValuePair in Model.ClanPoints)
+    {
+        <p><strong>@keyValuePair.Key</strong> - @string.Format("{0:#,0}", @keyValuePair.Value) points</p>
+    }
 }
+else
+{
+    <p>This profile is set to private.</p>
+}*@

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using TerritorialHQ.Mapping;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
 
 namespace TerritorialHQ
 {
@@ -20,12 +21,18 @@ namespace TerritorialHQ
             var connectionString = $"Server={db_server};Port={db_port};Database={db_cat};Uid={db_user};Pwd={db_pw};";
 
             // Add services
+
             builder.Services.AddSingleton(typeof(DiscordBotService));
             builder.Services.AddSingleton(typeof(LoggerService));
 
             builder.Services.AddScoped(typeof(BotEndpointService));
             builder.Services.AddScoped(typeof(ApisService));
             builder.Services.AddScoped(typeof(AppUserService));
+            builder.Services.AddScoped(typeof(ClanService));
+            builder.Services.AddScoped(typeof(ClanUserRelationService));
+            builder.Services.AddScoped(typeof(ContentPageService));
+            builder.Services.AddScoped(typeof(NavigationEntryService));
+            builder.Services.AddScoped(typeof(JournalArticleService));
 
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -45,6 +52,8 @@ namespace TerritorialHQ
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                 options.SlidingExpiration = true;
                 options.AccessDeniedPath = "/Forbidden/";
+                options.LoginPath = "/Authentication/Login";
+                options.LogoutPath = "/Authentication/Logout";
             });
 
             builder.Services.AddRazorPages(options =>

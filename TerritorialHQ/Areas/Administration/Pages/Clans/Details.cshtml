@@ -56,7 +56,7 @@
             @Html.Raw(Model.Clan.Description)
         </div>
         <div class="form-group">
-            @if (User.IsInRole("Staff") || (User.IsInRole("Administrator") && Model.UserRelations.Count == 0))
+            @if (User.IsInRole("Staff") || (User.IsInRole("Administrator") && Model.Clan.AssignedAppUsers.Count == 0))
             {
                 <a asp-page="./Edit" asp-route-id="@Model.Clan.Id" class="btn-admin-primary">Edit</a>
             }
@@ -101,7 +101,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.UserRelations!.Count == 0)
+                            @if (Model.Clan.AssignedAppUsers.Count == 0)
                             {
                                 <tr>
                                     <td colspan="2">
@@ -111,17 +111,17 @@
                             }
                             else
                             {
-                                foreach (var item in Model.UserRelations)
+                                foreach (var item in Model.Clan.AssignedAppUsers)
                                 {
                                     <tr>
                                         <td>
-                                            <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(item.AppUser?.UserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.AppUser?.UserName)" />
-                                            <span class="name-@(item.AppUser?.UserName)">@item.AppUser?.UserName</span>
+                                            <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(item.UserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.UserName)" />
+                                            <span class="name-@(item.UserName)">@item.UserName</span>
                                         </td>
                                         <td style="width: 1%">
                                             <form method="post" asp-page-handler="RemoveUser">
                                                 <input type="hidden" name="id" value="@Model.Clan.Id" />
-                                                <input type="hidden" name="userId" value="@item.AppUserId" />
+                                                <input type="hidden" name="userId" value="@item.Id" />
                                                 <button type="submit" class="btn-admin-danger-sm">Remove</button>
                                             </form>
                                         </td>
@@ -148,7 +148,7 @@
 
                 </div>
                 <div class="mt-3">
-                    @if (Model.UserRelations.Count > 0)
+                    @if (Model.Clan.AssignedAppUsers.Count > 0)
                     {
                         <div class="mb-3 p-3 bg-slate-100 text-slate-800 text-sm rounded"><strong>Editing disabled.</strong> While staff users are assigned to this clan listing, editing is disabled for administrators.</div>
                     }

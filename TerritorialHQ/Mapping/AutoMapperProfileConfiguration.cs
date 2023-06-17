@@ -5,6 +5,7 @@ using System.Diagnostics.Metrics;
 using System.Diagnostics;
 using TerritorialHQ.Models;
 using TerritorialHQ_Library.Entities;
+using TerritorialHQ_Library.DTO;
 
 namespace TerritorialHQ.Mapping
 {
@@ -17,14 +18,14 @@ namespace TerritorialHQ.Mapping
         protected ContentPageProfile(string profileName)
         : base(profileName)
         {
-            CreateMap<TerritorialHQ.Areas.Administration.Pages.Clans.CreateModel, Clan>().ReverseMap();
-            CreateMap<TerritorialHQ.Areas.Administration.Pages.Clans.EditModel, Clan>().ReverseMap();          
-            CreateMap<TerritorialHQ.Areas.Administration.Pages.Navigation.CreateModel, NavigationEntry>().ReverseMap();                  
-            CreateMap<TerritorialHQ.Areas.Administration.Pages.Navigation.EditModel, NavigationEntry>().ReverseMap();                  
-            CreateMap<TerritorialHQ.Areas.Administration.Pages.ContentPages.CreateModel, ContentPage>().ReverseMap();                  
-            CreateMap<TerritorialHQ.Areas.Administration.Pages.ContentPages.EditModel, ContentPage>().ReverseMap();                  
-            CreateMap<TerritorialHQ.Areas.Administration.Pages.Journal.CreateModel, TerritorialHQ_Library.Entities.JournalArticle>().ReverseMap();                  
-            CreateMap<TerritorialHQ.Areas.Administration.Pages.Journal.EditModel, TerritorialHQ_Library.Entities.JournalArticle>().ReverseMap();                  
+            CreateMap<TerritorialHQ.Areas.Administration.Pages.Clans.CreateModel, DTOClan>().ReverseMap();
+            CreateMap<TerritorialHQ.Areas.Administration.Pages.Clans.EditModel, DTOClan>().ReverseMap();          
+            CreateMap<TerritorialHQ.Areas.Administration.Pages.Navigation.CreateModel, DTONavigationEntry>().ReverseMap();                  
+            CreateMap<TerritorialHQ.Areas.Administration.Pages.Navigation.EditModel, DTONavigationEntry>().ReverseMap();                  
+            CreateMap<TerritorialHQ.Areas.Administration.Pages.ContentPages.CreateModel, DTOContentPage>().ReverseMap();                  
+            CreateMap<TerritorialHQ.Areas.Administration.Pages.ContentPages.EditModel, DTOContentPage>().ReverseMap();                  
+            CreateMap<TerritorialHQ.Areas.Administration.Pages.Journal.CreateModel, DTOJournalArticle>().ReverseMap();                  
+            CreateMap<TerritorialHQ.Areas.Administration.Pages.Journal.EditModel, DTOJournalArticle>().ReverseMap();                  
         }
     }
 }

@@ -12,6 +12,8 @@ using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Clans
@@ -21,10 +23,10 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
     {
 
         private readonly IMapper _mapper;
-        private readonly ApisService _service;
+        private readonly ClanService _service;
         private readonly IWebHostEnvironment _env;
 
-        public EditModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
+        public EditModel(IMapper mapper, ClanService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
             _service = service;
@@ -89,18 +91,16 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                 return NotFound();
             }
 
-            var item = await _service.FindAsync<Clan>("Clan", id);
+            var item = await _service.FindAsync<DTOClan>("Clan", id);
             if (item == null)
             {
                 return NotFound();
             }
 
-            var userRelations = await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>();
-
-            if (!User.IsInRole("Administrator") && !userRelations.Any(r => r.AppUser.UserName == User.Identity?.Name))
+            if (!User.IsInRole("Administrator") && !item.AssignedAppUsers.Any(r => r.UserName == User.Identity?.Name))
                 return Forbid();
 
-            if (User.IsInRole("Administrator") && userRelations.Count > 0)
+            if (User.IsInRole("Administrator") && item.AssignedAppUsers.Count > 0)
                 return Forbid();
             
             _mapper.Map(item, this);
@@ -110,7 +110,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
         public async Task<IActionResult> OnPostAsync(IFormFile? fileLogo, IFormFile? fileBanner)
         {
-            var item = await _service.FindAsync<Clan>("Clan", this.Id!);
+            var item = await _service.FindAsync<DTOClan>("Clan", this.Id!);
             if (item == null)
             {
                 return NotFound();
@@ -164,7 +164,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                 item.InReview = false;
             }
 
-            if (!(await _service.Update<Clan>("Clan", item)))
+            if (!(await _service.Update<DTOClan>("Clan", item)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Details", new { id = item.Id });

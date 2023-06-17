@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Linq;
 
 namespace TerritorialHQ.Pages
 {
@@ -14,6 +15,7 @@ namespace TerritorialHQ.Pages
 
         public void OnGet()
         {
+
 
         }
     }

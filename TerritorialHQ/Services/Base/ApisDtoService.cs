@@ -1,18 +1,20 @@
-﻿using System.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using TerritorialHQ_Library.DTO.Interface;
 using TerritorialHQ_Library.Entities;
 
-namespace TerritorialHQ.Services
+namespace TerritorialHQ.Services.Base
 {
-    public class ApisService
+    public class ApisDtoService
     {
         protected readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public ApisService(IHttpContextAccessor contextAccessor, IConfiguration configuration) 
+        public ApisDtoService(IHttpContextAccessor contextAccessor, IConfiguration configuration)
         {
             _contextAccessor = contextAccessor;
             _configuration = configuration;
@@ -29,14 +31,14 @@ namespace TerritorialHQ.Services
 #else
             _httpClient = new HttpClient();
 #endif
-            _httpClient.BaseAddress = new Uri(ConfigurationBinder.GetValue<string>(_configuration, "APIS_URI")!);
+            _httpClient.BaseAddress = new Uri(ConfigurationBinder.GetValue<string>(_configuration, "APIS_URI")! + "/api/");
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
 
         }
 
-        public async Task<List<T>?> GetAllAsync<T>(string endpoint) where T : IEntity
+        public async Task<List<T>?> GetAllAsync<T>(string endpoint) where T : IDto
         {
             AddTokenHeader();
 
@@ -51,7 +53,7 @@ namespace TerritorialHQ.Services
             return result;
         }
 
-        public async Task<T?> FindAsync<T>(string endpoint, string id) where T : IEntity
+        public async Task<T?> FindAsync<T>(string endpoint, string id) where T : IDto
         {
             AddTokenHeader();
 
@@ -66,7 +68,8 @@ namespace TerritorialHQ.Services
             return result;
         }
 
-        public async Task<bool> Add<T>(string endpoint, T item) where T : IEntity
+        [Authorize]
+        public async Task<bool> Add<T>(string endpoint, T item) where T : IDto
         {
             AddTokenHeader();
 
@@ -78,7 +81,8 @@ namespace TerritorialHQ.Services
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
         }
 
-        public async Task<bool> Update<T>(string endpoint, T item) where T : IEntity
+        [Authorize]
+        public async Task<bool> Update<T>(string endpoint, T item) where T : IDto
         {
             AddTokenHeader();
 
@@ -95,12 +99,13 @@ namespace TerritorialHQ.Services
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
         }
 
-        public async Task<bool> Remove<T>(string? endpoint, string? id) where T : IEntity
+        [Authorize(Roles = "Administrator")]
+        public async Task<bool> Remove(string? endpoint, string? id)
         {
             AddTokenHeader();
 
             var request = new HttpRequestMessage(HttpMethod.Delete, endpoint + "/" + id);
-            
+
             HttpResponseMessage response = await _httpClient.SendAsync(request);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -111,7 +116,7 @@ namespace TerritorialHQ.Services
 
         protected void AddTokenHeader()
         {
-            var token = _contextAccessor.HttpContext?.Request.Cookies["BearerToken"] ?? String.Empty;
+            var token = _contextAccessor.HttpContext?.Request.Cookies["BearerToken"] ?? string.Empty;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
     }

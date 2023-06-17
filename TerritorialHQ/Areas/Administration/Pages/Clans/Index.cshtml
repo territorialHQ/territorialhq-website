@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Index";
+    
+    var userId = User.GetId();
 }
 
 <h1 class="text-4xl mb-5">Clans</h1>
@@ -24,19 +26,19 @@
         <thead class="">
             <tr>
                 <th scope="col">
-                    @Html.DisplayNameFor(model => model.Clan![0].Name)
+                    @Html.DisplayNameFor(model => model.Clans![0].Name)
                 </th>
                 <th scope="col">
-                    @Html.DisplayNameFor(model => model.Clan![0].GuildId)
+                    @Html.DisplayNameFor(model => model.Clans![0].GuildId)
                 </th>
                 <th scope="col">
-                    @Html.DisplayNameFor(model => model.Clan![0].LogoFile)
+                    @Html.DisplayNameFor(model => model.Clans![0].LogoFile)
                 </th>
                 <th scope="col">
-                    @Html.DisplayNameFor(model => model.Clan![0].BannerFile)
+                    @Html.DisplayNameFor(model => model.Clans![0].BannerFile)
                 </th>
                 <th scope="col">
-                    @Html.DisplayNameFor(model => model.Clan![0].DiscordLink)
+                    Assigned Users
                 </th>
                 <th scope="col" class="">
                     Status
@@ -45,10 +47,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Clan!)
+            @foreach (var item in Model.Clans!)
             {
-@*                if (!User.IsInRole("Administrator") && !item.ClanUserRelations.Any(r => r.User.UserName == User.Identity?.Name))
-                    continue;*@
+                if (!User.IsInRole("Administrator") && item.AssignedAppUsers.Any(u => u.Id == userId))
+                    continue;
 
                 <tr class="">
                     <td>
@@ -70,7 +72,13 @@
                         }
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DiscordLink)
+                        @foreach (var user in item.AssignedAppUsers)
+                        {
+                            <p>
+                                <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(user.UserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(user.UserName)" />
+                                <span class="name-@(user.UserName)">@user.UserName</span>
+                            </p>
+                        }
                     </td>
                     <td>
                         @if (item.InReview)
@@ -88,10 +96,10 @@
                     </td>
                     <td style="width: 1%; white-space: nowrap">
                         <a class="btn-admin-secondary-sm" asp-page="./Details" asp-route-id="@item.Id">Details</a>
-                        @*@if (User.IsInRole("Administrator") && item.ClanUserRelations.Count == 0)
+                        @if (User.IsInRole("Administrator"))
                         {
                             <a class="btn-admin-danger-sm" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-                        }*@
+                        }
                     </td>
                 </tr>
             }

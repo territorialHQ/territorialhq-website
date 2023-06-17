@@ -48,11 +48,12 @@
                                         }
                                         else
                                         {
-                                            <form asp-page="./Remove" asp-route-id="@item.Id" method="post">
-                                            <button type="submit" class="btn-admin-danger-sm" onclick="return confirm('Remove user from role? The user will be signed out automatically.')">Remove</button>
-                                        </form>
+                                            <form asp-page-handler="RemoveAppUser" method="post">
+                                                <input type="hidden" name="userId" value="@item.Id" />
+                                                <button type="submit" class="btn-admin-danger-sm" onclick="return confirm('Remove user from role? The user will be signed out automatically.')">Remove</button>
+                                            </form>
                                         }
-                                        
+
                                     </td>
                                 </tr>
                             }
@@ -67,7 +68,7 @@
         <div class="ml-6 pl-6 border-l-2 border-l-gray-200">
             <h2 class="text-2xl mb-5">Add Users to Backend</h2>
 
-            <form method="post">
+            <form method="post" asp-page-handler="Search">
                 <div class="form-group">
                     <label class="control-label" asp-for="UserQuery"></label>
                     <input class="form-control" asp-for="UserQuery" />
@@ -102,13 +103,13 @@
                                     }
                                     else
                                     {
-                                        <form asp-page="./Add">
-                                        <input type="hidden" name="userId" value="@Model.QueryResult.Id" />
-                                        <select class="form-control inline-block w-[200px]" name="role" asp-items="@Html.GetEnumSelectList<AppUserRole>()"></select>
-                                        <button class="btn-admin-primary" type="submit">Add to role</button>
-                                    </form>
+                                        <form asp-page-handler="AddAppUser">
+                                            <input type="hidden" name="userId" value="@Model.QueryResult.Id" />
+                                            <select class="form-control inline-block w-[200px]" name="role" asp-items="@Html.GetEnumSelectList<AppUserRole>()"></select>
+                                            <button class="btn-admin-primary" type="submit">Add to role</button>
+                                        </form>
                                     }
-                                    
+
                                 </td>
                             </tr>
                         </tbody>

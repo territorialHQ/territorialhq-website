@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Models.ViewComponents

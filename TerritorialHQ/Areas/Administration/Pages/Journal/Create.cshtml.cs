@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Journal
@@ -14,10 +16,10 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
     public class CreateModel : PageModel
     {
         private readonly IMapper _mapper;
-        private readonly ApisService _service;
+        private readonly JournalArticleService _service;
         private readonly IWebHostEnvironment _env;
 
-        public CreateModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
+        public CreateModel(IMapper mapper, JournalArticleService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
             _service = service;
@@ -77,7 +79,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 return Page();
             }
 
-            var item = new JournalArticle();
+            var item = new DTOJournalArticle();
             _mapper.Map(this, item);
 
             if (imageFile != null)
@@ -85,7 +87,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 item.Image = ImageHelper.ProcessImage(imageFile, _env.WebRootPath + "/Data/Uploads/System/", true, null, true);
             }
 
-            if (!(await _service.Add<JournalArticle>("JournalArticle", item)))
+            if (!(await _service.Add<DTOJournalArticle>("JournalArticle", item)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

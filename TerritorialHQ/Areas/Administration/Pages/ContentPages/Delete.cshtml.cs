@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
@@ -12,14 +14,14 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
     [Authorize(Roles = "Administrator")]
     public class DeleteModel : PageModel
     {
-        private readonly ApisService _service;
+        private readonly ContentPageService _service;
 
-        public DeleteModel(ApisService service)
+        public DeleteModel(ContentPageService service)
         {
             _service = service;
         }
 
-        public ContentPage? ContentPage { get; set; }
+        public DTOContentPage? ContentPage { get; set; }
 
         public async Task<IActionResult>
             OnGetAsync(string id)
@@ -29,7 +31,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 return NotFound();
             }
 
-            ContentPage = await _service.FindAsync<ContentPage>("ContentPage", id);
+            ContentPage = await _service.FindAsync<DTOContentPage>("ContentPage", id);
 
             if (ContentPage == null)
             {
@@ -46,7 +48,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 return NotFound();
             }
 
-            if (!(await _service.Remove<ContentPage>("ContentPage", id)))
+            if (!(await _service.Remove("ContentPage", id)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

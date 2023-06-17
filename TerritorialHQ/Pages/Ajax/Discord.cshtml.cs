@@ -17,7 +17,7 @@ namespace TerritorialHQ.Pages.Ajax
             _discordBotService = discordBotService;
         }
 
-        public IActionResult OnGetDiscordUserData(ulong id)
+        public async Task<IActionResult> OnGetDiscordUserData(ulong id)
         {
             var rnd = new Random();
 

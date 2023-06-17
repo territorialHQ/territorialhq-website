@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
@@ -14,12 +16,12 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
     public class CreateModel : PageModel
     {
         private readonly IMapper _mapper;
-        private readonly ApisService _service;
+        private readonly ContentPageService _service;
         private readonly IWebHostEnvironment _env;
 
         public CreateModel(
             IMapper mapper,
-            ApisService service,
+            ContentPageService service,
             IWebHostEnvironment env
         )
         {
@@ -51,7 +53,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 return Page();
             }
 
-            var item = new ContentPage();
+            var item = new DTOContentPage();
             _mapper.Map(this, item);
 
             if (fileBanner != null)
@@ -59,7 +61,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 item.BannerImage = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerImage, false);
             }
 
-            if (!(await _service.Add<ContentPage>("ContentPage", item)))
+            if (!(await _service.Add<DTOContentPage>("ContentPage", item)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

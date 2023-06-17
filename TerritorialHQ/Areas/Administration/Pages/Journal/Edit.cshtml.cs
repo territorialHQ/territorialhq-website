@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Journal
@@ -16,10 +18,10 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
     {
 
         private readonly IMapper _mapper;
-        private readonly ApisService _service;
+        private readonly JournalArticleService _service;
         private readonly IWebHostEnvironment _env;
 
-        public EditModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
+        public EditModel(IMapper mapper, JournalArticleService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
             _service = service;
@@ -81,7 +83,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 return NotFound();
             }
 
-            var item = await _service.FindAsync<JournalArticle>("JournalArticle", id);
+            var item = await _service.FindAsync<DTOJournalArticle>("JournalArticle", id);
             if (item == null)
             {
                 return NotFound();
@@ -100,7 +102,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 return Page();
             }
 
-            var item = await _service.FindAsync<JournalArticle>("JournalArticle", this.Id);
+            var item = await _service.FindAsync<DTOJournalArticle>("JournalArticle", this.Id!);
             if (item == null)
                 return NotFound();
 
@@ -120,7 +122,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 RemoveImage = false;
             }
 
-            if (!(await _service.Update<JournalArticle>("JournalArticle", item)))
+            if (!(await _service.Update<DTOJournalArticle>("JournalArticle", item)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

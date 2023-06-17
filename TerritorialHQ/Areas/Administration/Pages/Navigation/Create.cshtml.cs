@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Navigation
@@ -15,14 +17,17 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
     public class CreateModel : PageModel
     {
         private readonly IMapper _mapper;
-        private readonly ApisService _service;
+        private readonly NavigationEntryService _service;
+        private readonly ContentPageService _contentPageService;
 
         public CreateModel(
             IMapper mapper,
-            ApisService service)
+            NavigationEntryService service,
+            ContentPageService contentPageService)
         {
             _mapper = mapper;
             _service = service;
+            _contentPageService = contentPageService;
         }
 
         [BindProperty]
@@ -53,7 +58,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
         {
             ParentId = parentId;
 
-            ViewData["ContentPageId"] = new SelectList(await _service.GetAllAsync<ContentPage>("ContentPage"), "Id", "DisplayName");
+            ViewData["ContentPageId"] = new SelectList(await _contentPageService.GetAllAsync<DTOContentPage>("ContentPage"), "Id", "DisplayName", this.ContentPageId);
             return Page();
         }
 
@@ -61,14 +66,14 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
         {
             if (!ModelState.IsValid)
             {
-                ViewData["ContentPageId"] = new SelectList(await _service.GetAllAsync<ContentPage>("ContentPage"), "Id", "DisplayName");
+                ViewData["ContentPageId"] = new SelectList(await _contentPageService.GetAllAsync<DTOContentPage>("ContentPage"), "Id", "DisplayName", this.ContentPageId);
                 return Page();
             }
 
-            var item = new NavigationEntry();
+            var item = new DTONavigationEntry();
             _mapper.Map(this, item);
 
-            if (!(await _service.Add<NavigationEntry>("NavigationEntry", item)))
+            if (!(await _service.Add<DTONavigationEntry>("NavigationEntry", item)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

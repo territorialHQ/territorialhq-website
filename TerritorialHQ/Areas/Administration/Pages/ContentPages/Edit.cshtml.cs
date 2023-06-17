@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
@@ -15,10 +17,10 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
     {
 
         private readonly IMapper _mapper;
-        private readonly ApisService _service;
+        private readonly ContentPageService _service;
         private readonly IWebHostEnvironment _env;
 
-        public EditModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
+        public EditModel(IMapper mapper, ContentPageService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
             _service = service;
@@ -55,7 +57,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 return NotFound();
             }
 
-            var item = await _service.FindAsync<ContentPage>("ContentPage", id);
+            var item = await _service.FindAsync<DTOContentPage>("ContentPage", id);
             if (item == null)
             {
                 return NotFound();
@@ -73,7 +75,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 return Page();
             }
 
-            var item = await _service.FindAsync<ContentPage>("ContentPage", this.Id!);
+            var item = await _service.FindAsync<DTOContentPage>("ContentPage", this.Id!);
             if (item == null)
                 return NotFound();
 
@@ -93,7 +95,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 RemoveBanner = false;
             }
 
-            if (!(await _service.Update<ContentPage>("ContentPage", item)))
+            if (!(await _service.Update<DTOContentPage>("ContentPage", item)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

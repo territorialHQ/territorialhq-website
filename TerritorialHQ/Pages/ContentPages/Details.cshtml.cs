@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
-using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Pages.ContentPages

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Navigation
@@ -15,21 +17,24 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
     {
 
         private readonly IMapper _mapper;
-        private readonly ApisService _service;
+        private readonly NavigationEntryService _service;
+        private readonly ContentPageService _contentPageService;
 
         public EditModel(
-        IMapper mapper,
-        ApisService service
+            IMapper mapper,
+            NavigationEntryService service,
+            ContentPageService contentPageService
         )
         {
             _mapper = mapper;
             _service = service;
+            _contentPageService = contentPageService;
         }
 
 
         [BindProperty]
         [Display(Name = " ")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [BindProperty]
         [Required]
         [Display(Name = "Display Name (required)")]
@@ -61,7 +66,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
                 return NotFound();
             }
 
-            var item = await _service.FindAsync<NavigationEntry>("NavigationEntry", id);
+            var item = await _service.FindAsync<DTONavigationEntry>("NavigationEntry", id);
             if (item == null)
             {
                 return NotFound();
@@ -69,7 +74,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
 
             _mapper.Map(item, this);
 
-            ViewData["ContentPageId"] = new SelectList(await _service.GetAllAsync<ContentPage>("ContentPage"), "Id", "DisplayName", this.ContentPageId);
+            ViewData["ContentPageId"] = new SelectList(await _contentPageService.GetAllAsync<DTOContentPage>("ContentPage"), "Id", "DisplayName", this.ContentPageId);
             return Page();
         }
 
@@ -78,14 +83,17 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
         {
             if (!ModelState.IsValid)
             {
-                ViewData["ContentPageId"] = new SelectList(await _service.GetAllAsync<ContentPage>("ContentPage"), "Id", "DisplayName", this.ContentPageId);
+                ViewData["ContentPageId"] = new SelectList(await _contentPageService.GetAllAsync<DTOContentPage>("ContentPage"), "Id", "DisplayName", this.ContentPageId);
                 return Page();
             }
 
-            var item = await _service.FindAsync<NavigationEntry>("NavigationEntry", this.Id);
+            var item = await _service.FindAsync<DTONavigationEntry>("NavigationEntry", this.Id!);
+            if (item == null) 
+                return NotFound();
+
             _mapper.Map(this, item);
 
-            if (!(await _service.Update<NavigationEntry>("NavigationEntry", item)))
+            if (!(await _service.Update<DTONavigationEntry>("NavigationEntry", item)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

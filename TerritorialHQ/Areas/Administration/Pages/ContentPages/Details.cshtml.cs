@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
 using TerritorialHQ.Services;
+using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
@@ -11,14 +13,14 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
     [Authorize(Roles = "Administrator")]
     public class DetailsModel : PageModel
     {
-        private readonly ApisService _service;
+        private readonly ContentPageService _service;
 
-        public DetailsModel(ApisService service)
+        public DetailsModel(ContentPageService service)
         {
             _service = service;
         }
 
-        public ContentPage? ContentPage { get; set; }
+        public DTOContentPage? ContentPage { get; set; }
 
         public async Task<IActionResult>
             OnGetAsync(string id)
@@ -28,7 +30,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 return NotFound();
             }
 
-            ContentPage = await _service.FindAsync<ContentPage>("ContentPage", id);
+            ContentPage = await _service.FindAsync<DTOContentPage>("ContentPage", id);
 
             if (ContentPage == null)
             {

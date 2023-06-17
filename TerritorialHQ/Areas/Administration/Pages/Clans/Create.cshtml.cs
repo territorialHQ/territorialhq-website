@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using TerritorialHQ.Helpers;
-using TerritorialHQ.Models;
 using TerritorialHQ.Services;
-using TerritorialHQ_Library.Entities;
+using TerritorialHQ_Library.DTO;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Clans
 {
@@ -14,10 +13,10 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
     public class CreateModel : PageModel
     {
         private readonly IMapper _mapper;
-        private readonly ApisService _service;
+        private readonly ClanService _service;
         private readonly IWebHostEnvironment _env;
 
-        public CreateModel(IMapper mapper, ApisService service, IWebHostEnvironment env)
+        public CreateModel(IMapper mapper, ClanService service, IWebHostEnvironment env)
         {
             _mapper = mapper;
             _service = service;
@@ -69,7 +68,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                 return Page();
             }
 
-            var item = new Clan();
+            var item = new DTOClan();
             _mapper.Map(this, item);
 
             if (fileLogo != null)
@@ -82,7 +81,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                 item.BannerFile = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerFile, false);
             }
 
-            if (!(await _service.Add<Clan>("Clan", item)))
+            if (!(await _service.Add<DTOClan>("Clan", item)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");
