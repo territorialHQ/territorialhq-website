@@ -2,38 +2,103 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+
+    @font-face {
+        font-family: 'LoRes';
+        src: url('/fonts/LoRes15OT-Bold.woff2') format('woff2'), url('/fonts/LoRes15OT-Bold.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Roboto Condensed';
+        src: url('/fonts/RobotoCondensed-Regular-webfont.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Roboto Condensed';
+        src: url('/fonts/RobotoCondensed-Italic-webfont.woff') format('woff');
+        font-weight: normal;
+        font-style: italic;
+    }
+
+    @font-face {
+        font-family: 'Roboto Condensed';
+        src: url('/fonts/RobotoCondensed-Light-webfont.woff') format('woff');
+        font-weight: 300;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Roboto Condensed';
+        src: url('/fonts/RobotoCondensed-LightItalic-webfont.woff') format('woff');
+        font-weight: 300;
+        font-style: italic;
+    }
+
+    @font-face {
+        font-family: 'Roboto Condensed';
+        src: url('/fonts/RobotoCondensed-Bold-webfont.woff') format('woff');
+        font-weight: 700;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'Roboto Condensed';
+        src: url('/fonts/RobotoCondensed-BoldItalic-webfont.woff') format('woff');
+        font-weight: 700;
+        font-style: italic;
+    }
+
+    html {
+        font-family: 'Roboto Condensed', system-ui, sans-serif;
+    }
+
+}
+
 @layer components {
 
+    h1 {
+        @apply text-accent-500;
+    }
+
+    h2 {
+        @apply text-slate-300;
+    }
+
     .admin-table {
-        @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+        @apply w-full text-left text-slate-300 shadow-xl;
     }
 
         .admin-table > thead {
-            @apply text-xs text-slate-700 uppercase bg-slate-100;
+            @apply text-sm text-slate-300 uppercase bg-slate-700;
         }
 
             .admin-table > thead th {
-                @apply px-6 py-3;
+                @apply px-6 py-3 text-accent-500;
             }
 
         .admin-table > tbody tr {
-            @apply border-b dark:bg-gray-900 dark:border-gray-700;
+            @apply border-b border-slate-700;
         }
 
         .admin-table > tbody td {
-            @apply px-6 py-4;
+            @apply px-6 py-4 bg-slate-800;
         }
 
     .btn-admin-primary {
-        @apply inline-block text-white bg-slate-800 hover:bg-slate-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-slate-700 focus:outline-none dark:focus:ring-blue-800;
+        @apply inline-block py-2.5 px-5 font-medium text-slate-900 focus:outline-none bg-accent-500 rounded-md border border-slate-700 hover:border-slate-500 hover:text-slate-500 focus:z-10 focus:ring-2 focus:ring-slate-500 stroke-slate-800 hover:stroke-slate-500;
     }
 
     .btn-admin-secondary {
-        @apply inline-block py-2.5 px-5 mr-2 text-sm font-medium text-slate-800 focus:outline-none bg-slate-100 rounded-md border border-slate-300 hover:border-slate-500 hover:text-slate-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+        @apply inline-block py-2.5 px-5 font-medium text-slate-300 focus:outline-none bg-slate-500 rounded-md border border-slate-700 hover:border-accent-500 hover:text-slate-200 focus:z-10 focus:ring-2 focus:ring-accent-500 stroke-slate-300 hover:stroke-slate-200;
     }
 
     .btn-admin-secondary-sm {
-        @apply inline-block py-1 px-2 mr-0.5 text-sm font-medium text-slate-800 focus:outline-none bg-slate-100 rounded-md border border-slate-300 hover:border-slate-500 hover:text-slate-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+        @apply inline-block py-1 px-2 mr-0.5 text-sm font-medium text-slate-300 focus:outline-none bg-slate-500 rounded-md border border-slate-700 hover:border-accent-500 hover:text-slate-200 focus:z-10 focus:ring-2 focus:ring-accent-500 stroke-slate-300 hover:stroke-slate-200;
     }
 
     .btn-admin-danger-sm {
@@ -41,15 +106,23 @@
     }
 
     .form-group {
-        @apply mb-3;
+        @apply mb-6;
     }
 
-    .control-label {
-        @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white;
+    .form-group label {
+        @apply text-slate-300;
     }
+
+        .form-group > input[type=file] {
+            @apply text-slate-300;
+        }
+
+        .form-group label.control-label {
+            @apply block mb-2 text-sm font-bold uppercase text-accent-500;
+        }
 
     .form-control {
-        @apply bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:bg-gray-200 disabled:text-gray-400;
+        @apply bg-slate-800 border border-slate-600 text-slate-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 disabled:bg-gray-200 disabled:text-gray-400;
     }
 
     dialog::backdrop {

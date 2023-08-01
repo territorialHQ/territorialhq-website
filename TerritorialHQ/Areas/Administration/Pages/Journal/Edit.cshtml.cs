@@ -125,7 +125,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
             if (!(await _service.Update<DTOJournalArticle>("JournalArticle", item)))
                 throw new Exception("Error while saving data set.");
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Details", new { id = item.Id });
         }
 
     }

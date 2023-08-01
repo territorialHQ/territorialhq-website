@@ -1,0 +1,159 @@
+﻿$font-primary: 'Roboto Condensed', Helvetica, Arial, sans-serif;
+$font-secondary: 'LoRes', Georgia, Times, serif;
+
+body {
+    font-family: $font-primary;
+    font-weight: 300;
+}
+
+h1, h2, h3 {
+    font-family: $font-secondary;
+}
+
+h4, h5 {
+    font-weight: 300;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.h1 {
+    font-size: 2.5rem;
+    color: #EACF69;
+    text-transform: uppercase;
+    margin-top: 0;
+    line-height: 1em;
+
+    img {
+        width: 48px;
+        height: 48px;
+        margin-right: 6px;
+        vertical-align: -12px;
+    }
+}
+
+.h2 {
+    color: #EACF69;
+    text-transform: uppercase;
+    margin-top: 0;
+    line-height: 1rem;
+    margin-bottom: 14px;
+
+    img {
+        width: 28px;
+        height: 28px;
+        margin-right: 6px;
+        vertical-align: -6px;
+    }
+}
+
+.content-page {
+    h1 {
+        font-size: 3.2rem;
+        color: #EACF69;
+        text-transform: uppercase;
+        margin-top: 0;
+        margin-bottom: 40px;
+        line-height: 1em;
+
+        img {
+            width: 48px;
+            height: 48px;
+            margin-right: 6px;
+            vertical-align: -12px;
+        }
+    }
+
+    h2 {
+        color: #EACF69;
+        text-transform: uppercase;
+        margin-top: 30px;
+        margin-bottom: 14px;
+        bottom: 15px;
+        line-height: 1rem;
+
+        img {
+            width: 28px;
+            height: 28px;
+            margin-right: 6px;
+            vertical-align: -6px;
+        }
+    }
+
+    h3 {
+        font-family: $font-primary;
+        color: #EACF69;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        font-family: $font-primary;
+        color: #64748b;
+    }
+}
+
+p, li {
+    color: #e2e8f0;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+$maxSize: 40;
+$i: 8;
+
+@while $i <= $maxMargin {
+    .font-size-#{$i} {
+        font-size: 0px + $i;
+    }
+
+    $i: $i + 2;
+}
+
+@media (min-width: 768px) {
+
+    $maxSize: 40;
+    $i: 8;
+
+    @while $i <= $maxMargin {
+        .font-size-md-#{$i} {
+            font-size: 0px + $i;
+        }
+
+        $i: $i + 2;
+    }
+
+    p {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .h1 {
+        font-size: 2rem;
+        color: #EACF69;
+        text-transform: uppercase;
+        margin-top: 0;
+        line-height: 1.2rem;
+
+        img {
+            width: 40px;
+            height: 40px;
+            margin-right: 6px;
+            vertical-align: -8px;
+        }
+    }
+
+}

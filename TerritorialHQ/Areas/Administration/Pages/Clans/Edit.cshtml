@@ -31,14 +31,14 @@
 
                 <div class="form-group">
                     <div class="checkbox">
-                        <label>
+                        <label class="text-slate-400">
                             <input asp-for="IsPublished" /> @Html.DisplayNameFor(model => model.IsPublished)
                         </label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="checkbox">
-                        <label>
+                        <label class="text-slate-400">
                             <input asp-for="InReview" /> @Html.DisplayNameFor(model => model.InReview)
                         </label>
                     </div>
@@ -67,8 +67,8 @@
                     {
                         <img src="/Data/Uploads/System/@Model.LogoFile" style="max-height: 150px" class="block mb-2" />
                     }
-                    <input type="file" name="fileLogo" accept=".jpg,.jpeg,.gif,.png" />
-                    <label class="block mt-2"><input type="checkbox" asp-for="RemoveLogo" /> Remove logo image on save</label>
+                    <input type="file" name="fileLogo" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
+                    <label class="block mt-2  text-slate-400"><input type="checkbox" asp-for="RemoveLogo" /> Remove logo image on save</label>
                 </div>
                 <div class="basis-1/2  form-group">
                     <label asp-for="BannerFile" class="control-label"></label>
@@ -76,15 +76,46 @@
                     {
                         <img src="/Data/Uploads/System/@Model.BannerFile" style="max-height: 150px" class="block mb-2" />
                     }
-                    <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" />
-                    <label class="block mt-2"><input type="checkbox" asp-for="RemoveBanner" /> Remove banner image on save</label>
+                    <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
+                    <label class="block mt-2 text-slate-400"><input type="checkbox" asp-for="RemoveBanner" /> Remove banner image on save</label>
                 </div>
             </div>
+            <div class="flex flex-row gap-4">
+                <div class="basis-1/2 form-group">
+                    <div class="form-group">
+                        <label asp-for="Motto" class="control-label"></label>
+                        <input asp-for="Motto" class="form-control" />
+                        <span asp-validation-for="Motto" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="basis-1/2 form-group">
 
-            <div class="form-group">
-                <label asp-for="Motto" class="control-label"></label>
-                <input asp-for="Motto" class="form-control" />
-                <span asp-validation-for="Motto" class="text-danger"></span>
+                    <div class="flex flex-row gap-4">
+                        <div class="basis-1/3">
+                            <div class="form-group">
+                                <label asp-for="Tag" class="control-label"></label>
+                                <input asp-for="Tag" class="form-control" />
+                                <span asp-validation-for="Tag" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="basis-1/3">
+                            <div class="form-group">
+                                <label asp-for="Color1" class="control-label"></label>
+                                <input asp-for="Color1" class="form-control" />
+                                <span asp-validation-for="Color1" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="basis-1/3">
+                            <div class="form-group">
+                                <label asp-for="Color2" class="control-label"></label>
+                                <input asp-for="Color2" class="form-control" />
+                                <span asp-validation-for="Color2" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
             </div>
             <div class="flex flex-row gap-4">
                 <div class="basis-1/2 form-group">
@@ -117,6 +148,26 @@
                 <label asp-for="Description" class="control-label"></label>
                 <textarea asp-for="Description" class="form-control" rows="12"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="History" class="control-label"></label>
+                <textarea asp-for="History" class="form-control" rows="12"></textarea>
+                <span asp-validation-for="History" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Community" class="control-label"></label>
+                <textarea asp-for="Community" class="form-control" rows="12"></textarea>
+                <span asp-validation-for="Community" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Features" class="control-label"></label>
+                <textarea asp-for="Features" class="form-control" rows="12"></textarea>
+                <span asp-validation-for="Features" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Miscellaneous" class="control-label"></label>
+                <textarea asp-for="Miscellaneous" class="form-control" rows="12"></textarea>
+                <span asp-validation-for="Miscellaneous" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn-admin-primary">Save</button>

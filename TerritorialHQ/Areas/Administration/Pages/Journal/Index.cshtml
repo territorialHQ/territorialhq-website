@@ -11,7 +11,7 @@
 {
     <p>
         <a asp-page="Create" class="btn-admin-primary mb-6">
-            <svg class="inline-block w-6 h-6" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <svg class="inline-block w-6 h-6" fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             Create new article
@@ -68,7 +68,7 @@
                         @string.Format("{0:dd MMMM yyyy}", item.PublishTo)
                     </td>
                     <td style="width: 1%; white-space: nowrap">
-                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn-admin-secondary-sm">Edit</a>
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn-admin-secondary-sm">Details</a>
                         <a asp-page="./Delete" asp-route-id="@item.Id" class="btn-admin-danger-sm">Delete</a>
                     </td>
                 </tr>

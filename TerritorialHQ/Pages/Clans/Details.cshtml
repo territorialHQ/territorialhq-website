@@ -1,0 +1,100 @@
+﻿@page
+@model TerritorialHQ.Pages.Clans.DetailsModel
+@{
+}
+
+
+@if (!string.IsNullOrEmpty(Model.Clan?.BannerFile))
+{
+    <div class="fader" style="background-image: url(/Data/Uploads/System/@Model.Clan?.BannerFile)"></div>
+    <div class="fader-soft">
+    </div>
+
+}
+else
+{
+    <div class="start-video">
+        <video autoplay muted loop class="w-full h-full absolute object-cover">
+            <source src="/video/intro.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="fader-narrow">
+    </div>
+
+}
+
+
+
+<div class="clan-header mb-40">
+    <div class="pure-g">
+        <div class="pure-u-1-1 pure-u-md-2-3 text-center">
+            <img class="clan-logo" src="/Data/Uploads/System/@(Model.Clan?.LogoFile)" />
+            <h1>@Model.Clan?.Name</h1>
+            <p class="clan-motto">"@Model.Clan?.Motto"</p>
+        </div>
+    </div>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1-1 pure-u-md-2-3">
+        <p class="news-details-teaser">
+            @Model.Clan?.Description
+        </p>
+        @if (!string.IsNullOrEmpty(Model.Clan!.History))
+        {
+            <h2 class="h2 mt-30">Clan History</h2>
+            <p>@Html.Raw(Model.Clan!.History.Replace(System.Environment.NewLine, "<br />"))</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Clan!.Community))
+        {
+            <h2 class="h2 mt-30">Clan Community</h2>
+            <p>@Html.Raw(Model.Clan!.Community.Replace(System.Environment.NewLine, "<br />"))</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Clan!.Features))
+        {
+            <h2 class="h2 mt-30">Unique Features</h2>
+            <p>@Html.Raw(Model.Clan!.Features.Replace(System.Environment.NewLine, "<br />"))</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Clan!.Miscellaneous))
+        {
+            <h2 class="h2 mt-30">Miscellaneous</h2>
+            <p>@Html.Raw(Model.Clan!.Miscellaneous.Replace(System.Environment.NewLine, "<br />"))</p>
+        }
+    </div>
+    <div class="pure-u-1-1 pure-u-md-1-3">
+        <h2 class="h2">Quick Facts</h2>
+        <div class="clan-quickfacts-container mb-20">
+            <table class="tthq-table">
+                <tbody>
+                    <tr>
+                        <td>Clan Tag</td>
+                        <td>[@Model.Clan?.Tag]</td>
+                    </tr>
+                    <tr>
+                        <td>Founded</td>
+                        <td>@Model.Clan?.Foundation</td>
+                    </tr>
+                    <tr>
+                        <td>Founded by</td>
+                        <td>@Model.Clan?.Founders</td>
+                    </tr>
+                    <tr>
+                        <td>Discord Server</td>
+                        <td><a href="@Model.Clan?.DiscordLink" target="_blank">@Model.Clan?.DiscordLink</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h2 class="h2 mt-40">Clan Graph (3 months)</h2>
+        <div class="clan-quickfacts-container mb-20">
+            <div style="width: 100%; height: 300px">
+                <canvas id="myChart" data-clan="@Model.Clan!.Tag" style="width: 100%; height: 300px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/chart.min.js"></script>
+    <script src="~/js/chart-init.js"></script>
+}

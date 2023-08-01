@@ -1,0 +1,67 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.Journal.DetailsModel
+@{
+}
+
+
+<h1 class="text-4xl mb-5">@Model.Article?.Title</h1>
+<h2 class="text-2xl mb-5">Details</h2>
+
+<div class="flex flex-row text-slate-500">
+    <div class="basis-3/4">
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Article!.Image)</label>
+            @if (!string.IsNullOrEmpty(Model.Article!.Image))
+            {
+                <img src="/Data/Uploads/System/@Model.Article!.Image" style="max-height: 150px" class="block mb-2" />
+            }
+        </div>
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Article!.Subtitle)</label>
+            @Html.DisplayFor(model => model.Article!.Subtitle)
+        </div>
+        <div class="flex flex-row">
+            <div class="basis-1/2 form-group">
+                <label class="control-label">@Html.DisplayNameFor(model => model.Article!.PublishFrom)</label>
+                @Html.DisplayFor(model => model.Article!.PublishFrom)
+            </div>
+            <div class="basis-1/2  form-group">
+                <label class="control-label">@Html.DisplayNameFor(model => model.Article!.PublishTo)</label>
+                @Html.DisplayFor(model => model.Article!.PublishTo)
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Article!.Teaser)</label>
+            @Html.DisplayFor(model => model.Article!.Teaser)
+        </div>
+        <div class="flex flex-row">
+            <div class="basis-1/2 form-group">
+                <label class="control-label">@Html.DisplayNameFor(model => model.Article!.Tags)</label>
+                @Html.DisplayFor(model => model.Article!.Tags)
+            </div>
+            <div class="basis-1/2  form-group">
+                <label class="control-label">@Html.DisplayNameFor(model => model.Article!.IsSticky)</label>
+                @Html.DisplayFor(model => model.Article!.IsSticky)
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Article!.Body)</label>
+            @Html.Raw(Model.Article!.Body)
+        </div>
+    </div>
+    <div class="basis-1/4">
+        <div class="ml-6 pl-6 border-l-2 border-l-slate-600">
+            <a class="btn-admin-primary w-full mb-2 text-center" asp-page="./Edit" asp-route-id="@Model.Article?.Id">
+                <svg class="inline-block w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>
+                </svg>
+                Edit</a>
+            <a class="btn-admin-secondary w-full mb-4 text-center" asp-page="./Preview" asp-route-id="@Model.Article?.Id" target="_blank">
+                <svg class="inline-block w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Preview</a>
+        </div>
+    </div>
+</div>

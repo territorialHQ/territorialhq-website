@@ -1,0 +1,27 @@
+﻿/*#mainContainer {
+    margin-top: 140px;
+}*/
+
+.navbar-container {
+    overflow: hidden;
+}
+
+.nav-container {
+    background-color: #FFF;
+    z-index: 999;
+}
+
+@media (max-width: 767px) {
+
+    .nav-container {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    #mainContainer {
+        /*margin-top: 80px;*/
+    }
+}
+

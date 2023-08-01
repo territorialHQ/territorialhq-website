@@ -1,0 +1,73 @@
+﻿@page
+@model TerritorialHQ.Pages.Clans.IndexModel
+@{
+}
+
+<div class="start-video">
+    <video autoplay muted loop class="w-full h-full absolute object-cover">
+        <source src="/video/intro.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div class="fader-narrow">
+</div>
+
+
+<div class="content-page">
+    <h1 class="h1">Clans</h1>
+
+    <div class="mt-10 mb-30">
+        <a class="btn @(string.IsNullOrEmpty(Request.Query["sort"]) || Request.Query["sort"] == "rank" ? "btn-secondary" : "btn-primary")" href="/Clans?sort=rank">Sort by rank</a>
+        <a class="btn @(Request.Query["sort"] == "name" ? "btn-secondary" : "btn-primary")" href="/Clans?sort=name">Sort by name</a>
+    </div>
+
+    <div class="clan-grid">
+        @foreach (var item in Model.ClanListings)
+        {
+            if (item.IsPublished)
+            {
+                <a asp-page="/Clans/Details" asp-route-id="@item.Id" class="hero-container-link">
+                    <div class="cl-container-h">
+                        <div class="cl-corner-container">
+                            <div class="cl-corner-l" style="border-color: @(item.Color1 ?? "#3A5A82")50"></div>
+                            <div class="cl-corner-r" style="border-color: @(item.Color1 ?? "#3A5A82")50"></div>
+                        </div>
+                        <div class="cl-gap-container"></div>
+                        <div class="cl-content-container" style="border-color: @(item.Color1 ?? "#3A5A82")50;
+                    background-image: linear-gradient(120deg, @(item.Color1 ?? "#3A5A82")28 0%, @(item.Color2 ?? "#3A5A82")28 100%), url(/img/pattern2.png)">
+                            <img src="/Data/Uploads/System/@(item.LogoFile)" />
+                            <div>
+                                <h2>@item.Name</h2>
+                                @if (!string.IsNullOrEmpty(item.Motto))
+                                {
+                                    <p>"@item.Motto"</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="cl-container-h">
+                    <div class="cl-corner-container">
+                        <div class="cl-corner-l" style="border-color: #333"></div>
+                        <div class="cl-corner-r" style="border-color: #333"></div>
+                    </div>
+                    <div class="cl-gap-container"></div>
+                    <div class="cl-content-container" style="border-color: #333;
+                                    background-image: linear-gradient(120deg, #33333328 0%, #33333328 100%), url(/img/pattern2.png)">
+                        <img src="/img/clan-placeholder.png" />
+                        <div>
+                            <h2 style="color: #888">@item.Name</h2>
+                            <p style="color: #888"><em>Updating, back soon!</em></p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+</div>
+
+

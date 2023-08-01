@@ -1,7 +1,6 @@
-﻿namespace TerritorialHQ.Services
-{
-    public class LogFileService
-    {
+﻿namespace TerritorialHQ.Services;
 
-    }
+public class LogFileService
+{
+
 }

@@ -30,10 +30,21 @@
         <label asp-for="BannerFile" class="control-label"></label>
         <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" />
     </div>
-    <div class="form-group">
-        <label asp-for="Motto" class="control-label"></label>
-        <input asp-for="Motto" class="form-control" />
-        <span asp-validation-for="Motto" class="text-danger"></span>
+    <div class="flex flex-row gap-4">
+        <div class="basis-1/2 form-group">
+            <div class="form-group">
+                <label asp-for="Motto" class="control-label"></label>
+                <input asp-for="Motto" class="form-control" />
+                <span asp-validation-for="Motto" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="basis-1/2 form-group">
+            <div class="form-group">
+                <label asp-for="Tag" class="control-label"></label>
+                <input asp-for="Tag" class="form-control" />
+                <span asp-validation-for="Tag" class="text-danger"></span>
+            </div>
+        </div>
     </div>
     <div class="flex flex-row gap-4">
         <div class="basis-1/2 form-group">
@@ -65,6 +76,26 @@
         <label asp-for="Description" class="control-label"></label>
         <textarea asp-for="Description" class="form-control" rows="12"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="History" class="control-label"></label>
+        <textarea asp-for="History" class="form-control" rows="12"></textarea>
+        <span asp-validation-for="History" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Community" class="control-label"></label>
+        <textarea asp-for="Community" class="form-control" rows="12"></textarea>
+        <span asp-validation-for="Community" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Features" class="control-label"></label>
+        <textarea asp-for="Features" class="form-control" rows="12"></textarea>
+        <span asp-validation-for="Features" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Miscellaneous" class="control-label"></label>
+        <textarea asp-for="Miscellaneous" class="form-control" rows="12"></textarea>
+        <span asp-validation-for="Miscellaneous" class="text-danger"></span>
     </div>
     <div class="form-group">
         <button type="submit" class="btn-admin-primary">Create</button>

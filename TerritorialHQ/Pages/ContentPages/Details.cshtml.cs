@@ -1,22 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TerritorialHQ.Models;
+using TerritorialHQ.Services;
 using TerritorialHQ.Services.Base;
+using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Pages.ContentPages
 {
     public class DetailsModel : PageModel
     {
-        private readonly ApisService _service;
+        private readonly NavigationEntryService _navigationEntryService;
+        private readonly ContentPageService _contentPageService;
 
-        public DetailsModel(ApisService service)
+        public DetailsModel(NavigationEntryService navigationEntryService, ContentPageService contentPageService)
         {
-            _service = service;
+            _navigationEntryService = navigationEntryService;
+            _contentPageService = contentPageService;
         }
 
-        public NavigationEntry? NavEntry { get; set; }
-        public ContentPage? ContentPage { get; set; }
+        public DTONavigationEntry? NavEntry { get; set; }
+        public DTOContentPage? ContentPage { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -28,13 +32,13 @@ namespace TerritorialHQ.Pages.ContentPages
                 return NotFound();
 
             // See if the slug belongs to an actual navigation entry
-            NavEntry = await _service.FindAsync<NavigationEntry>("NavigationEntry", slug);
-            if (NavEntry == null) 
+            NavEntry = await _navigationEntryService.FindAsync<DTONavigationEntry>("NavigationEntry", slug);
+            if (NavEntry == null)
                 return NotFound();
 
             // Get the content page
             if (NavEntry.ContentPageId != null)
-                ContentPage = await _service.FindAsync<ContentPage>("ContentPage", NavEntry.ContentPageId);
+                ContentPage = await _contentPageService.FindAsync<DTOContentPage>("ContentPage", NavEntry.ContentPageId);
 
             return Page();
         }

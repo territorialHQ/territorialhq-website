@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TerritorialHQ Administration</title>
+    <link rel="stylesheet" href="~/css/flowbite.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/dist/admin.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="bg-slate-900">
+
+    <div class="w-full h-[80px] bg-slate-950 border-b-2 border-slate-700"></div>
+
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/flowbite.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/discord-loader.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

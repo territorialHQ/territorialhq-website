@@ -1,0 +1,20 @@
+﻿@model List<TerritorialHQ.ViewModels.LeaderboardEntry>
+@{
+}
+
+<table class="tthq-lb-table" id="lb-players" style="display: none;"> 
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="width: 1%;"><strong>@item.Rank</strong></td>
+                <td style="white-space: nowrap; text-overflow: ellipsis; max-width: 55px; overflow: hidden;">
+                    @item.Tag
+                </td>
+                <td style="text-align: right">
+                    @string.Format("{0:#.0}", item.Points)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -4,7 +4,155 @@
     ViewData["Title"] = "Home page";
 }
 
-<div>
-    <h1>Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="start-video">
+    <video autoplay muted loop class="w-full h-full absolute object-cover">
+        <source src="/video/intro.mp4" type="video/mp4">
+    </video>
 </div>
+<div class="fader">
+</div>
+
+
+
+<div class="start-logo-container mb-30">
+    <img src="/img/TTHQ-Logo-Full-Centered.png" />
+</div>
+<div class="pure-g">
+    <div class="pure-u-1-1 pure-u-lg-2-3 mb-40">
+        <div class="hero-containers">
+
+            <a href="#" class="hero-container-link">
+                <div class="hero-container-v hc-1">
+                    <div class="hc-corner-container">
+                        <div class="hc-corner-l"></div>
+                        <div class="hc-corner-r"></div>
+                    </div>
+                    <div class="hc-gap-container"></div>
+                    <div class="hc-content-container">
+                        <img src="/img/guide.png" />
+                        <div>
+                            <h2>Beginner's Guide</h2>
+                            <p>Learn the basics of the game</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="hero-container-link">
+                <div class="hero-container-v hc-2">
+                    <div class="hc-corner-container">
+                        <div class="hc-corner-l"></div>
+                        <div class="hc-corner-r"></div>
+                    </div>
+                    <div class="hc-gap-container"></div>
+                    <div class="hc-content-container">
+                        <img src="/img/clients.png" />
+                        <div>
+                            <h2>Clients & Updates</h2>
+                            <p>Ways to play the game</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="/Clans/Index" class="hero-container-link">
+                <div class="hero-container-v hc-3">
+                    <div class="hc-corner-container">
+                        <div class="hc-corner-l"></div>
+                        <div class="hc-corner-r"></div>
+                    </div>
+                    <div class="hc-gap-container"></div>
+                    <div class="hc-content-container">
+                        <img src="/img/clans.png" />
+                        <div>
+                            <h2>Clans</h2>
+                            <p>The clans competing in the Neverending War</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <div class="hero-subcontainers">
+                <a href="#" class="hero-container-link">
+                    <div class="hero-container-h hc-4">
+                        <div class="hc-corner-container">
+                            <div class="hc-corner-l"></div>
+                            <div class="hc-corner-r"></div>
+                        </div>
+                        <div class="hc-gap-container"></div>
+                        <div class="hc-content-container">
+                            <img src="/img/community.png" />
+                            <div>
+                                <h2>Community Projects</h2>
+                                <p>Projects run by the tt.io community</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="hero-container-link hidden-sm-down">
+                    <div class="hero-container-h hc-5">
+                        <div class="hc-corner-container">
+                            <div class="hc-corner-l"></div>
+                            <div class="hc-corner-r"></div>
+                        </div>
+                        <div class="hc-gap-container"></div>
+                        <div class="hc-content-container">
+                            <img src="/img/history.png" />
+                            <div>
+                                <h2>TT.io History</h2>
+                                <p>History of the game</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="pure-u-1-1 pure-u-lg-1-3 mb-40">
+        <h2 class="h2"><img src="/img/trophy.svg" />Leaderboards</h2>
+        <div class="lb-container shadow">
+            <div style="display: flex;">
+                <a class="lb-tab active" data-target="#lb-clans" href="#" style="flex-grow: 1">TOP CLANS</a>
+                <a class="lb-tab" href="#" data-target="#lb-players" style="flex-grow: 1">TOP PLAYERS</a>
+            </div>
+
+            @await Component.InvokeAsync("ClanLeaderboard")
+            @await Component.InvokeAsync("PlayerLeaderboard")
+        </div>
+    </div>
+
+</div>
+
+<div class="pure-g">
+    <div class="pure-u-1-1 pure-u-md-2-3">
+        <h2 class="h1 mb-30"><img src="/img/news.svg" />Territorial Journal</h2>
+        <div class="news-section">
+
+            @foreach (var item in Model.JournalArticles)
+            {
+                <div class="news-item">
+                    <div class="news-image" style="background-image: url(/Data/Uploads/System/@(item.Image))">
+                        <a asp-page="/Journal/Details" asp-route-id="@item.Id">&nbsp;</a>
+                    </div>
+                    <div class="news-content">
+                        <h3><a asp-page="/Journal/Details" asp-route-id="@item.Id">@item.Title</a></h3>
+                        <p class="news-date"><img src="/img/calendar.svg" /> @string.Format("{0:d}", item.PublishFrom)</p>
+                        <p>@item.Teaser</p>
+                        <p class="news-by">
+                            by <img style="width: 24px; height: 24px; border-radius: 12px; margin-left: 4px" class="avatar avatar-@(item.Author) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.Author)" />
+                            <span class="name-@(item.Author)">@item.Author</span>
+                        </p>
+                    </div>
+                </div>
+            }
+
+
+
+        </div>
+    </div>
+    <div class="pure-u-1-1 pure-u-md-1-3">
+        <h2 class="h2"><img src="/img/tv.svg" />Content Creators</h2>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/leaderboard.js"></script>
+}

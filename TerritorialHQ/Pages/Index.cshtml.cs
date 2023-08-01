@@ -1,22 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Linq;
+using TerritorialHQ.Services;
+using TerritorialHQ_Library.DTO;
 
 namespace TerritorialHQ.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly JournalArticleService _journalArticleService;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public List<DTOJournalArticleListEntry> JournalArticles { get; set; }
+
+        public IndexModel(JournalArticleService journalArticleService)
         {
-            _logger = logger;
+           _journalArticleService = journalArticleService;
         }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            JournalArticles = (await _journalArticleService.GetAllAsync<DTOJournalArticleListEntry>("JournalArticle/Listing"))?.OrderByDescending(o => o.IsSticky).ThenBy(o => o.PublishFrom).ToList() ?? new();
 
-
+            return Page();
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using TerritorialHQ.Services.Base;
 
-namespace TerritorialHQ.Services
+namespace TerritorialHQ.Services;
+
+public class NavigationEntryService : ApisDtoService
 {
-    public class NavigationEntryService : ApisDtoService
+    public NavigationEntryService(IHttpContextAccessor contextAccessor, IConfiguration configuration) : base(contextAccessor, configuration)
     {
-        public NavigationEntryService(IHttpContextAccessor contextAccessor, IConfiguration configuration) : base(contextAccessor, configuration)
-        {
-        }
     }
 }

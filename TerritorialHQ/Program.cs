@@ -26,6 +26,7 @@ namespace TerritorialHQ
             builder.Services.AddSingleton(typeof(LoggerService));
 
             builder.Services.AddScoped(typeof(BotEndpointService));
+            builder.Services.AddScoped(typeof(ChartDataService));
             builder.Services.AddScoped(typeof(ApisService));
             builder.Services.AddScoped(typeof(AppUserService));
             builder.Services.AddScoped(typeof(ClanService));

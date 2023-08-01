@@ -2,21 +2,30 @@
 @{
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Points</th>
-        </tr>
-    </thead>
+<table class="tthq-lb-table" id="lb-clans" style="border-right: 0">
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Rank</td>
-                <td>@item.Name</td>
-                <td>@item.Points</td>
+                <td style="width: 1%;"><strong>@item.Rank</strong></td>
+                <td style="width: 1%; min-width: 40px; padding-right: 0;">
+                    @if (!string.IsNullOrEmpty(item.LogoFile))
+                    {
+                        <img src="/Data/Uploads/System/@item.LogoFile" />
+                    }
+                </td>
+                <td style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 50px;">
+                    @if (item.IsPublished)
+                    {
+                        <a asp-page="/Clans/Details" asp-route-id="@item.Id">@item.Tag</a>
+                    }
+                    else {
+                        @item.Tag
+                    }
+                </td>
+                <td style="text-align: right">
+                    @string.Format("{0:#.00}", item.Points)
+                </td>
             </tr>
         }
     </tbody>

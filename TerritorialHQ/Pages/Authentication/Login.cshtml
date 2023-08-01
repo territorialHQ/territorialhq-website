@@ -4,5 +4,79 @@
 }
 
 
+<div class="start-video">
+    <video autoplay muted loop class="w-full h-full absolute object-cover">
+        <source src="/video/intro.mp4" type="video/mp4">
+    </video>
+</div>
+<div class="fader-narrow">
+</div>
 
-    <a href="@(Model.LoginUrl)/Authentication/GetToken?client=TerritorialHQ">Sign in with Discord</a>
+
+<div class="content-page">
+    <div class="pure-g">
+        <div class="pure-u-1-1 pure-u-md-1-5"></div>
+        <div class="pure-u-1-1 pure-u-md-3-5">
+            <h1 class="h1">
+                Log in to TTHQ
+            </h1>
+            <p>
+                No registration is required to log in to territorial-hq.com. We use Discord's OAuth authentication system to allow you
+                to view your personal territorial.io player profile, consisting of the points you have earned in participating clans as well
+                as matches that you have recorded using a compatible game client.
+            </p>
+            <p>
+                <span style="color: #EACF69">
+                    The Discord OAuth system keeps your personal data safe by design. You will be redirected to the secure
+                    Discord website for authentication. <strong>No passwords, e-mail-addresses or other sensitive data can be accessed by TerritorialHQ</strong>.
+                </span>
+            </p>
+            <p class="text-center">
+                <a class="btn btn-special mt-30 mb-50" href="@(Model.LoginUrl)/Authentication/GetToken?client=TerritorialHQ"><img src="/img/discord-icon-svgrepo-com.svg" style="width: 32px; height: 32px; margin-right: 5px" />Sign in with Discord</a>
+            </p>
+
+            <div class="pure-g">
+                <div class="pure-u-1-1 pure-u-md-1-2">
+                    <h2 class="h2">What data will TTHQ access?</h2>
+                    <p>
+                        You will grant TerritorialHQ <strong>read-only</strong> access to:
+                    </p>
+                    <ul>
+                        <li>Your public DiscordId</li>
+                        <li>Your public username</li>
+                        <li>Your public avatar / banner</li>
+                    </ul>
+                    <p>
+                        No other private or senitive data can be accessed.
+                    </p>
+                </div>
+                <div class="pure-u-1-1 pure-u-md-1-2">
+                    <h2 class="h2">What is my data used for?</h2>
+                    <p>
+                        Your <strong>username</strong> and <strong>avatar / banner</strong> are used for display purposes on this website only 
+                        and will not be stored.
+                    </p>
+                    <p>
+                        Your <strong>DiscordId</strong> will be used to display data in your personal profile by retrieving your scores from compatible
+                        Discord clan bots. If you use a compatible game client, your DiscordId will also be stored alongside the points 
+                        you gain in matches.
+                    </p>
+                </div>
+            </div>
+            <div class="pure-g">
+                <div class="pure-u-1-1 pure-u-md-1-2">
+                    <h2 class="h2">Can I double-check this?</h2>
+                    <p>
+                        Yes. The code for TerritorialHQ and the connected services is publicly available on GitHub and can be checked by anyone anytime.
+                    </p>
+                    <p>
+                        <a href="https://github.com/territorialHQ/" target="_blank">https://github.com/territorialHQ/</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="pure-u-1-1 pure-u-md-1-5"></div>
+    </div>
+</div>
+
+

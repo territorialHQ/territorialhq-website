@@ -13,7 +13,7 @@
 {
     <p>
         <a asp-page="Create" class="btn-admin-primary mb-6">
-            <svg class="inline-block w-6 h-6" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <svg class="inline-block w-6 h-6" fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             Create new Clan
@@ -29,7 +29,7 @@
                     @Html.DisplayNameFor(model => model.Clans![0].Name)
                 </th>
                 <th scope="col">
-                    @Html.DisplayNameFor(model => model.Clans![0].GuildId)
+                    @Html.DisplayNameFor(model => model.Clans![0].Tag)
                 </th>
                 <th scope="col">
                     @Html.DisplayNameFor(model => model.Clans![0].LogoFile)
@@ -49,34 +49,34 @@
         <tbody>
             @foreach (var item in Model.Clans!)
             {
-                if (!User.IsInRole("Administrator") && item.AssignedAppUsers.Any(u => u.Id == userId))
+                if (!User.IsInRole("Administrator") && !item.AssignedAppUsers.Any(u => u.Id == userId))
                     continue;
 
                 <tr class="">
-                    <td>
+                    <td class="font-bold">
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GuildId)
+                    <td class="font-bold">
+                        [@Html.DisplayFor(modelItem => item.Tag)]
                     </td>
                     <td>
                         @if (item.LogoFile != null)
                         {
-                            <img src="/Data/Uploads/System/@item.LogoFile" style="max-width: 120px;">
+                            <img src="/Data/Uploads/System/@item.LogoFile" style="height: 120px;">
                         }
                     </td>
                     <td>
                         @if (item.BannerFile != null)
                         {
-                            <img src="/Data/Uploads/System/@item.BannerFile" style="max-width: 120px;">
+                            <img src="/Data/Uploads/System/@item.BannerFile" style="height: 120px;">
                         }
                     </td>
                     <td>
                         @foreach (var user in item.AssignedAppUsers)
                         {
-                            <p>
-                                <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(user.UserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(user.UserName)" />
-                                <span class="name-@(user.UserName)">@user.UserName</span>
+                            <p class="mb-1">
+                                <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(user.AppUserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(user.AppUserName)" />
+                                <span class="name-@(user.AppUserName)">@user.AppUserName</span>
                             </p>
                         }
                     </td>

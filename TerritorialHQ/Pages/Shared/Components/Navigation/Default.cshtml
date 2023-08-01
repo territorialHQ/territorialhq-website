@@ -1,63 +1,85 @@
-﻿@model List<TerritorialHQ_Library.Entities.NavigationEntry>
+﻿@model List<TerritorialHQ_Library.DTO.DTONavigationEntry>
 
-<ul>
-    @foreach (var item in Model)
-    {
-        if (!item.Public) continue;
+<div class="navbar shadow">
+    <div class="container navbar-container">
 
-        <li>
-            @if (item.SubEntries != null && item.SubEntries.Count > 0)
-            {
-                <span>@item.Name</span>
-                <ul>
-                    @foreach (var subitem in item.SubEntries.OrderBy(o => o.Order))
+        <div class="menu-logo">
+            <a href="~/">
+                <img src="~/img/TTHQ-Logo-Full-Wide.png" class="hidden-md-down" />
+                <img src="~/img/TTHQ-Logo-Full-Wide.png" class="hidden-lg-up" />
+            </a>
+        </div>
+        <div class="menu-toggle">
+        </div>
+
+        <div class="menu-navigation">
+            <nav class="nav">
+                <ul class="menu">
+                    @foreach (var item in Model.OrderBy(o => o.Order))
                     {
-                        if (!subitem.Public) continue;
+                        if (!item.Public) continue;
 
-                        <li>
-                            @if (!string.IsNullOrEmpty(subitem.ExternalUrl))
-                            {
-                                if (subitem.ExternalUrl.StartsWith("http")) {
-                                    <a href="@subitem.ExternalUrl" target="_blank">@subitem.Name</a>
+                        @if (item.SubEntries != null && item.SubEntries.Count > 0)
+                        {
+                            <li class="menu-item">
+                                <a href="javascript:void(0)" class="menu-link">@item.Name</a>
+                                <ul class="sub-menu">
+                                    @foreach (var subitem in item.SubEntries.OrderBy(o => o.Order))
+                                    {
+                                        if (!subitem.Public) continue;
+
+                                        <li class="menu-item">
+                                            @if (!string.IsNullOrEmpty(subitem.ExternalUrl))
+                                            {
+                                                <a class="menu-link" href="@subitem.ExternalUrl" target="@(subitem.ExternalUrl.StartsWith("http") ? "_blank" : "_self")">@subitem.Name</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="menu-link" href="/@item.Slug/@subitem.Slug">@subitem.Name</a>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="menu-item">
+                                @if (!string.IsNullOrEmpty(item.ExternalUrl))
+                                {
+                                    <a class="menu-link" href="@item.ExternalUrl" target="@(item.ExternalUrl.StartsWith("http") ? "_blank" : "_self")">@item.Name</a>
                                 }
                                 else
                                 {
-                                    <a href="@subitem.ExternalUrl">@subitem.Name</a>
+                                    <a class="menu-link" href="/@item.Slug">@item.Name</a>
                                 }
-                            }
-                            else
-                            {
-                                <a href="/@item.Slug/@subitem.Slug">@subitem.Name</a>
-                            }
-                        </li>
+                            </li>
+                        }
                     }
-                </ul>
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(item.ExternalUrl))
-                {
-                    if (item.ExternalUrl.StartsWith("http"))
+                    @if (User.Identity!.IsAuthenticated)
                     {
-                        <a href="@item.ExternalUrl" target="_blank">@item.Name</a>
+                        <li class="menu-item">
+                            <a class="menu-link" href="/Administration/Home" style="color: #EACF69">
+                                <svg style="width: 18px; height: 18px; vertical-align: -3px" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path clip-rule="evenodd" fill-rule="evenodd" d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.331 1.652a6.993 6.993 0 011.929 1.115l1.598-.54a1 1 0 011.186.447l1.18 2.044a1 1 0 01-.205 1.251l-1.267 1.113a7.047 7.047 0 010 2.228l1.267 1.113a1 1 0 01.206 1.25l-1.18 2.045a1 1 0 01-1.187.447l-1.598-.54a6.993 6.993 0 01-1.929 1.115l-.33 1.652a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.331-1.652a6.993 6.993 0 01-1.929-1.115l-1.598.54a1 1 0 01-1.186-.447l-1.18-2.044a1 1 0 01.205-1.251l1.267-1.114a7.05 7.05 0 010-2.227L1.821 7.773a1 1 0 01-.206-1.25l1.18-2.045a1 1 0 011.187-.447l1.598.54A6.993 6.993 0 017.51 3.456l.33-1.652zM10 13a3 3 0 100-6 3 3 0 000 6z"></path>
+                                </svg>
+                                Administration
+                            </a>
+                        </li>
+                        <li class="menu-item hidden-md-up">
+                            <img style="width: 24px; height: 24px; border-radius: 12px" class="avatar avatar-@(User.Identity?.Name) discord-loader" src="~/img/loading_symbol.gif" data-id="@(User.Identity?.Name)" />
+                        </li>
                     }
                     else
                     {
-                        <a href="@item.ExternalUrl">@item.Name</a>
+                        <li class="menu-item hidden-md-up">
+                            <a class="menu-link" asp-page="/Authentication/Login"><i class="icon-login"></i> Login</a>
+                        </li>
                     }
-                }
-                else
-                {
-                    <a href="/@item.Slug">@item.Name</a>
-                }
-            }
-        </li>
-    }
-    @if (User.IsInRole("Administrator") || User.IsInRole("Staff") || User.IsInRole("Journalist"))
-    {
-        <li>
-            <a asp-area="Administration" asp-page="/Home/Index">Administration</a>
-        </li>
-    }
-</ul>
-<partial name="_LoginPartial" />
+                </ul>
+            </nav>
+        </div>
+        <partial name="_LoginPartial" />
+    </div>
+</div>
+

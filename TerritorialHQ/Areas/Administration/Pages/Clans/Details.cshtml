@@ -8,7 +8,7 @@
 <h1 class="text-4xl mb-5">@Model.Clan.Name</h1>
 <h2 class="text-2xl mb-5">Details</h2>
 
-<div class="flex flex-row">
+<div class="flex flex-row text-slate-500">
     <div class="basis-3/4">
         <div class="flex flex-row">
             <div class="basis-1/2 form-group">
@@ -26,10 +26,32 @@
                 }
             </div>
         </div>
+        <div class="flex flex-row gap-4">
+            <div class="basis-1/2 form-group">
+                <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Motto)</label>
+                @Html.DisplayFor(model => model.Clan!.Motto)
+            </div>
+            <div class="basis-1/2">
 
-        <div class="form-group">
-            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Motto)</label>
-            @Html.DisplayFor(model => model.Clan!.Motto)
+                <div class="flex flex-row gap-4">
+                    <div class="basis-1/3 form-group">
+                        <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Tag)</label>
+                        @Html.DisplayFor(model => model.Clan!.Tag)
+                    </div>
+                    <div class="basis-1/3 form-group">
+                        <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Color1)</label>
+                        <span style="color: @Model.Clan!.Color1">
+                            @Html.DisplayFor(model => model.Clan!.Color1)
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Color2)</label>
+                        <span style="color: @Model.Clan!.Color2">
+                            @Html.DisplayFor(model => model.Clan!.Color2)
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="flex flex-row gap-4">
             <div class="basis-1/2 form-group">
@@ -56,18 +78,45 @@
             @Html.Raw(Model.Clan.Description)
         </div>
         <div class="form-group">
-            @if (User.IsInRole("Staff") || (User.IsInRole("Administrator") && Model.Clan.AssignedAppUsers.Count == 0))
-            {
-                <a asp-page="./Edit" asp-route-id="@Model.Clan.Id" class="btn-admin-primary">Edit</a>
-            }
-            <a asp-page="./Index" class="btn-admin-secondary">Back to List</a>
+            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.History)</label>
+            @Html.Raw(Model.Clan.History)
+        </div>
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Community)</label>
+            @Html.Raw(Model.Clan.Community)
+        </div>
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Features)</label>
+            @Html.Raw(Model.Clan.Features)
+        </div>
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Miscellaneous)</label>
+            @Html.Raw(Model.Clan.Miscellaneous)
         </div>
     </div>
     <div class="basis-1/4">
-        <div class="ml-6 pl-6 border-l-2 border-l-gray-200">
+        <div class="ml-6 pl-6 border-l-2 border-l-slate-600">
+
+            @if (User.IsInRole("Staff") || (User.IsInRole("Administrator") && Model.Clan.AssignedAppUsers.Count == 0))
+            {
+                <a class="btn-admin-primary w-full mb-2 text-center" asp-page="./Edit" asp-route-id="@Model.Clan?.Id">
+                    <svg class="inline-block w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>
+                    </svg>
+                    Edit
+                </a>
+            }
+            <a class="btn-admin-secondary w-full mb-4 text-center" asp-area="" asp-page="/Clans/Details" asp-route-id="@Model.Clan?.Id" target="_blank">
+                <svg class="inline-block w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Preview
+            </a>
+
             @if (User.IsInRole("Administrator"))
             {
-                if (Model.Clan.IsPublished)
+                if (Model.Clan!.IsPublished)
                 {
                     <div class="p-3 bg-green-200 text-green-800 rounded text-sm mb-4">
                         <p class="font-bold">This page is published.</p>
@@ -115,13 +164,13 @@
                                 {
                                     <tr>
                                         <td>
-                                            <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(item.UserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.UserName)" />
-                                            <span class="name-@(item.UserName)">@item.UserName</span>
+                                            <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(item.AppUserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.AppUserName)" />
+                                            <span class="name-@(item.AppUserName)">@item.AppUserName</span>
                                         </td>
                                         <td style="width: 1%">
                                             <form method="post" asp-page-handler="RemoveUser">
                                                 <input type="hidden" name="id" value="@Model.Clan.Id" />
-                                                <input type="hidden" name="userId" value="@item.Id" />
+                                                <input type="hidden" name="relationId" value="@item.Id" />
                                                 <button type="submit" class="btn-admin-danger-sm">Remove</button>
                                             </form>
                                         </td>
@@ -157,7 +206,7 @@
             }
             else
             {
-                if (Model.Clan.IsPublished)
+                if (Model.Clan!.IsPublished)
                 {
                     <div class="p-3 bg-green-200 text-green-800 rounded text-sm mb-4">
                         <p class="font-bold mb-3">This page is published.</p>

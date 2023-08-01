@@ -48,88 +48,68 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
         public async Task<IActionResult> OnPostAddUser(string id, string userId)
         {
-            Clan = await _service.FindAsync<DTOClan>("Clan", id);
-            if (Clan == null)
-                return NotFound(); 
-            
-            //var user = await _service.FindAsync<AppUser>("AppUser", userId);
-            //if (user != null)
-            //{
-            //    if (!UserRelations.Any(r => r.AppUserId == user.Id))
-            //    {
-            //        var relation = new ClanUserRelation() { ClanId = Clan.Id, AppUserId = user.Id };
+            var relation = new DTOClanUserRelation()
+            {
+                ClanId = id,
+                AppUserId = userId
+            };
 
-            //        if (!(await _service.Add<ClanUserRelation>("ClanUserRelation", relation)))
-            //            throw new Exception("Error while saving relation data set.");
-            //    }
-            //}
+            if (!(await _service.Add<DTOClanUserRelation>("ClanUserRelation", relation)))
+                throw new Exception("Error while saving relation data set.");
 
             return RedirectToPage("./Details", new { id });
         }
 
 
-        public async Task<IActionResult> OnPostRemoveUser(string id, string userId)
+        public async Task<IActionResult> OnPostRemoveUser(string id, string relationId)
         {
-            Clan = await _service.FindAsync<DTOClan>("Clan", id);
-            if (Clan == null)
-                return NotFound();
-
-            //var relationToRemove = await _service.FindAsync<ClanUserRelation>("ClanUserRelation", userId);
-            //if (relationToRemove != null)
-            //    if(!(await _service.Remove<ClanUserRelation>("ClanUserRelation", relationToRemove.Id)))
-            //            throw new Exception("Error while saving relation data set.");
-
-            //UserRelations = (await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>()).Where(r => r.ClanId == id).ToList();
-            //await FillStaffUserSelect();
+            if (!(await _service.Remove("ClanUserRelation", relationId)))
+                throw new Exception("Error while saving relation data set.");
 
             return RedirectToPage("./Details", new { id });
         }
 
         public async Task<IActionResult> OnPostMarkForReview(string? id)
         {
-            //Clan = await _service.FindAsync<Clan>("Clan", id);
-            //if (Clan == null)
-            //    return NotFound();
+            Clan = await _service.FindAsync<DTOClan>("Clan", id!);
+            if (Clan == null)
+                return NotFound();
 
-            //Clan.InReview = true;
+            Clan.InReview = true;
 
-            //if (!(await _service.Update<Clan>("Clan", Clan)))
-            //    throw new Exception("Error while saving data set.");
+            if (!(await _service.Update<DTOClan>("Clan", Clan)))
+                throw new Exception("Error while saving data set.");
 
-            //UserRelations = (await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>()).Where(r => r.ClanId == id).ToList();
-            //await FillStaffUserSelect();
+            await _discordBotService.SendReviewNotificationAsync(User.Identity?.Name, id);
 
-            //await _discordBotService.SendReviewNotificationAsync(User.Identity?.Name, id);
-
-            return RedirectToPage("./Details", new { id });
+            await FillStaffUserSelect();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostPublish(string id)
         {
-            //Clan = await _service.FindAsync<Clan>("Clan", id);
-            //if (Clan == null)
-            //    return NotFound();
+            Clan = await _service.FindAsync<DTOClan>("Clan", id);
+            if (Clan == null)
+                return NotFound();
 
-            //if (User.IsInRole("Administrator"))
-            //{
-            //    Clan.InReview = false;
-            //    Clan.IsPublished = true;
+            if (User.IsInRole("Administrator"))
+            {
+                Clan.InReview = false;
+                Clan.IsPublished = true;
 
-            //    if (!(await _service.Update<Clan>("Clan", Clan)))
-            //        throw new Exception("Error while saving data set.");
-            //}
+                if (!(await _service.Update<DTOClan>("Clan", Clan)))
+                    throw new Exception("Error while saving data set.");
+            }
 
-            //UserRelations = (await _service.GetAllAsync<ClanUserRelation>("ClanUserRelation") ?? new List<ClanUserRelation>()).Where(r => r.ClanId == id).ToList();
-            //await FillStaffUserSelect();
-
-            return RedirectToPage("./Details", new { id });
+            await FillStaffUserSelect();
+            return Page();
         }
 
         private async Task FillStaffUserSelect()
         {
             if (User.IsInRole("Administrator"))
             {
-                var assignedStaffUsersIds = Clan?.AssignedAppUsers.Select(s => s.Id).ToList() ?? new List<string?>();
+                var assignedStaffUsersIds = Clan?.AssignedAppUsers.Select(s => s.AppUserId).ToList() ?? new List<string?>();
                 var staffUsers = await _userService.GetUsersInRoleAsync(AppUserRole.Staff);
 
                 staffUsers!.RemoveAll(u => assignedStaffUsersIds.Contains(u.Id));

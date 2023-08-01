@@ -4,7 +4,30 @@
 }
 
 
-<h1>User Profile</h1>
+<div class="start-video">
+    <video autoplay muted loop class="w-full h-full absolute object-cover">
+        <source src="/video/intro.mp4" type="video/mp4">
+    </video>
+</div>
+<div class="fader-narrow">
+</div>
+
+
+<div class="content-page">
+        <a class="btn btn-secondary btn-lg" asp-page="/Authentication/Logout">Log out</a>
+</div>
+
+<div class="profile">
+    <img class="avatar avatar-@(Model.AppUser?.DiscordId) discord-loader" src="~/img/loading_symbol.gif" data-id="@(Model.AppUser?.DiscordId)" />
+    <p class="name-@(Model.AppUser?.DiscordId)">@Model.AppUser?.DiscordId</p>
+</div>
+
+
+@foreach (var keyValuePair in Model.ClanPoints)
+{
+    <p><strong>@keyValuePair.Key.Tag</strong> - @string.Format("{0:#,0}", @keyValuePair.Value) points</p>
+}
+
 @*
 @if (!Model.IsPrivate || Model.IsOwnProfile)
 {
@@ -27,10 +50,7 @@
     }
 
 
-    @foreach (var keyValuePair in Model.ClanPoints)
-    {
-        <p><strong>@keyValuePair.Key</strong> - @string.Format("{0:#,0}", @keyValuePair.Value) points</p>
-    }
+
 }
 else
 {

@@ -4,28 +4,27 @@ using TerritorialHQ.Services.Base;
 using TerritorialHQ_Library.DTO;
 using TerritorialHQ_Library.Entities;
 
-namespace TerritorialHQ.Services
+namespace TerritorialHQ.Services;
+
+public class AppUserService : ApisDtoService
 {
-    public class AppUserService : ApisDtoService
+    public AppUserService(IHttpContextAccessor contextAccessor, IConfiguration configuration) : base(contextAccessor, configuration)
     {
-        public AppUserService(IHttpContextAccessor contextAccessor, IConfiguration configuration) : base(contextAccessor, configuration)
+    }
+
+    public async Task<List<DTOAppUser>?> GetUsersInRoleAsync(AppUserRole role)
+    {
+        AddTokenHeader();
+
+        List<DTOAppUser>? result = new();
+        HttpResponseMessage response = await _httpClient.GetAsync("AppUser/RoleUsers/" + (int)role);
+
+        if (response.IsSuccessStatusCode)
         {
+            var jsonString = await response.Content.ReadAsStringAsync();
+            result = JsonConvert.DeserializeObject<List<DTOAppUser>>(jsonString);
         }
 
-        public async Task<List<DTOAppUser>?> GetUsersInRoleAsync(AppUserRole role)
-        {
-            AddTokenHeader();
-
-            List<DTOAppUser>? result = new();
-            HttpResponseMessage response = await _httpClient.GetAsync("AppUser/RoleUsers/" + (int)role);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonString = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject<List<DTOAppUser>>(jsonString);
-            }
-
-            return result;
-        }
+        return result;
     }
 }

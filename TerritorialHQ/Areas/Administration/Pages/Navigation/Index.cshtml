@@ -10,7 +10,7 @@
 
 <p>
     <a asp-page="Create" class="btn-admin-primary mb-6">
-        <svg class="inline-block w-6 h-6" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <svg class="inline-block w-6 h-6" fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
         Create new Menu Item
@@ -33,7 +33,7 @@
             @{
                 var i = 0;
             }
-            @foreach (var item in Model.NavigationEntries)
+            @foreach (var item in Model.NavigationEntries.OrderBy(o => o.Order))
             {
                 <tr id="row-head-@i" data-accordion-target="#row-body-@i" aria-expanded="false" aria-controls="row-body-@i" class="focus:bg-gray-200">
                     <td class="w-16">
@@ -75,7 +75,7 @@
                             <tbody>
                                 @if (item.SubEntries != null)
                                 {
-                                    @foreach (var subitem in item.SubEntries)
+                                    @foreach (var subitem in item.SubEntries.OrderBy(o => o.Order))
                                     {
                                         <tr class="bg-gray-50">
                                             <td class="w-16"></td>
@@ -107,7 +107,7 @@
                                     <td class="w-16"></td>
                                     <td colspan="5">
                                         <a asp-page="Create" asp-route-parentId="@item.Id" class="btn-admin-secondary">
-                                            <svg class="inline-block w-6 h-6" fill="none" stroke="#4b5563" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                            <svg class="inline-block w-6 h-6" fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
                                             Create Submenu Item

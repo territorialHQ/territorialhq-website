@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="~/dist/admin.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+<body class="bg-slate-950">
 
     <partial name="_TopBar" />
     <partial name="_Sidebar" />
 
 
-    <main class="p-6 md:ml-64 h-auto pt-20">
+    <main class="p-12 md:ml-64 h-auto pt-20">
         @RenderBody()
     </main>
 

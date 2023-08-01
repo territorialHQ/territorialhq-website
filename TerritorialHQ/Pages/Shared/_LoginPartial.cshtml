@@ -1,18 +1,15 @@
-﻿<ul class="navbar-nav">
+﻿<div class="navigation-login">
     @if (User.Identity!.IsAuthenticated)
     {
-        <li>
+        <div class="navigation-user">
+            <a class="logout-link" href="/Profiles/@(User.Identity?.Name)">
                 <img style="width: 24px; height: 24px; border-radius: 12px" class="avatar avatar-@(User.Identity?.Name) discord-loader" src="~/img/loading_symbol.gif" data-id="@(User.Identity?.Name)" />
                 <span class="name-@(User.Identity?.Name)">@User.Identity?.Name</span>
-        </li>
-        <li>
-            <a asp-page="/Authentication/Logout">Logout</a>
-        </li>
+            </a>
+        </div>
     }
     else
     {
-        <li>
-            <a asp-page="/Authentication/Login">Login</a>
-        </li>
+        <a class="login-link" asp-page="/Authentication/Login">Login</a>
     }
-</ul>
+</div>

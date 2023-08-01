@@ -40,6 +40,15 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         [Display(Name = "Clan Motto")]
         public string? Motto { get; set; }
         [BindProperty]
+        [Display(Name = "Primary Clan Color")]
+        public string? Color1 { get; set; }
+        [BindProperty]
+        [Display(Name = "Secondary Clan Color")]
+        public string? Color2 { get; set; }
+        [BindProperty]
+        [Display(Name = "Clan Tag (without [ ])")]
+        public string? Tag { get; set; }
+        [BindProperty]
         [Display(Name = "Custom Bot HttpGet Endpoint")]
         public string? BotEndpoint { get; set; }
         [BindProperty]
@@ -52,8 +61,21 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         [Display(Name = "Discord server link")]
         public string? DiscordLink { get; set; }
         [BindProperty]
-        [Display(Name = "Description")]
+        [Display(Name = "Overview / Short Description (500 characters max)")]
+        [MaxLength(500)]
         public string? Description { get; set; }
+        [BindProperty]
+        [Display(Name = "Clan History")]
+        public string? History { get; set; }
+        [BindProperty]
+        [Display(Name = "Community")]
+        public string? Community { get; set; }
+        [BindProperty]
+        [Display(Name = "Features")]
+        public string? Features { get; set; }
+        [BindProperty]
+        [Display(Name = "Miscellaneous")]
+        public string? Miscellaneous { get; set; }
 
 
         public IActionResult OnGet()

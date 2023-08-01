@@ -6,7 +6,15 @@ module.exports = {
         "./wwwroot/js/**/*.js"
     ],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                'accent': { 
+                    300: '#FCE488',
+                    500: '#EACF69',
+                    700: '#ad9333'
+                },
+            },
+        },
     },
     plugins: [],
 }
