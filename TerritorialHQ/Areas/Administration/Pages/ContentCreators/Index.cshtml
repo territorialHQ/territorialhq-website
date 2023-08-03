@@ -1,0 +1,68 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.ContentCreators.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Content Pages</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">
+        <svg class="icon" fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Create new Content Page
+    </a>
+</p>
+
+<div>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ContentCreator![0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ContentCreator![0].LogoFile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ContentCreator![0].BannerFile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ContentCreator![0].ChannelLink)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ContentCreator)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @if (item.LogoFile != null)
+                        {
+                            <img src="/Data/Uploads/System/@item.LogoFile" style="height: 120px;">
+                        }
+                    </td>
+                    <td>
+                        @if (item.BannerFile != null)
+                        {
+                            <img src="/Data/Uploads/System/@item.BannerFile" style="height: 120px;">
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ChannelLink)
+                    </td>
+                    <td style="width: 1%; white-space: nowrap">
+                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

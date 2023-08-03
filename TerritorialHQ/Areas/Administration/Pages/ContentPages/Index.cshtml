@@ -5,18 +5,18 @@
     ViewData["Title"] = "Index";
 }
 
-<h1 class="text-4xl mb-5">Content Pages</h1>
+<h1>Content Pages</h1>
 
 <p>
-    <a asp-page="Create" class="btn-admin-primary mb-6">
-        <svg class="inline-block w-6 h-6" fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <a asp-page="Create" class="btn btn-primary">
+        <svg class="icon" fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
         Create new Content Page
     </a>
 </p>
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+<div>
     <table class="admin-table">
         <thead>
             <tr>
@@ -35,8 +35,8 @@
                     </td>
                     <td style="width: 1%; white-space: nowrap">
                         @*<a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-xs btn-secondary"><i class="icon-eye"></i></a>*@
-                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn-admin-secondary-sm">Edit</a>
-                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn-admin-danger-sm">Delete</a>
+                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }

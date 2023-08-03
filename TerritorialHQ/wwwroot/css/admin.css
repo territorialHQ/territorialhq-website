@@ -89,7 +89,7 @@
             @apply px-6 py-4 bg-slate-800;
         }
 
-    .btn-admin-primary {
+    .btn btn-primary {
         @apply inline-block py-2.5 px-5 font-medium text-slate-900 focus:outline-none bg-accent-500 rounded-md border border-slate-700 hover:border-slate-500 hover:text-slate-500 focus:z-10 focus:ring-2 focus:ring-slate-500 stroke-slate-800 hover:stroke-slate-500;
     }
 
@@ -97,16 +97,16 @@
         @apply inline-block py-2.5 px-5 font-medium text-slate-300 focus:outline-none bg-slate-500 rounded-md border border-slate-700 hover:border-accent-500 hover:text-slate-200 focus:z-10 focus:ring-2 focus:ring-accent-500 stroke-slate-300 hover:stroke-slate-200;
     }
 
-    .btn-admin-secondary-sm {
+    .btn btn-primary btn-sm {
         @apply inline-block py-1 px-2 mr-0.5 text-sm font-medium text-slate-300 focus:outline-none bg-slate-500 rounded-md border border-slate-700 hover:border-accent-500 hover:text-slate-200 focus:z-10 focus:ring-2 focus:ring-accent-500 stroke-slate-300 hover:stroke-slate-200;
     }
 
-    .btn-admin-danger-sm {
+    .btn btn-danger btn-sm {
         @apply inline-block py-1 px-2 mr-0.5 text-sm font-medium text-gray-50 focus:outline-none bg-red-500 rounded-md border border-red-600 hover:bg-red-600 hover:text-gray-100 focus:z-10 focus:ring-4 focus:ring-red-200 dark:focus:ring-red-700 dark:bg-red-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
     }
 
     .form-group {
-        @apply mb-6;
+        @apply;
     }
 
     .form-group label {

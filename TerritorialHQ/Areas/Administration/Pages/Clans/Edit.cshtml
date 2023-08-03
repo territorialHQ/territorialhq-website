@@ -5,11 +5,13 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1 class="text-4xl mb-5">Clans</h1>
-<h2 class="text-2xl mb-5">Edit</h2>
+<link href="~/css/ckeditor.css" rel="stylesheet" />
 
-<div class="flex flex-row">
-    <div class="basis-3/4">
+<h1>Clans</h1>
+<h2>Edit</h2>
+
+<div class="pure-g">
+    <div class="pure-u-1-1 pure-u-md-3-4">
         <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -60,52 +62,65 @@
                 </div>
             }
 
-            <div class="flex flex-row">
-                <div class="basis-1/2 form-group">
-                    <label asp-for="LogoFile" class="control-label"></label>
-                    @if (!string.IsNullOrEmpty(Model.LogoFile))
-                    {
-                        <img src="/Data/Uploads/System/@Model.LogoFile" style="max-height: 150px" class="block mb-2" />
-                    }
-                    <input type="file" name="fileLogo" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
-                    <label class="block mt-2  text-slate-400"><input type="checkbox" asp-for="RemoveLogo" /> Remove logo image on save</label>
+            <div class="pure-g">
+                <div class="pure-u-1-1 pure-u-md-1-2 form-group">
+                    <div class="form-group">
+                        <label asp-for="LogoFile" class="control-label"></label>
+                        @if (!string.IsNullOrEmpty(Model.LogoFile))
+                        {
+                        <img src="/Data/Uploads/System/@Model.LogoFile" style="max-height: 150px" class="block mb-2" /><br />
+                        }
+                        <input type="file" name="fileLogo" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" asp-for="RemoveLogo" /> Remove logo image on save</label>
+                    </div>
                 </div>
-                <div class="basis-1/2  form-group">
-                    <label asp-for="BannerFile" class="control-label"></label>
-                    @if (!string.IsNullOrEmpty(Model.BannerFile))
-                    {
-                        <img src="/Data/Uploads/System/@Model.BannerFile" style="max-height: 150px" class="block mb-2" />
-                    }
-                    <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
-                    <label class="block mt-2 text-slate-400"><input type="checkbox" asp-for="RemoveBanner" /> Remove banner image on save</label>
+               
+                <div class="pure-u-1-1 pure-u-md-1-2  form-group">
+                    <div class="form-group">
+                        <label asp-for="BannerFile" class="control-label"></label>
+                        @if (!string.IsNullOrEmpty(Model.BannerFile))
+                        {
+                        <img src="/Data/Uploads/System/@Model.BannerFile" style="max-height: 150px" class="block mb-2" /><br />
+                        }
+                        <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" asp-for="RemoveBanner" /> Remove banner image on save</label>
+                    </div>
                 </div>
+                
             </div>
-            <div class="flex flex-row gap-4">
-                <div class="basis-1/2 form-group">
+            <div class="pure-g">
+                <div class="pure-u-1-1 pure-u-md-1-2 form-group">
                     <div class="form-group">
                         <label asp-for="Motto" class="control-label"></label>
                         <input asp-for="Motto" class="form-control" />
                         <span asp-validation-for="Motto" class="text-danger"></span>
                     </div>
+                    <div class="form-group">
+                        <label asp-for="Foundation" class="control-label"></label>
+                        <input asp-for="Foundation" class="form-control" />
+                        <span asp-validation-for="Foundation" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="basis-1/2 form-group">
+                <div class="pure-u-1-1 pure-u-md-1-2 form-group">
+                    <div class="form-group">
+                        <label asp-for="Tag" class="control-label"></label>
+                        <input asp-for="Tag" class="form-control" />
+                        <span asp-validation-for="Tag" class="text-danger"></span>
+                    </div>
+                    <div class="pure-g">
 
-                    <div class="flex flex-row gap-4">
-                        <div class="basis-1/3">
-                            <div class="form-group">
-                                <label asp-for="Tag" class="control-label"></label>
-                                <input asp-for="Tag" class="form-control" />
-                                <span asp-validation-for="Tag" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="basis-1/3">
+                        <div class="pure-u-1-1 pure-u-md-1-2">
                             <div class="form-group">
                                 <label asp-for="Color1" class="control-label"></label>
                                 <input asp-for="Color1" class="form-control" />
                                 <span asp-validation-for="Color1" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="basis-1/3">
+                        <div class="pure-u-1-1 pure-u-md-1-2">
                             <div class="form-group">
                                 <label asp-for="Color2" class="control-label"></label>
                                 <input asp-for="Color2" class="form-control" />
@@ -114,25 +129,16 @@
                         </div>
                     </div>
 
-                    
+
                 </div>
             </div>
-            <div class="flex flex-row gap-4">
-                <div class="basis-1/2 form-group">
-                    <div class="form-group">
-                        <label asp-for="Foundation" class="control-label"></label>
-                        <input asp-for="Foundation" class="form-control" />
-                        <span asp-validation-for="Foundation" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="basis-1/2 form-group">
-                    <div class="form-group">
-                        <label asp-for="Founders" class="control-label"></label>
-                        <input asp-for="Founders" class="form-control" />
-                        <span asp-validation-for="Founders" class="text-danger"></span>
-                    </div>
-                </div>
+
+            <div class="form-group">
+                <label asp-for="Founders" class="control-label"></label>
+                <input asp-for="Founders" class="form-control" />
+                <span asp-validation-for="Founders" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="BotEndpoint" class="control-label"></label>
                 <input asp-for="BotEndpoint" class="form-control" />
@@ -145,73 +151,78 @@
                 <span asp-validation-for="DiscordLink" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Overview" class="control-label"></label>
+                <textarea asp-for="Overview" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Overview" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="12"></textarea>
+                <textarea asp-for="Description" class="form-control baseedit" rows="12"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="History" class="control-label"></label>
-                <textarea asp-for="History" class="form-control" rows="12"></textarea>
+                <textarea asp-for="History" class="form-control baseedit" rows="12"></textarea>
                 <span asp-validation-for="History" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Community" class="control-label"></label>
-                <textarea asp-for="Community" class="form-control" rows="12"></textarea>
+                <textarea asp-for="Community" class="form-control baseedit" rows="12"></textarea>
                 <span asp-validation-for="Community" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Features" class="control-label"></label>
-                <textarea asp-for="Features" class="form-control" rows="12"></textarea>
+                <textarea asp-for="Features" class="form-control baseedit" rows="12"></textarea>
                 <span asp-validation-for="Features" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Miscellaneous" class="control-label"></label>
-                <textarea asp-for="Miscellaneous" class="form-control" rows="12"></textarea>
+                <textarea asp-for="Miscellaneous" class="form-control baseedit" rows="12"></textarea>
                 <span asp-validation-for="Miscellaneous" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn-admin-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Save</button>
                 <a asp-page="Details" class="btn-admin-secondary" asp-route-id="@Model.Id">Cancel</a>
             </div>
         </form>
     </div>
 
 
-    <div class="basis-1/4">
+    <div class="pure-u-1-1 pure-u-md-1-4">
         <div class="ml-6 pl-6 border-l-2 border-l-gray-200">
             @if (!User.IsInRole("Administrator"))
             {
                 if (Model.IsPublished)
                 {
-                    <div class="p-3 bg-green-200 text-green-800 rounded text-sm mb-4">
-                        <p class="font-bold mb-3">This page is published.</p>
-                        <p class="mb-3">Saving changes to this page will unpublish the clan listing until it has been reviewed again by an administrator.</p>
-                        <p><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                    <div class="alert alert-success">
+                        <p><strong>This page is published.</strong></p>
+                        <p>Saving changes to this page will unpublish the clan listing until it has been reviewed again by an administrator.</p>
+                        <a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline"><strong>Learn more</strong></a>
                     </div>
                 }
                 else
                 {
                     if (Model.InReview)
                     {
-                        <div class="p-3 mb-3 bg-blue-100 text-blue-800 rounded text-sm">
-                            <p class="font-bold mb-3">This page is currently in rewiew.</p>
-                            <p class="mb-3">
+                        <div class="alert alert-warning">
+                            <p><strong>This page is currently in rewiew.</strong></p>
+                            <p>
                                 An administrator will review and publish the listing shortly.
                             </p>
-                            <p class="mb-3">
+                            <p>
                                 You may edit the page at any time. This will stop the review process until you mark the listing for review again.
                             </p>
-                            <p><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                            <a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline"><strong>Learn more</strong></a>
                         </div>
                     }
                     else
                     {
-                        <div class="p-3 bg-yellow-100 text-yellow-800 rounded text-sm">
-                            <p class="font-bold mb-3">This page is currently unlisted.</p>
-                            <p class="pb-3">
+                        <div class="alert alert-warning">
+                            <p><strong>This page is currently unlisted.</strong></p>
+                            <p>
                                 When you are done and happy with your edits, mark your clan listing for review on the Details page to have in published.
                             </p>
-                            <p><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                            <a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline"><strong>Learn more</strong></a>
                         </div>
                     }
 
@@ -222,30 +233,32 @@
 
 </div>
 
-<dialog id="reviewInfo" class="max-w-[800px] p-8 shadow-xl">
-    <h1 class="text-2xl mb-5">Review System for clan listings</h1>
-    <p class="mb-3">
+<dialog id="reviewInfo">
+    <h1>
+        Review System for clan listings
+    </h1>
+    <p>
         Since the content you create for your clan will be publicly visible, we must ensure that the text and images you provide do not violate the community standards of
         TerritorialHQ. This means that each clan listing will undergo a quick check before becoming publicly visible. For detailed information check the <a href="#" class="underline">community standards</a>.
     </p>
-    <div class="mb-3 flex flex-row gap-5">
-        <div class="basis-1/2">
-            <p class="mb-3"><strong>These images are not allowed:</strong></p>
+    <div class="mb-3 pure-g gap-5">
+        <div class="pure-u-1-1 pure-u-md-1-2">
+            <p><strong>These images are not allowed:</strong></p>
             <ul class="ml-5 list-disc">
                 <li class="mb-2">Images containing NSFW content, violence, hate speech, symbols of extremist or terrorist organizations or copyrighted material</li>
             </ul>
         </div>
-        <div class="basis-1/2">
-            <p class="mb-3"><strong>These texts are now allowed:</strong></p>
+        <div class="pure-u-1-1 pure-u-md-1-2">
+            <p><strong>These texts are now allowed:</strong></p>
             <ul class="ml-5 list-disc">
                 <li class="mb-2">Texts containing NSFW content, graphic description of violence, hate speech, political messages, misinformation or copyrighted material</li>
             </ul>
         </div>
     </div>
-    <p class="mb-3">
+    <p>
         Other than that, our administrators <strong>will not interfere with your clan listing</strong>. You are free to describe your clan in any way you like.
     </p>
-    <p class="mb-3">
+    <p>
         In case your listing can't be published, we will try to get in touch with you via Discord, let you know the reasons for the rejection and give you advice on how to change
         the content to have it pass the review.
     </p>
@@ -256,8 +269,36 @@
     </form>
 </dialog>
 
+
+
+
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+
+    <script src="/js/ckeditor.js"></script>
+    <script>
+        $(".baseedit").each(function (i) {
+            ClassicEditor
+                .create(this, {
+                    removePlugins: ['Title'],
+                    toolbar: ['heading', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList', 'outdent', 'indent'],
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                            { model: 'heading2', view: 'h3', title: 'Heading 2', class: 'ck-heading_heading3' },
+                            { model: 'heading3', view: 'h4', title: 'Heading 3', class: 'ck-heading_heading4' }
+                        ]
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
+    <style>
+        .ck-content, .ck-content p {
+            color: #94A3B8 !important;
+        }
+    </style>
+
+
 }

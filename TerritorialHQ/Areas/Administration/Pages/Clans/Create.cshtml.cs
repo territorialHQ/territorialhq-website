@@ -29,7 +29,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         public string? Name { get; set; }
         [BindProperty]
         [Display(Name = "Discord Guild ID")]
-        public ulong? GuildId { get; set; }
+        public string? GuildId { get; set; }
         [BindProperty]
         [Display(Name = "Date / Period of Foundation")]
         public string? Foundation { get; set; }
@@ -61,8 +61,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         [Display(Name = "Discord server link")]
         public string? DiscordLink { get; set; }
         [BindProperty]
-        [Display(Name = "Overview / Short Description (500 characters max)")]
+        [Display(Name = "Overview (500 characters max)")]
         [MaxLength(500)]
+        public string? Overview { get; set; }
+        [BindProperty]
+        [Display(Name = "General Description")]
         public string? Description { get; set; }
         [BindProperty]
         [Display(Name = "Clan History")]

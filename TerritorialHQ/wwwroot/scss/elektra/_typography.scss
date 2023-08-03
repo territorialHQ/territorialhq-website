@@ -6,12 +6,13 @@ body {
     font-weight: 300;
 }
 
-h1, h2, h3 {
+h1, h2 {
     font-family: $font-secondary;
 }
 
-h4, h5 {
-    font-weight: 300;
+h3, h4, h5 {
+    font-family: $font-primary;
+    color: #EACF69;
 }
 
 a {
@@ -95,7 +96,11 @@ a {
 }
 
 p, li {
-    color: #e2e8f0;
+    color: #94A3B8;
+}
+
+ul, ol {
+    padding-left: 1em;
 }
 
 .text-left {

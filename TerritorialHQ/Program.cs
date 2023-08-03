@@ -34,6 +34,7 @@ namespace TerritorialHQ
             builder.Services.AddScoped(typeof(ContentPageService));
             builder.Services.AddScoped(typeof(NavigationEntryService));
             builder.Services.AddScoped(typeof(JournalArticleService));
+            builder.Services.AddScoped(typeof(ContentCreatorService));
 
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

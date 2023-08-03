@@ -4,28 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TerritorialHQ Administration</title>
-    <link rel="stylesheet" href="~/css/flowbite.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/dist/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/reboot.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/elektra.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
+
 </head>
 <body class="bg-slate-950">
 
     <partial name="_TopBar" />
-    <partial name="_Sidebar" />
 
-
-    <main class="p-12 md:ml-64 h-auto pt-20">
-        @RenderBody()
+    <main>
+        <div class="admin pa-40">
+            @RenderBody()
+        </div>
     </main>
 
-    <footer>
-        <div>
-            &copy; 2023 - TerritorialHQ - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/flowbite.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/discord-loader.js"></script>
 

@@ -1,0 +1,124 @@
+﻿.admin {
+    padding: 40px 0;
+
+
+    h1 {
+        color: #EACF69;
+        font-size: 2.8em;
+        text-transform: uppercase;
+        margin-top: 0;
+        margin-bottom: 40px;
+        line-height: 1em;
+    }
+
+    h2 {
+        color: #EACF69;
+        font-size: 2em;
+        text-transform: uppercase;
+        margin-top: 0;
+        margin-bottom: 30px;
+        line-height: 1em;
+    }
+
+    h3 {
+        font-size: 1.4em;
+        color: #cbd5e1;
+    }
+
+    a {
+        color: #cbd5e1;
+    }
+
+    dl, dd {
+        color: #cbd5e1;
+    }
+
+    .btn-primary .icon {
+        stroke: #64748b;
+    }
+
+    .admin-table {
+        width: 100%;
+        text-align: left;
+        color: #cbd5e1;
+        box-shadow: 0 5px 15px 0px rgba(0,0,0,0.2);
+    }
+
+    .admin-table > thead {
+        text-transform: uppercase;
+        background-color: #334155;
+    }
+
+    .admin-table > thead th {
+        padding: 6px 12px;
+        color: #64748b;
+    }
+
+    .admin-table > tbody tr {
+        border-bottom: 1px solid #334155;
+    }
+
+    .admin-table > tbody td {
+        padding: 12px 8px;
+        background-color: #1e293b;
+    }
+
+    .admin-table-alt {
+        width: 100%;
+        text-align: left;
+        color: #cbd5e1;
+        box-shadow: 0 5px 15px 0px rgba(0,0,0,0.2);
+    }
+
+    .admin-table-alt > thead {
+        text-transform: uppercase;
+        background-color: transparent;
+    }
+
+    .admin-table-alt > thead th {
+        padding: 6px 12px;
+        color: transparent;
+    }
+
+    .admin-table-alt > tbody tr {
+        border-bottom: 1px solid #334155;
+    }
+
+    .admin-table-alt > tbody td {
+        padding: 12px 8px;
+        background-color: transparent;
+    }
+}
+
+
+.ck-editor__editable_inline {
+    min-height: 400px;
+}
+
+.ck.ck-editor__main > .ck-editor__editable {
+    background: #020617 !important;
+}
+
+.ck-content, .ck-content p {
+    color: #64748b !important;
+}
+
+#reviewInfo {
+    max-width: 800px;
+    padding: 30px;
+    box-shadow: 0px 5px 20px 0px rgba(0,0,0,0.5);
+    background-color: #1e293b;
+    border: 1px solid #EACF69;
+
+    button {
+        display: inline-block;
+        font-weight: 300;
+        border: 1px solid transparent;
+        padding: .5rem .75rem;
+        font-size: 1rem;
+        line-height: 1.25;
+        border-color: #64748b;
+        background-color: #1e293b;
+        color: #94a3b8 !important;
+    }
+}

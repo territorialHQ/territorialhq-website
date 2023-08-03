@@ -12,47 +12,65 @@
 <div class="fader-narrow">
 </div>
 
+<div class="pure-g mt-50">
 
-<div class="content-page">
-        <a class="btn btn-secondary btn-lg" asp-page="/Authentication/Logout">Log out</a>
-</div>
-
-<div class="profile">
-    <img class="avatar avatar-@(Model.AppUser?.DiscordId) discord-loader" src="~/img/loading_symbol.gif" data-id="@(Model.AppUser?.DiscordId)" />
-    <p class="name-@(Model.AppUser?.DiscordId)">@Model.AppUser?.DiscordId</p>
-</div>
-
-
-@foreach (var keyValuePair in Model.ClanPoints)
-{
-    <p><strong>@keyValuePair.Key.Tag</strong> - @string.Format("{0:#,0}", @keyValuePair.Value) points</p>
-}
-
-@*
-@if (!Model.IsPrivate || Model.IsOwnProfile)
-{
-    if (Model.IsOwnProfile)
+    @if (Model.IsOwnProfile)
     {
-        if (Model.AppUser.Public)
-        {
-            <p>Your profile is set to public.</p>
-            <form method="post" asp-page-handler="TogglePublic">
-                <button type="submit">Click here to switch it to private</button>
-            </form>
-        }
-        else
-        {
-            <p>Your profile is set to private.</p>
-            <form method="post" asp-page-handler="TogglePublic">
-                <button type="submit">Click here to switch it to public</button>
-            </form>
-        }
+        <div class="pure-u-1-1 pure-u-lg-1-4 mb-30">
+            <a class="btn btn-secondary btn-block btn" asp-page="/Authentication/Logout">Log out</a>
+
+            <div class="clan-quickfacts-container mt-20">
+                @if (Model.AppUser.Public)
+                {
+                    <p class="label label-block label-success">Public profile</p>
+                    <p>Visitors can see your recorded points and the clans you played for.</p>
+                    <form method="post" asp-page-handler="TogglePublic">
+                        <button type="submit" class="btn btn-primary btn-block">Switch to private</button>
+                    </form>
+                }
+                else
+                {
+                    <p class="label label-block label-danger">Private profile</p>
+                    <p>Visitors can't see your points or clans you played for.</p>
+                    <form method="post" asp-page-handler="TogglePublic">
+                        <button type="submit" class="btn btn-primary btn-block">Switch to public</button>
+                    </form>
+                }
+            </div>
+        </div>
     }
 
+    <div class="pure-u-1-1 @(Model.IsOwnProfile ? "pure-u-lg-3-4" : "")">
+        <div class="profile">
+            <img class="avatar avatar-@(Model.AppUser?.DiscordId) discord-loader" src="~/img/loading_symbol.gif" data-id="@(Model.AppUser?.DiscordId)" />
+            <p class="name-@(Model.AppUser?.DiscordId)">@Model.AppUser?.DiscordId</p>
+
+            <h2 class="h2 mt-40">Clan points</h2>
+            @if (Model.IsOwnProfile || !Model.IsPrivate)
+            {
+                <div class="profile-grid mt-20">
+                    @foreach (var keyValuePair in Model.ClanPoints)
+                    {
+                        <div class="profile-grid-item">
+                            <img src="/Data/Uploads/System/@keyValuePair.Key.LogoFile">
+                            <strong>@keyValuePair.Key.Tag</strong><br />
+                            @string.Format("{0:#,0}", @keyValuePair.Value)
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <span class="mt-20 mb-40 label label-danger">This profile is private</span>
+            }
+        </div>
 
 
-}
-else
-{
-    <p>This profile is set to private.</p>
-}*@
+
+    </div>
+
+</div>
+
+
+
+

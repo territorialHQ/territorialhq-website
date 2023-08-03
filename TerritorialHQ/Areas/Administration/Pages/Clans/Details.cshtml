@@ -5,20 +5,20 @@
     ViewData["Title"] = "Details";
 }
 
-<h1 class="text-4xl mb-5">@Model.Clan.Name</h1>
-<h2 class="text-2xl mb-5">Details</h2>
+<h1>@Model.Clan?.Name</h1>
+<h2>Details</h2>
 
-<div class="flex flex-row text-slate-500">
-    <div class="basis-3/4">
-        <div class="flex flex-row">
-            <div class="basis-1/2 form-group">
+<div class="pure-g">
+    <div class="pure-u-1-1 pure-u-md-3-4">
+        <div class="pure-g">
+            <div class="pure-u-1-1 pure-u-md-1-2 form-group">
                 <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.LogoFile)</label>
                 @if (!string.IsNullOrEmpty(Model.Clan.LogoFile))
                 {
                     <img src="/Data/Uploads/System/@Model.Clan.LogoFile" style="max-height: 150px" class="block mb-2" />
                 }
             </div>
-            <div class="basis-1/2  form-group">
+            <div class="pure-u-1-1 pure-u-md-1-2  form-group">
                 <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.BannerFile)</label>
                 @if (!string.IsNullOrEmpty(Model.Clan.BannerFile))
                 {
@@ -26,25 +26,25 @@
                 }
             </div>
         </div>
-        <div class="flex flex-row gap-4">
-            <div class="basis-1/2 form-group">
+        <div class="pure-g">
+            <div class="pure-u-1-1 pure-u-md-1-2 form-group">
                 <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Motto)</label>
                 @Html.DisplayFor(model => model.Clan!.Motto)
             </div>
-            <div class="basis-1/2">
+            <div class="pure-u-1-1 pure-u-md-1-2">
 
-                <div class="flex flex-row gap-4">
-                    <div class="basis-1/3 form-group">
+                <div class="pure-g">
+                    <div class="pure-u-1-1 pure-u-md-1-3 form-group">
                         <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Tag)</label>
                         @Html.DisplayFor(model => model.Clan!.Tag)
                     </div>
-                    <div class="basis-1/3 form-group">
+                    <div class="pure-u-1-1 pure-u-md-1-3 form-group">
                         <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Color1)</label>
                         <span style="color: @Model.Clan!.Color1">
                             @Html.DisplayFor(model => model.Clan!.Color1)
                         </span>
                     </div>
-                    <div class="form-group">
+                    <div class="pure-u-1-1 pure-u-md-1-3 form-group">
                         <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Color2)</label>
                         <span style="color: @Model.Clan!.Color2">
                             @Html.DisplayFor(model => model.Clan!.Color2)
@@ -53,12 +53,12 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-row gap-4">
-            <div class="basis-1/2 form-group">
+        <div class="pure-g">
+            <div class="pure-u-1-1 pure-u-md-1-2 form-group">
                 <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Foundation)</label>
                 @Html.DisplayFor(model => model.Clan!.Foundation)
             </div>
-            <div class="basis-1/2 form-group">
+            <div class="pure-u-1-1 pure-u-md-1-2 form-group">
                 <div class="form-group">
                     <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Founders)</label>
                     @Html.DisplayFor(model => model.Clan!.Founders)
@@ -72,6 +72,10 @@
         <div class="form-group">
             <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.DiscordLink)</label>
             @Html.DisplayFor(model => model.Clan!.DiscordLink)
+        </div>
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Overview)</label>
+            @Html.Raw(Model.Clan.Overview)
         </div>
         <div class="form-group">
             <label class="control-label">@Html.DisplayNameFor(model => model.Clan!.Description)</label>
@@ -94,20 +98,20 @@
             @Html.Raw(Model.Clan.Miscellaneous)
         </div>
     </div>
-    <div class="basis-1/4">
+    <div class="pure-u-1-1 pure-u-md-1-4">
         <div class="ml-6 pl-6 border-l-2 border-l-slate-600">
 
             @if (User.IsInRole("Staff") || (User.IsInRole("Administrator") && Model.Clan.AssignedAppUsers.Count == 0))
             {
-                <a class="btn-admin-primary w-full mb-2 text-center" asp-page="./Edit" asp-route-id="@Model.Clan?.Id">
-                    <svg class="inline-block w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <a class="btn btn-primary btn-block mb-20" asp-page="./Edit" asp-route-id="@Model.Clan?.Id">
+                    <svg class="icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>
                     </svg>
                     Edit
                 </a>
             }
-            <a class="btn-admin-secondary w-full mb-4 text-center" asp-area="" asp-page="/Clans/Details" asp-route-id="@Model.Clan?.Id" target="_blank">
-                <svg class="inline-block w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <a class="btn btn-secondary btn-block mb-20" asp-area="" asp-page="/Clans/Details" asp-route-id="@Model.Clan?.Id" target="_blank">
+                <svg class="icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
@@ -118,88 +122,87 @@
             {
                 if (Model.Clan!.IsPublished)
                 {
-                    <div class="p-3 bg-green-200 text-green-800 rounded text-sm mb-4">
-                        <p class="font-bold">This page is published.</p>
+                    <div class="alert alert-success text-center">
+                        <strong>This page is published.</strong>
                     </div>
                 }
                 else
                 {
                     if (Model.Clan.InReview)
                     {
-                        <div class="p-3 mb-3 bg-yellow-200 text-yellow-800 rounded text-sm">
-                            <p class="font-bold mb-3">This page is currently pending review.</p>
-                            <p class="pb-3">
+                        <div class="alert alert-warning">
+                            <p><strong>This page is currently pending review.</strong></p>
+                            <p>
                                 Please check the content of this page with regards to the community guidelines. If there are no concerns, click the button below to
                                 publish the listing.
                             </p>
                             <form method="post" asp-page-handler="Publish">
                                 <input type="hidden" name="id" value="@Model.Clan.Id">
-                                <button type="submit" class="btn-admin-primary w-full">Publish</button>
+                                <button type="submit" class="btn btn-secondary btn-block">Publish</button>
                             </form>
                         </div>
 
                     }
                 }
 
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="admin-table">
-                        <thead>
+
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Edit permissions</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Clan.AssignedAppUsers.Count == 0)
+                        {
                             <tr>
-                                <th>Edit permissions</th>
-                                <th></th>
+                                <td colspan="2">
+                                    <em>No staff users have permissions to edit</em>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.Clan.AssignedAppUsers.Count == 0)
+                        }
+                        else
+                        {
+                            foreach (var item in Model.Clan.AssignedAppUsers)
                             {
                                 <tr>
-                                    <td colspan="2">
-                                        <em>No staff users have permissions to edit</em>
+                                    <td>
+                                        <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(item.AppUserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.AppUserName)" />
+                                        <span class="name-@(item.AppUserName)">@item.AppUserName</span>
+                                    </td>
+                                    <td style="width: 1%">
+                                        <form method="post" asp-page-handler="RemoveUser">
+                                            <input type="hidden" name="id" value="@Model.Clan.Id" />
+                                            <input type="hidden" name="relationId" value="@item.Id" />
+                                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                        </form>
                                     </td>
                                 </tr>
                             }
-                            else
-                            {
-                                foreach (var item in Model.Clan.AssignedAppUsers)
-                                {
-                                    <tr>
-                                        <td>
-                                            <img style="width: 24px; height: 24px; border-radius: 12px" class="inline avatar avatar-@(item.AppUserName) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.AppUserName)" />
-                                            <span class="name-@(item.AppUserName)">@item.AppUserName</span>
-                                        </td>
-                                        <td style="width: 1%">
-                                            <form method="post" asp-page-handler="RemoveUser">
-                                                <input type="hidden" name="id" value="@Model.Clan.Id" />
-                                                <input type="hidden" name="relationId" value="@item.Id" />
-                                                <button type="submit" class="btn-admin-danger-sm">Remove</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                            <tr>
-                                <td colspan="2">
-                                    <form method="post" asp-page-handler="AddUser">
-                                        <div class="form-group">
-                                            <label class="control-label">Give edit permission to user</label>
-                                            <input type="hidden" name="id" value="@Model.Clan.Id" />
-                                            <select class="form-control" name="userId" asp-items="@ViewBag.UserId">
-                                                <option value=""></option>
-                                            </select>
-                                        </div>
+                        }
+                        <tr>
+                            <td colspan="2">
+                                <form method="post" asp-page-handler="AddUser">
+                                    <div class="form-group">
+                                        <label class="control-label">Give edit permission to user</label>
+                                        <input type="hidden" name="id" value="@Model.Clan.Id" />
+                                        <select class="form-control discord-loader" name="userId" asp-items="@ViewBag.UserId">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
 
-                                        <button class="btn-admin-secondary-sm" type="submit">Add user</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    <button class="btn btn-primary btn-sm" type="submit">Add user</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                </div>
                 <div class="mt-3">
                     @if (Model.Clan.AssignedAppUsers.Count > 0)
                     {
-                        <div class="mb-3 p-3 bg-slate-100 text-slate-800 text-sm rounded"><strong>Editing disabled.</strong> While staff users are assigned to this clan listing, editing is disabled for administrators.</div>
+                        <div class="alert alert-warning"><strong>Editing disabled.</strong> While staff users are assigned to this clan listing, editing is disabled for administrators.</div>
                     }
                 </div>
 
@@ -208,38 +211,38 @@
             {
                 if (Model.Clan!.IsPublished)
                 {
-                    <div class="p-3 bg-green-200 text-green-800 rounded text-sm mb-4">
-                        <p class="font-bold mb-3">This page is published.</p>
-                        <p class="mb-3">Saving changes to this page will unpublish the clan listing until it has been reviewed again by an administrator.</p>
-                        <p><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                    <div class="alert alert-success">
+                        <p><strong>This page is published.</strong></p>
+                        <p>Saving changes to this page will unpublish the clan listing until it has been reviewed again by an administrator.</p>
+                        <a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline"><strong>Learn more</strong></a>
                     </div>
                 }
                 else
                 {
                     if (Model.Clan.InReview)
                     {
-                        <div class="p-3 mb-3 bg-yellow-200 text-yellow-800 rounded text-sm">
-                            <p class="font-bold mb-3">This page is currently in review.</p>
-                            <p class="mb-3">
+                        <div class="alert alert-warning">
+                            <p><strong>This page is currently in review.</strong></p>
+                            <p>
                                 An administrator will review and publish the listing shortly.
                             </p>
-                            <p class="mb-3">
+                            <p>
                                 You may edit the page at any time. This will stop the review process until you mark the listing for review again.
                             </p>
-                            <p><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                            <a href="javascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();"><strong>Learn more</strong></a>
                         </div>
                     }
                     else
                     {
-                        <div class="p-3 mb-3 bg-gray-200 text-gray-800 rounded text-sm">
-                            <p class="font-bold mb-3">This page is currently unlisted.</p>
-                            <p class="mb-3">
+                        <div class="alert">
+                            <p><strong>This page is currently unlisted.</strong></p>
+                            <p>
                                 When you are done and happy with your edits, click the button below to mark your listing as ready for review.
                             </p>
-                            <p class="mb-3"><a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                            <p><a href="javascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
                             <form method="post" asp-page-handler="MarkForReview">
                                 <input type="hidden" name="id" value="@Model.Clan.Id">
-                                <button type="submit" class="btn-admin-primary w-full">Mark for Review</button>
+                                <button type="submit" class="btn btn-primary btn-block">Mark for Review</button>
                             </form>
                         </div>
                     }
@@ -250,30 +253,32 @@
 </div>
 
 
-<dialog id="reviewInfo" class="max-w-[800px] p-8 shadow-xl">
-    <h1 class="text-2xl mb-5">Review System for clan listings</h1>
-    <p class="mb-3">
+<dialog id="reviewInfo">
+    <h1>
+        Review System for clan listings
+    </h1>
+    <p>
         Since the content you create for your clan will be publicly visible, we must ensure that the text and images you provide do not violate the community standards of
         TerritorialHQ. This means that each clan listing will undergo a quick check before becoming publicly visible. For detailed information check the <a href="#" class="underline">community standards</a>.
     </p>
-    <div class="mb-3 flex flex-row gap-5">
-        <div class="basis-1/2">
-            <p class="mb-3"><strong>These images are not allowed:</strong></p>
+    <div class="pure-g">
+        <div class="pure-u-1-1 pure-u-md-1-2">
+            <p><strong>These images are not allowed:</strong></p>
             <ul class="ml-5 list-disc">
                 <li class="mb-2">Images containing NSFW content, violence, hate speech, symbols of extremist or terrorist organizations or copyrighted material</li>
             </ul>
         </div>
-        <div class="basis-1/2">
-            <p class="mb-3"><strong>These texts are now allowed:</strong></p>
+        <div class="pure-u-1-1 pure-u-md-1-2">
+            <p><strong>These texts are now allowed:</strong></p>
             <ul class="ml-5 list-disc">
                 <li class="mb-2">Texts containing NSFW content, graphic description of violence, hate speech, political messages, misinformation or copyrighted material</li>
             </ul>
         </div>
     </div>
-    <p class="mb-3">
+    <p>
         Other than that, our administrators <strong>will not interfere with your clan listing</strong>. You are free to describe your clan in any way you like.
     </p>
-    <p class="mb-3">
+    <p>
         In case your listing can't be published, we will try to get in touch with you via Discord, let you know the reasons for the rejection and give you advice on how to change
         the content to have it pass the review.
     </p>
@@ -283,3 +288,7 @@
         </p>
     </form>
 </dialog>
+
+@section Scripts {
+    <script src="~/js/discord-drodown-loader.js"></script>
+}

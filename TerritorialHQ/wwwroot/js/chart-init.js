@@ -6,7 +6,6 @@ var chartRequest = $.ajax({
     type: 'GET',
     cache: true,
     success: function (cdata) {
-        console.log(cdata);
 
         Chart.defaults.borderColor = '#4E431E';
         Chart.defaults.color = '#EACF69';

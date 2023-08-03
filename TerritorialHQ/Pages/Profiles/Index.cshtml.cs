@@ -32,7 +32,10 @@ namespace TerritorialHQ.Pages.Profiles
 
             AppUser = await _appUserService.FindAsync<DTOAppUser>("AppUser", id);
             if (AppUser == null)
-                return NotFound();
+            {
+                IsPrivate = true;
+                return Page();
+            }
 
             if (User.Identity?.Name != id)
             {
@@ -62,16 +65,14 @@ namespace TerritorialHQ.Pages.Profiles
 
         public async Task<IActionResult> OnPostAsync()
         {
-            //var appUser = await _appUserService.FindAsync<DTOAppUser>("AppUser", User.Identity?.Name);
-            //if (appUser == null) 
-            //    return NotFound();
+            var appUser = await _appUserService.FindAsync<DTOAppUser>("AppUser", User.Identity?.Name!);
+            if (appUser == null)
+                return NotFound();
 
-            //appUser.Public = !appUser.Public;
+            if (!(await _appUserService.TogglePublicAsync(appUser.Id!)))
+                throw new Exception("Error while updating profile settings");
 
-            //if (!(await _appUserService.Update<DTOAppUser>("AppUser", appUser)))
-            //    throw new Exception("Error while updating profile settings");
-
-            return RedirectToPage("./Index"/*, new { id = appUser.DiscordId }*/);
+            return RedirectToPage("./Index", new { id = appUser.DiscordId });
         }
     }
 }

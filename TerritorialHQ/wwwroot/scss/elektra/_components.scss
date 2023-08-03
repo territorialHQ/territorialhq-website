@@ -951,18 +951,23 @@
     }
 }
 
-.clan-quickfacts-container {
+.clan-quickfacts-container { 
     background-color: #0F172A;
     border: 1px solid #475569;
     padding: 20px;
     box-shadow: 0px 10px 15px 0px rgba(0,0,0,0.35);
 }
 
+.clan-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
 
 /* Profile */
 
 .profile {
-
     text-align: center;
 
     img {
@@ -977,3 +982,43 @@
         color: #94a3b8;
     }
 }
+
+.profile-grid {
+    padding-top: 25px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+}
+
+.profile-grid-item {
+    color: #94a3b8;
+    padding: 1px;
+    text-align: center;
+    background-color: rgba(0,0,0,0.5);
+    border: 2px solid #334155;
+
+    img {
+        display: block;
+        margin: 0 auto;
+        max-height: 85px;
+        width: auto;
+        margin-top: -25px;
+    }
+}
+
+@media (max-width: 991px) {
+    .profile-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 575px) {
+    .profile-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+}
+

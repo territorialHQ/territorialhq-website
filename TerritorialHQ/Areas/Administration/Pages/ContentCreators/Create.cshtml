@@ -1,0 +1,86 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.ContentCreators.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<link href="~/css/ckeditor.css" rel="stylesheet" />
+
+<h1>Content Pages</h1>
+<h2>Create</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-1 pure-u-md-1-2 form-group">
+            <div class="form-group">
+                <label asp-for="LogoFile" class="control-label"></label>
+                @if (!string.IsNullOrEmpty(Model.LogoFile))
+                {
+                    <img src="/Data/Uploads/System/@Model.LogoFile" style="max-height: 150px" class="block mb-2" />
+
+                    <br />
+                }
+                <input type="file" name="fileLogo" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
+            </div>
+        </div>
+        <div class="pure-u-1-1 pure-u-md-1-2  form-group">
+            <div class="form-group">
+                <label asp-for="BannerFile" class="control-label"></label>
+                @if (!string.IsNullOrEmpty(Model.BannerFile))
+                {
+                    <img src="/Data/Uploads/System/@Model.BannerFile" style="max-height: 150px" class="block mb-2" />
+
+                    <br />
+                }
+                <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ChannelLink" class="control-label"></label>
+        <input asp-for="ChannelLink" class="form-control" />
+        <span asp-validation-for="ChannelLink" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
+
+@section Scripts {
+
+    <script src="/js/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#Content'), {
+                simpleUpload: {
+                    uploadUrl: '/Ajax/Uploads'
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        ClassicEditor
+            .create(document.querySelector('#SidebarContent'), {
+                removePlugins: ['Title'],
+                simpleUpload: {
+                    uploadUrl: '/Ajax/Uploads'
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    <style>
+        .ck-content, .ck-content p {
+            color: #94A3B8 !important;
+        }
+    </style>
+}

@@ -36,7 +36,7 @@ namespace TerritorialHQ.Pages.Ajax
                 var userData = await _discordBotService.GetDiscordUserAsync(id);
                 if (userData != null)
                 {
-                    model.Username = userData.Username + "#" + userData.Discriminator;
+                    model.Username = userData.Username;
                     model.Avatar = userData.AvatarHash;
                     _memoryCache.Set(id, new DiscordCacheModel() { Username = model.Username, Avatar = userData.AvatarHash }, new TimeSpan(0, rnd.Next(12, 24), 0, 0));
 

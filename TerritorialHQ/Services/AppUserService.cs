@@ -27,4 +27,17 @@ public class AppUserService : ApisDtoService
 
         return result;
     }
+
+    public async Task<bool> TogglePublicAsync(string id)
+    {
+        AddTokenHeader();
+
+        bool result = false;
+        HttpResponseMessage response = await _httpClient.GetAsync("AppUser/Public/" + id);
+
+        if (response.IsSuccessStatusCode)
+            result = true;
+
+        return result;
+    }
 }

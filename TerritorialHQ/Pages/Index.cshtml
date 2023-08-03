@@ -128,6 +128,8 @@
 
             @foreach (var item in Model.JournalArticles)
             {
+                if (!item.IsPublished) { continue; }
+
                 <div class="news-item">
                     <div class="news-image" style="background-image: url(/Data/Uploads/System/@(item.Image))">
                         <a asp-page="/Journal/Details" asp-route-id="@item.Id">&nbsp;</a>
@@ -150,9 +152,21 @@
     </div>
     <div class="pure-u-1-1 pure-u-md-1-3">
         <h2 class="h2"><img src="/img/tv.svg" />Content Creators</h2>
+        @if (Model.ContentCreators != null && Model.ContentCreators.Count > 0)
+        {
+            var creator = @Model.ContentCreators?.FirstOrDefault();
+
+            <div class="yembed">@creator?.ChannelLink</div>
+            <div class="yembed-caption">Featured creator: <img class="yembed-creator-logo" src="/Data/Uploads/System/@(creator?.LogoFile)" /> @creator?.Name</div>
+        }
     </div>
 </div>
 
+
+@section Styles {
+    <link href="~/lib/yembed/yembed.css" rel="stylesheet" />
+}
 @section Scripts {
     <script src="~/js/leaderboard.js"></script>
+    <script src="~/lib/yembed/yembed.js"></script>
 }

@@ -117,7 +117,7 @@ $maxWidth: 100;
 
 /* Reusable margins and paddings */
 
-$maxMargin: 60;
+$maxMargin: 100;
 
 $i: 0;
 
@@ -333,6 +333,12 @@ $i: 0;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: -6px;
 }
 
 /* Hidden elements */
