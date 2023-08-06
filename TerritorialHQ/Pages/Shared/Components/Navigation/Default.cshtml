@@ -34,9 +34,12 @@
                                             {
                                                 <a class="menu-link" href="@subitem.ExternalUrl" target="@(subitem.ExternalUrl.StartsWith("http") ? "_blank" : "_self")">@subitem.Name</a>
                                             }
-                                            else
+                                            else if (subitem.ContentPageId != null)
                                             {
                                                 <a class="menu-link" href="/@item.Slug/@subitem.Slug">@subitem.Name</a>
+                                            } else
+                                            {
+                                                <a class="menu-link inactive" href="#">@subitem.Name <span>(Coming soon)</span></a>
                                             }
                                         </li>
                                     }
@@ -50,9 +53,13 @@
                                 {
                                     <a class="menu-link" href="@item.ExternalUrl" target="@(item.ExternalUrl.StartsWith("http") ? "_blank" : "_self")">@item.Name</a>
                                 }
-                                else
+                                else if (item.ContentPageId != null)
                                 {
                                     <a class="menu-link" href="/@item.Slug">@item.Name</a>
+                                }
+                                else
+                                {
+                                    <a class="menu-link inactive" href="#">@item.Name <span>(Coming soon)</span></a>
                                 }
                             </li>
                         }
@@ -70,7 +77,10 @@
                                 </a>
                             </li>
                             <li class="menu-item hidden-md-up">
-                                <img style="width: 24px; height: 24px; border-radius: 12px" class="avatar avatar-@(User.Identity?.Name) discord-loader" src="~/img/loading_symbol.gif" data-id="@(User.Identity?.Name)" />
+                                <a class="menu-link" href="/Profiles/@(User.Identity?.Name)" style="font-family: 'Roboto Condensed'; text-transform: none;">
+                                    <img style="width: 24px; height: 24px; border-radius: 12px" class="avatar avatar-@(User.Identity?.Name) discord-loader" src="~/img/loading_symbol.gif" data-id="@(User.Identity?.Name)" />
+                                    <span class="name-@(User.Identity?.Name)">@User.Identity?.Name</span>
+                                </a>
                             </li>
                         }
                     }

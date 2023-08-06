@@ -2,3 +2,47 @@
 @model TerritorialHQ.Areas.Administration.Pages.Home.IndexModel
 @{
 }
+
+<h1>Overview</h1>
+<div class="pure-g">
+    <div class="pure-u-1-1 pure-u-md-1-3">
+        <h2>Website Logins*</h2>
+        <div class="clan-quickfacts-container mb-20">
+            <table class="tthq-table">
+                <tr>
+                    <td><strong>Last 24h</strong></td>
+                    <td>@Model.LoginStats?.Count()</td>
+                </tr>
+                <tr>
+                    <td><strong>Last 1h</strong></td>
+                    <td>@Model.LoginStats?.Where(s => s.Timestamp >= DateTime.Now.AddHours(-1)).Count()</td>
+                </tr>
+            </table>
+        </div>
+        <p>* Unique users. Login data is reset on site restart. Last restart was @System.Diagnostics.Process.GetCurrentProcess().StartTime</p>
+    </div>
+    <div class="pure-u-1-1 pure-u-md-1-3">
+        <h2>Clan pages awaiting review</h2>
+        <div class="clan-quickfacts-container">
+            <table class="tthq-table">
+                @if (Model.ClansInReview?.Count == 0)
+                {
+                    <tr>
+                        <td><em>No clan pages in review.</em></td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.ClansInReview!)
+                    {
+                        <tr>
+                            <td><a asp-page="/Clans/Details" asp-route-id="@item.Id">@item.Name</a></td>
+                            <td class="text-right"><span class="label label-warning">In Review</span></td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+    <div class="pure-u-1-1 pure-u-md-1-3"></div>
+</div>

@@ -69,6 +69,73 @@
 }
 
 
+/* CKEdit images */
+
+.image.image_resized {
+    max-width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+/* @ckeditor/ckeditor5-image/theme/imageresize.css */
+.image.image_resized img {
+    width: 100%;
+}
+/* @ckeditor/ckeditor5-image/theme/imageresize.css */
+.image.image_resized > figcaption {
+    display: block;
+}
+/* @ckeditor/ckeditor5-image/theme/imagecaption.css */
+.image > figcaption {
+    display: table-caption;
+    caption-side: bottom;
+    word-break: break-word;
+    color: #94a3b8;
+    background-color: rgba(0,0,0,0.5);
+    padding: .6em;
+    font-size: .85em;
+    outline-offset: -1px;
+}
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image {
+    display: table;
+    clear: both;
+    text-align: center;
+    margin: 30px auto;
+    min-width: 50px;
+    box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.35);
+}
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    min-width: 100%;
+    border: 2px solid rgba(0,0,0,0.5);
+}
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image-inline {
+    /*
+     * Normally, the .image-inline would have "display: inline-block" and "img { width: 100% }" (to follow the wrapper while resizing).;
+     * Unfortunately, together with "srcset", it gets automatically stretched up to the width of the editing root.
+     * This strange behavior does not happen with inline-flex.
+     */
+    display: inline-flex;
+    max-width: 100%;
+    align-items: flex-start;
+}
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image-inline picture {
+    display: flex;
+}
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image-inline picture,
+.image-inline img {
+    flex-grow: 1;
+    flex-shrink: 1;
+    max-width: 100%;
+}
+
+
 
 
 /* Start Hero Containers */
@@ -514,7 +581,7 @@
         }
     }
 
-    h3 {
+    h3, h4 {
         font-family: $font-primary !important;
         font-weight: 500;
         font-size: 2rem;
@@ -529,6 +596,11 @@
         a:hover {
             color: #e2e8f0;
         }
+    }
+
+    h4 {
+        font-size: 1.4rem;
+        margin-bottom: 12px;
     }
 
     p {
@@ -987,7 +1059,8 @@
     padding-top: 25px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 20px;
+    grid-column-gap: 20px;
+    grid-row-gap: 40px;
     width: 100%;
     justify-content: center;
 }
@@ -1005,6 +1078,7 @@
         max-height: 85px;
         width: auto;
         margin-top: -25px;
+        border-radius: 0;
     }
 }
 

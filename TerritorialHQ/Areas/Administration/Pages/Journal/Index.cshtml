@@ -23,17 +23,17 @@
     <table class="admin-table">
         <thead>
             <tr>
-                <th></th>
+                <th class="hidden-sm-down"></th>
                 <th>
                     @Html.DisplayNameFor(model => model.JournalArticle![0].Title)
                 </th>
-                <th>
+                <th class="hidden-sm-down">
                     @Html.DisplayNameFor(model => model.JournalArticle![0].IsPublished)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.JournalArticle![0].PublishFrom)
                 </th>
-                <th>
+                <th class="hidden-sm-down">
                     @Html.DisplayNameFor(model => model.JournalArticle![0].PublishTo)
                 </th>
                 <th></th>
@@ -43,7 +43,7 @@
             @foreach (var item in Model.JournalArticle)
             {
                 <tr>
-                    <td style="width: 1%">
+                    <td style="width: 1%" class="hidden-sm-down">
                         @if (item.Image != null)
                         {
                             <img src="/Data/Uploads/System/@item.Image" style="max-width: 120px;">
@@ -52,13 +52,13 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Title)
                     </td>
-                    <td>
+                    <td class="hidden-sm-down">
                         @Html.DisplayFor(modelItem => item.IsPublished)
                     </td>
                     <td>
                         @string.Format("{0:d}", item.PublishFrom)
                     </td>
-                    <td>
+                    <td class="hidden-sm-down">
                         @string.Format("{0:d}", item.PublishTo)
                     </td>
                     <td style="width: 1%; white-space: nowrap">

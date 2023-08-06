@@ -28,16 +28,16 @@
                 <th scope="col">
                     @Html.DisplayNameFor(model => model.Clans![0].Name)
                 </th>
-                <th scope="col">
+                <th scope="col" class="hidden-sm-down">
                     @Html.DisplayNameFor(model => model.Clans![0].Tag)
                 </th>
-                <th scope="col">
+                <th scope="col" class="hidden-sm-down">
                     @Html.DisplayNameFor(model => model.Clans![0].LogoFile)
                 </th>
-                <th scope="col">
+                <th scope="col" class="hidden-sm-down">
                     @Html.DisplayNameFor(model => model.Clans![0].BannerFile)
                 </th>
-                <th scope="col">
+                <th scope="col" class="hidden-sm-down">
                     Assigned Users
                 </th>
                 <th scope="col" class="">
@@ -47,7 +47,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Clans!)
+            @foreach (var item in Model.Clans!.OrderBy(o => o.Name))
             {
                 if (!User.IsInRole("Administrator") && !item.AssignedAppUsers.Any(u => u.Id == userId))
                     continue;
@@ -56,22 +56,22 @@
                     <td class="font-bold">
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
-                    <td class="font-bold">
+                    <td class="font-bold hidden-sm-down">
                         [@Html.DisplayFor(modelItem => item.Tag)]
                     </td>
-                    <td>
+                    <td class="hidden-sm-down">
                         @if (item.LogoFile != null)
                         {
                             <img src="/Data/Uploads/System/@item.LogoFile" style="height: 120px;">
                         }
                     </td>
-                    <td>
+                    <td class="hidden-sm-down">
                         @if (item.BannerFile != null)
                         {
                             <img src="/Data/Uploads/System/@item.BannerFile" style="height: 120px;">
                         }
                     </td>
-                    <td>
+                    <td class="hidden-sm-down">
                         @foreach (var user in item.AssignedAppUsers)
                         {
                             <p class="mb-1">

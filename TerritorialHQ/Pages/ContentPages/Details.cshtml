@@ -4,7 +4,7 @@
 }
 
 
-@if (!string.IsNullOrEmpty(Model.ContentPage!.BannerImage))
+@if (Model.ContentPage != null && !string.IsNullOrEmpty(Model.ContentPage.BannerImage))
 {
     <div class="fader" style="background-image: url(/Data/Uploads/System/@Model.ContentPage.BannerImage)"></div>
 }
@@ -33,7 +33,7 @@ else
         if (useSidebar)
         {
             <div class="pure-g">
-                <div class="pure-u-1-1 pure-u-md-3-4 pr-50 pr-mobile-0"> 
+                <div class="pure-u-1-1 pure-u-md-3-4"> 
                     @Html.Raw(Model.ContentPage.Content)
                 </div>
                 <div class="pure-u-1-1 pure-u-md-1-4 pt-85 pt-mobile-20">

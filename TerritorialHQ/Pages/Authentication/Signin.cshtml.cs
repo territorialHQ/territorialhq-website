@@ -3,22 +3,26 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TerritorialHQ.Models.ViewModels;
 
 namespace TerritorialHQ.Pages.Authentication
 {
     public class SigninModel : PageModel
     {
         private readonly IConfiguration _configuration;
+        private readonly IMemoryCache _memoryCache;
 
-        public SigninModel(IConfiguration configuration)
+        public SigninModel(IConfiguration configuration, IMemoryCache memoryCache)
         {
             _configuration = configuration;
+            _memoryCache = memoryCache;
         }
 
         public async Task<IActionResult> OnGet(string? token)
@@ -44,11 +48,15 @@ namespace TerritorialHQ.Pages.Authentication
 
                 var jwtClaims = (JwtSecurityToken)validatedToken;
 
+                var userId = jwtClaims.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+                var discordId = jwtClaims.Claims.FirstOrDefault(c => c.Type == "DiscordId")?.Value;
+                var role = jwtClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
                 var claims = new List<Claim>
                 {
-                    new Claim("Id", jwtClaims.Claims.FirstOrDefault(c => c.Type == "Id")?.Value ?? string.Empty),
-                    new Claim(ClaimTypes.Name, jwtClaims.Claims.FirstOrDefault(c => c.Type == "DiscordId")?.Value ?? string.Empty),
-                    new Claim(ClaimTypes.Role, jwtClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? string.Empty)
+                    new Claim("Id", userId ?? string.Empty),
+                    new Claim(ClaimTypes.Name, discordId ?? string.Empty),
+                    new Claim(ClaimTypes.Role, role ?? string.Empty)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -68,6 +76,30 @@ namespace TerritorialHQ.Pages.Authentication
                     IsEssential = true
                 };
                 Response.Cookies.Append("BearerToken", token, cookieOptions);
+
+                if (_memoryCache.TryGetValue("login-stats", out List<LoginStat>? logins))
+                {
+                    if (discordId != null)
+                    {
+                        if (logins != null && !logins.Any(s => s.Id == discordId))
+                        {
+                            logins.Add(new LoginStat { Id = discordId, Timestamp = DateTime.Now });
+                        }
+                    }
+
+                    logins.RemoveAll(s => s.Timestamp < DateTime.Now.AddDays(-1));
+                    _memoryCache.Set("login-stats", logins);
+
+                }
+                else
+                {
+                    if (discordId != null)
+                    {
+                        logins = new List<LoginStat>();
+                        logins.Add(new LoginStat { Id = discordId, Timestamp = DateTime.Now });
+                        _memoryCache.Set("login-stats", logins);
+                    }
+                }
 
             }
             catch (SecurityTokenValidationException)

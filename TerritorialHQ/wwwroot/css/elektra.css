@@ -4920,7 +4920,12 @@ h3, h4, h5 {
 }
 
 a {
+  color: #cbd5e1;
   text-decoration: none !important;
+}
+
+a:hover {
+  color: white;
 }
 
 .h1 {
@@ -5543,7 +5548,7 @@ ul, ol {
   flex-grow: 1;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   .nav ul {
     list-style-type: none;
     padding: 0;
@@ -5561,7 +5566,8 @@ ul, ol {
   .nav ul li ul {
     position: absolute;
     top: 80px;
-    width: 200px;
+    min-width: 200px;
+    max-width: 400px;
     transition: opacity 1s ease-in-out;
     border-top: 3px solid #EACF69;
     box-shadow: 0px 0px 20px -4px rgba(0, 0, 0, 0.66);
@@ -5650,7 +5656,7 @@ ul, ol {
     vertical-align: -6px;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .navbar {
     border-bottom: none;
   }
@@ -5726,6 +5732,13 @@ ul, ol {
     display: none;
   }
 }
+.menu-link.inactive span {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #808080;
+  vertical-align: 0;
+}
+
 label {
   font-weight: 700;
   display: block;
@@ -6005,6 +6018,79 @@ textarea.form-control {
 /* Content pages */
 .content-page {
   padding-top: 50px;
+}
+
+/* CKEdit images */
+.image.image_resized {
+  max-width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* @ckeditor/ckeditor5-image/theme/imageresize.css */
+.image.image_resized img {
+  width: 100%;
+}
+
+/* @ckeditor/ckeditor5-image/theme/imageresize.css */
+.image.image_resized > figcaption {
+  display: block;
+}
+
+/* @ckeditor/ckeditor5-image/theme/imagecaption.css */
+.image > figcaption {
+  display: table-caption;
+  caption-side: bottom;
+  word-break: break-word;
+  color: #94a3b8;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.6em;
+  font-size: 0.85em;
+  outline-offset: -1px;
+}
+
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image {
+  display: table;
+  clear: both;
+  text-align: center;
+  margin: 30px auto;
+  min-width: 50px;
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+}
+
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  min-width: 100%;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image-inline {
+  /*
+   * Normally, the .image-inline would have "display: inline-block" and "img { width: 100% }" (to follow the wrapper while resizing).;
+   * Unfortunately, together with "srcset", it gets automatically stretched up to the width of the editing root.
+   * This strange behavior does not happen with inline-flex.
+   */
+  display: inline-flex;
+  max-width: 100%;
+  align-items: flex-start;
+}
+
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image-inline picture {
+  display: flex;
+}
+
+/* @ckeditor/ckeditor5-image/theme/image.css */
+.image-inline picture,
+.image-inline img {
+  flex-grow: 1;
+  flex-shrink: 1;
+  max-width: 100%;
 }
 
 /* Start Hero Containers */
@@ -6368,7 +6454,7 @@ textarea.form-control {
   vertical-align: -5px;
   margin-right: 3px;
 }
-.news-content h3 {
+.news-content h3, .news-content h4 {
   font-family: "Roboto Condensed", Helvetica, Arial, sans-serif !important;
   font-weight: 500;
   font-size: 2rem;
@@ -6376,11 +6462,15 @@ textarea.form-control {
   margin-bottom: 8px;
   line-height: 1.1em;
 }
-.news-content h3 a {
+.news-content h3 a, .news-content h4 a {
   color: #cbd5e1;
 }
-.news-content h3 a:hover {
+.news-content h3 a:hover, .news-content h4 a:hover {
   color: #e2e8f0;
+}
+.news-content h4 {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
 }
 .news-content p {
   color: #94a3b8;
@@ -6740,7 +6830,8 @@ textarea.form-control {
   padding-top: 25px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 20px;
+  grid-column-gap: 20px;
+  grid-row-gap: 40px;
   width: 100%;
   justify-content: center;
 }
@@ -6758,6 +6849,7 @@ textarea.form-control {
   max-height: 85px;
   width: auto;
   margin-top: -25px;
+  border-radius: 0;
 }
 
 @media (max-width: 991px) {

@@ -48,14 +48,17 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
         public async Task<IActionResult> OnPostAddUser(string id, string userId)
         {
-            var relation = new DTOClanUserRelation()
+            if (userId != null)
             {
-                ClanId = id,
-                AppUserId = userId
-            };
+                var relation = new DTOClanUserRelation()
+                {
+                    ClanId = id,
+                    AppUserId = userId
+                };
 
-            if (!(await _service.Add<DTOClanUserRelation>("ClanUserRelation", relation)))
-                throw new Exception("Error while saving relation data set.");
+                if (!(await _service.Add<DTOClanUserRelation>("ClanUserRelation", relation)))
+                    throw new Exception("Error while saving relation data set.");
+            }
 
             return RedirectToPage("./Details", new { id });
         }

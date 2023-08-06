@@ -6,11 +6,11 @@
 
 		link.classList.add("yembed-container");
 		link.style.height = (link.offsetWidth * 0.5625) + "px";
-		
+		link.style.backgroundImage = "url(/lib/yembed/play-button.png), url(" + link.dataset.banner + ")";
+
 		var agreementLink = document.createElement("a");
 		agreementLink.setAttribute("href", "javascript:void(0);")
 		agreementLink.setAttribute("data-link", link.innerHTML)
-		agreementLink.innerHTML = '<div class="yembed-play-button"></div>';
 		agreementLink.classList.add("yembed-play-button");
 
 		var agreementText = document.createElement("p");

@@ -1,0 +1,22 @@
+﻿@model List<TerritorialHQ_Library.DTO.DTOJournalArticleListEntry>
+@{
+}
+<div class="clan-quickfacts-container">
+    <table class="tthq-table mb-0">
+        @foreach (var item in Model)
+        {
+            if (!item.IsPublished) { continue; }
+            <tr>
+                <td class="news-content">
+                    <h4><a asp-page="/Journal/Details" asp-route-id="@item.Id">@item.Title</a></h4>
+                    <p class="news-date">
+                        <img src="/img/calendar.svg" /> @string.Format("{0:d}", item.PublishFrom) | by
+                        <img style="width: 24px; height: 24px; border-radius: 12px; margin-left: 4px" class="avatar avatar-@(item.Author) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.Author)" />
+                        <span class="name-@(item.Author)">@item.Author</span>
+                    </p>
+                    <p class="mb-0">@item.Teaser</p>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

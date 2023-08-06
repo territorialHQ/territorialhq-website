@@ -116,14 +116,14 @@
                         <div class="pure-u-1-1 pure-u-md-1-2">
                             <div class="form-group">
                                 <label asp-for="Color1" class="control-label"></label>
-                                <input asp-for="Color1" class="form-control" />
+                                <input asp-for="Color1" class="form-control" data-coloris />
                                 <span asp-validation-for="Color1" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="pure-u-1-1 pure-u-md-1-2">
                             <div class="form-group">
                                 <label asp-for="Color2" class="control-label"></label>
-                                <input asp-for="Color2" class="form-control" />
+                                <input asp-for="Color2" class="form-control" data-coloris />
                                 <span asp-validation-for="Color2" class="text-danger"></span>
                             </div>
                         </div>
@@ -270,6 +270,10 @@
 </dialog>
 
 
+@section Styles {
+    <link href="~/lib/coloris/coloris.min.css" rel="stylesheet" />
+}
+
 
 
 @section Scripts {
@@ -294,6 +298,8 @@
                 });
         });
     </script>
+    <script src="~/lib/coloris/coloris.min.js"></script>
+    <script src="~/js/init-coloris.js"></script>
     <style>
         .ck-content, .ck-content p {
             color: #94A3B8 !important;

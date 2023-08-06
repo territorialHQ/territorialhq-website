@@ -32,7 +32,7 @@
                         <img src="/img/guide.png" />
                         <div>
                             <h2>Beginner's Guide</h2>
-                            <p>Learn the basics of the game</p>
+                            <p>- Coming soon! -</p>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                         <img src="/img/clients.png" />
                         <div>
                             <h2>Clients & Updates</h2>
-                            <p>Ways to play the game</p>
+                            <p>- Coming soon! -</p>
                         </div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                             <img src="/img/community.png" />
                             <div>
                                 <h2>Community Projects</h2>
-                                <p>Projects run by the tt.io community</p>
+                                <p>- Coming soon! -</p>
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                             <img src="/img/history.png" />
                             <div>
                                 <h2>TT.io History</h2>
-                                <p>History of the game</p>
+                                <p>- Coming soon! -</p>
                             </div>
                         </div>
                     </div>
@@ -125,29 +125,28 @@
     <div class="pure-u-1-1 pure-u-md-2-3">
         <h2 class="h1 mb-30"><img src="/img/news.svg" />Territorial Journal</h2>
         <div class="news-section">
-
-            @foreach (var item in Model.JournalArticles)
+            @if (Model.JournalArticles != null)
             {
-                if (!item.IsPublished) { continue; }
+                foreach (var item in Model.JournalArticles.OrderByDescending(o => o.PublishFrom))
+                {
+                    if (!item.IsPublished) { continue; }
 
-                <div class="news-item">
-                    <div class="news-image" style="background-image: url(/Data/Uploads/System/@(item.Image))">
-                        <a asp-page="/Journal/Details" asp-route-id="@item.Id">&nbsp;</a>
+                    <div class="news-item">
+                        <div class="news-image" style="background-image: url(/Data/Uploads/System/@(item.Image))">
+                            <a asp-page="/Journal/Details" asp-route-id="@item.Id">&nbsp;</a>
+                        </div>
+                        <div class="news-content">
+                            <h3><a asp-page="/Journal/Details" asp-route-id="@item.Id">@item.Title</a></h3>
+                            <p class="news-date"><img src="/img/calendar.svg" /> @string.Format("{0:d}", item.PublishFrom)</p>
+                            <p>@item.Teaser</p>
+                            <p class="news-by">
+                                by <img style="width: 24px; height: 24px; border-radius: 12px; margin-left: 4px" class="avatar avatar-@(item.Author) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.Author)" />
+                                <span class="name-@(item.Author)">@item.Author</span>
+                            </p>
+                        </div>
                     </div>
-                    <div class="news-content">
-                        <h3><a asp-page="/Journal/Details" asp-route-id="@item.Id">@item.Title</a></h3>
-                        <p class="news-date"><img src="/img/calendar.svg" /> @string.Format("{0:d}", item.PublishFrom)</p>
-                        <p>@item.Teaser</p>
-                        <p class="news-by">
-                            by <img style="width: 24px; height: 24px; border-radius: 12px; margin-left: 4px" class="avatar avatar-@(item.Author) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.Author)" />
-                            <span class="name-@(item.Author)">@item.Author</span>
-                        </p>
-                    </div>
-                </div>
+                }
             }
-
-
-
         </div>
     </div>
     <div class="pure-u-1-1 pure-u-md-1-3">
@@ -155,8 +154,7 @@
         @if (Model.ContentCreators != null && Model.ContentCreators.Count > 0)
         {
             var creator = @Model.ContentCreators?.FirstOrDefault();
-
-            <div class="yembed">@creator?.ChannelLink</div>
+            <div class="yembed" data-banner="/Data/Uploads/System/@creator?.BannerFile">@creator?.ChannelLink</div>
             <div class="yembed-caption">Featured creator: <img class="yembed-creator-logo" src="/Data/Uploads/System/@(creator?.LogoFile)" /> @creator?.Name</div>
         }
     </div>
@@ -167,6 +165,6 @@
     <link href="~/lib/yembed/yembed.css" rel="stylesheet" />
 }
 @section Scripts {
-    <script src="~/js/leaderboard.js"></script>
-    <script src="~/lib/yembed/yembed.js"></script>
+    <script src="~/js/leaderboard.js" asp-append-version="true"></script>
+    <script src="~/lib/yembed/yembed.js" asp-append-version="true"></script>
 }
