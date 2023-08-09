@@ -13,7 +13,7 @@ using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Journal
 {
-    [Authorize(Roles = "Administrator, Journalist")]
+    [Authorize(Roles = "Administrator, Journalist, Editor")]
     public class EditModel : PageModel
     {
 
@@ -51,6 +51,10 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
         [Display(Name = "Publish until")]
         [DataType(DataType.Text)]
         public DateTime? PublishTo { get; set; }
+
+        [BindProperty]
+        [Display(Name = "Cleared for publish")]
+        public bool IsCleared { get; set; }
 
         [BindProperty]
         [Display(Name = "Teaser text")]
@@ -120,6 +124,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
 
                 item.Image = null;
                 RemoveImage = false;
+            }
+
+            if (!User.IsInRole("Administrator") && !User.IsInRole("Editor"))
+            {
+                item.IsCleared = false;
             }
 
             if (!(await _service.Update<DTOJournalArticle>("JournalArticle", item)))

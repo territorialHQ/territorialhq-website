@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
+using TerritorialHQ.Models.ViewModels;
 using TerritorialHQ.Services;
 using TerritorialHQ_Library.DTO;
 
@@ -11,15 +12,18 @@ namespace TerritorialHQ.Pages.Clans
         private readonly ChartDataService _chartDataService;
         private readonly IMemoryCache _memoryCache;
         private readonly ClanService _clanService;
+        private readonly BotEndpointService _botEndpointService;
 
-        public DetailsModel(ChartDataService chartDataService, IMemoryCache memoryCache, ClanService clanService)
+        public DetailsModel(ChartDataService chartDataService, IMemoryCache memoryCache, ClanService clanService, BotEndpointService botEndpointService)
         {
             _chartDataService = chartDataService;
             _memoryCache = memoryCache;
             _clanService = clanService;
+            _botEndpointService = botEndpointService;
         }
 
         public DTOClan? Clan { get; set; }
+        public DiscordServerInfo? ServerInfo { get; set; }
 
         public async Task<IActionResult> OnGet(string id)
         {
@@ -35,6 +39,14 @@ namespace TerritorialHQ.Pages.Clans
                 (!User.IsInRole("Staff") || (User.IsInRole("Staff") && !Clan.AssignedAppUsers.Any(u => u.AppUserName == User.Identity?.Name))))
             {
                 return NotFound();
+            }
+
+            if (Clan.DiscordLink != null)
+            {
+                var lastSlash = Clan.DiscordLink.LastIndexOf('/');
+                var inviteCode = Clan.DiscordLink.Substring(lastSlash).Replace("/", "");
+
+                ServerInfo = await _botEndpointService.GetServerStats(inviteCode);
             }
 
             return Page();

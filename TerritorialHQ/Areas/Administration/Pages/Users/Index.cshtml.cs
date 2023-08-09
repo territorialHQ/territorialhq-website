@@ -13,10 +13,12 @@ namespace TerritorialHQ.Areas.Administration.Pages.Users
     public class IndexModel : PageModel
     {
         private readonly AppUserService _userService;
+        private readonly AppUserRoleRelationService _appUserRoleRelationService;
 
-        public IndexModel(AppUserService userService)
+        public IndexModel(AppUserService userService, AppUserRoleRelationService appUserRoleRelationService)
         {
             _userService = userService;
+            _appUserRoleRelationService = appUserRoleRelationService;
         }
 
         public Dictionary<AppUserRole, List<DTOAppUser>> UsersInRoles { get; set; } = new();
@@ -51,31 +53,24 @@ namespace TerritorialHQ.Areas.Administration.Pages.Users
             if (user == null)
                 return NotFound();
 
-            if (user.Role != null)
-                throw new Exception("User is already in a role, cannot assign a new one.");
+            if (!user.Roles.Any(r => r.Role == role))
+            {
+                var userRoleRelation = new DTOAppUserRoleRelation()
+                {
+                    AppUserId = userId,
+                    Role = role
+                };
 
-            user.Role = role;
-
-            if (!(await _userService.Update("AppUser", user)))
-                throw new Exception("Error while saving data set.");
+                if (!(await _appUserRoleRelationService.Add<DTOAppUserRoleRelation>("AppUserRoleRelation", userRoleRelation)))
+                    throw new Exception("Error while saving data set.");
+            }
 
             return RedirectToPage("./Index");
         }
 
-        public async Task<IActionResult> OnPostRemoveAppUser(string userId)
+        public async Task<IActionResult> OnPostRemoveAppUser(string id)
         {
-
-            var user = await _userService.FindAsync<DTOAppUser>("AppUser", userId);
-            if (user == null)
-                return NotFound();
-
-            await GetCurrentUsers();
-            if (UsersInRoles[AppUserRole.Administrator].Count == 1 && user.Role == AppUserRole.Administrator)
-                throw new Exception("Cannot remove last remaining administrator.");
-
-           user.Role = null;
-
-            if (!(await _userService.Update<DTOAppUser>("AppUser", user)))
+            if (!(await _appUserRoleRelationService.Remove("AppUserRoleRelation", id)))
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

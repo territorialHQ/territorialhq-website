@@ -7,7 +7,7 @@
 
 <h1>Journal</h1>
 
-@if (User.IsInRole("Administrator") || User.IsInRole("Journalist"))
+@if (User.IsInRole("Administrator") || User.IsInRole("Journalist") || User.IsInRole("Editor"))
 {
     <p>
         <a asp-page="Create" class="btn btn-primary">
@@ -25,16 +25,19 @@
             <tr>
                 <th class="hidden-sm-down"></th>
                 <th>
-                    @Html.DisplayNameFor(model => model.JournalArticle![0].Title)
+                    Title
                 </th>
                 <th class="hidden-sm-down">
-                    @Html.DisplayNameFor(model => model.JournalArticle![0].IsPublished)
+                    Published
+                </th>
+                <th class="hidden-sm-down">
+                    Cleared
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.JournalArticle![0].PublishFrom)
+                    From
                 </th>
                 <th class="hidden-sm-down">
-                    @Html.DisplayNameFor(model => model.JournalArticle![0].PublishTo)
+                    To
                 </th>
                 <th></th>
             </tr>
@@ -55,6 +58,9 @@
                     <td class="hidden-sm-down">
                         @Html.DisplayFor(modelItem => item.IsPublished)
                     </td>
+                    <td class="hidden-sm-down">
+                        @Html.DisplayFor(modelItem => item.IsCleared)
+                    </td>
                     <td>
                         @string.Format("{0:d}", item.PublishFrom)
                     </td>
@@ -63,7 +69,10 @@
                     </td>
                     <td style="width: 1%; white-space: nowrap">
                         <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Details</a>
-                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                        @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+                        {
+                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                        }
                     </td>
                 </tr>
             }

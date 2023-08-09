@@ -35,6 +35,8 @@ namespace TerritorialHQ
             builder.Services.AddScoped(typeof(NavigationEntryService));
             builder.Services.AddScoped(typeof(JournalArticleService));
             builder.Services.AddScoped(typeof(ContentCreatorService));
+            builder.Services.AddScoped(typeof(ClanRelationService));
+            builder.Services.AddScoped(typeof(AppUserRoleRelationService));
 
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -51,8 +53,8 @@ namespace TerritorialHQ
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
             {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(360);
-                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromDays(6);
+                options.SlidingExpiration = false;
                 options.AccessDeniedPath = "/Forbidden/";
                 options.LoginPath = "/Authentication/Login";
                 options.LogoutPath = "/Authentication/Logout";

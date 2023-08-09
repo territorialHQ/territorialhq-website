@@ -5,7 +5,7 @@
     <table class="tthq-table mb-0">
         @foreach (var item in Model)
         {
-            if (!item.IsPublished) { continue; }
+            if (!item.IsPublished || !item.IsCleared) { continue; }
             <tr>
                 <td class="news-content">
                     <h4><a asp-page="/Journal/Details" asp-route-id="@item.Id">@item.Title</a></h4>

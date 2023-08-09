@@ -20,12 +20,14 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         private readonly ClanService _service;
         private readonly AppUserService _userService;
         private readonly DiscordBotService _discordBotService;
+        private readonly ClanRelationService _clanRelationService;
 
-        public DetailsModel(ClanService service,  DiscordBotService discordBotService, AppUserService userService)
+        public DetailsModel(ClanService service,  DiscordBotService discordBotService, AppUserService userService, ClanRelationService clanRelationService)
         {
             _service = service;
             _discordBotService = discordBotService;
             _userService = userService;
+            _clanRelationService = clanRelationService;
         }
 
         public DTOClan? Clan { get; set; }
@@ -42,6 +44,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                 return NotFound();
 
             await FillStaffUserSelect();
+            await FillRelationSelects();
 
             return Page();
         }
@@ -86,6 +89,8 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
             await _discordBotService.SendReviewNotificationAsync(User.Identity?.Name, id);
 
             await FillStaffUserSelect();
+            await FillRelationSelects();
+
             return Page();
         }
 
@@ -105,7 +110,37 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
             }
 
             await FillStaffUserSelect();
+            await FillRelationSelects();
+
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAddRelation(string id, string targetClanId, DiplomaticRelationType relationType)
+        {
+            if (id == null) 
+                return NotFound();
+
+            if (targetClanId != null)
+            {
+                var relation = new DTOClanRelation() { ClanId = id, TargetClanId = targetClanId, DiplomaticRelation = relationType };
+
+                if (!(await _clanRelationService.Add<DTOClanRelation>("ClanRelation", relation)))
+                    throw new Exception("Error while saving data set.");
+
+            }
+
+            return RedirectToPage("./Details", new { id });
+        }
+
+        public async Task<IActionResult> OnPostRemoveRelation(string id, string clanId)
+        {
+            if (id == null)
+                return NotFound();
+
+            if (!(await _clanRelationService.Remove("ClanRelation", id)))
+                throw new Exception("Error while saving relation data set.");
+
+            return RedirectToPage("./Details", new { id = clanId });
         }
 
         private async Task FillStaffUserSelect()
@@ -119,6 +154,15 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
                 ViewData["UserId"] = new SelectList(staffUsers, "Id", "UserName");
             }
+        }
+
+        private async Task FillRelationSelects()
+        {
+            List<DTOClanListEntry> clans = await _service.GetClanListings("Clan/Listing") ?? new();
+
+            clans.RemoveAll(c => Clan!.ClanRelations.Any(r => r.TargetClanId == c.Id) || c.Id == Clan.Id);
+
+            ViewData["TargetClanId"] = new SelectList(clans.Select(c => new { Name = c.Tag, Id = c.Id }).OrderBy(o => o.Name), "Id", "Name");
         }
     }
 }

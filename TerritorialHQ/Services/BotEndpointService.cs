@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Headers;
+using System.Text.Json;
+using TerritorialHQ.Models.ViewModels;
 
 namespace TerritorialHQ.Services;
 
@@ -48,4 +50,23 @@ public class BotEndpointService
         return result;
     }
 
+    public async Task<DiscordServerInfo> GetServerStats(string? invite)
+    {
+        var request = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri("https://discord.com/api/invites/" + invite + "?with_counts=true"),
+        };
+
+        var response = await _httpClient.SendAsync(request);
+
+        DiscordServerInfo result = null;
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            result = JsonSerializer.Deserialize<DiscordServerInfo>(content);
+        }
+
+        return result;
+    }
 }

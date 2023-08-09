@@ -40,11 +40,14 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         [Display(Name = "Clan Motto")]
         public string? Motto { get; set; }
         [BindProperty]
-        [Display(Name = "Primary Clan Color")]
+        [Display(Name = "Primary Color")]
         public string? Color1 { get; set; }
         [BindProperty]
-        [Display(Name = "Secondary Clan Color")]
+        [Display(Name = "Secondary Color")]
         public string? Color2 { get; set; }
+        [BindProperty]
+        [Display(Name = "Use colors for clan page")]
+        public bool UseColorForPage { get; set; }
         [BindProperty]
         [Display(Name = "Clan Tag (without [ ])")]
         public string? Tag { get; set; }

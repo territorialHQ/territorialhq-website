@@ -1,5 +1,6 @@
 ﻿.start-video {
     position: absolute;
+    top: 0;
     left: 0;
     width: 100%;
     height: 800px;
@@ -15,6 +16,7 @@
 
 .fader {
     position: absolute;
+    top: 0;
     left: 0;
     width: 100%;
     height: 800px;
@@ -26,6 +28,7 @@
 
 .fader-narrow {
     position: absolute;
+    top: 0;
     left: 0;
     width: 100%;
     height: 800px;
@@ -37,6 +40,7 @@
 
 .fader-soft {
     position: absolute;
+    top: 0;
     left: 0;
     width: 100%;
     height: 800px;
@@ -697,12 +701,14 @@
 .lb-container {
     border: 2px solid #475569;
 }
+
 .lb-tab {
     padding: 10px;
     text-align: center;
     color: #94a3b8;
     background-color: #070d1a;
 }
+
 .lb-tab:hover {
     color: #94a3b8;
     background-color: #1e293b;
@@ -741,6 +747,10 @@
             td {
                 background-color: #EACF69;
                 color: #0f172a;
+
+                a {
+                    color: #0f172a
+                }
             }
         }
 
@@ -816,6 +826,14 @@
     }
 }
 
+.tthq-table.tthq-table-noaccent {
+    tbody {
+        td:first-child {
+            color: #94A3B8;
+        }
+    }
+}
+
 @media (max-width: 991px) {
     .tthq-lb-table {
         width: 100%;
@@ -871,7 +889,6 @@
         }
     }
 }
-
 /* Clan listing */
 
 .clan-grid {
@@ -893,8 +910,6 @@
         grid-template-columns: 1fr;
         gap: 20px;
     }
-
-
 }
 
 .cl-container-h {
@@ -996,8 +1011,6 @@
         border-color: #EACF69 !important;
     }
 }
-
-
 /* Clan Details */
 
 .clan-header {
@@ -1023,11 +1036,12 @@
     }
 }
 
-.clan-quickfacts-container { 
+.clan-quickfacts-container {
     background-color: #0F172A;
     border: 1px solid #475569;
     padding: 20px;
     box-shadow: 0px 10px 15px 0px rgba(0,0,0,0.35);
+    color: #94A3B8;
 }
 
 .clan-content-grid {
@@ -1035,8 +1049,6 @@
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
-
-
 /* Profile */
 
 .profile {
@@ -1095,4 +1107,3 @@
         gap: 15px;
     }
 }
-

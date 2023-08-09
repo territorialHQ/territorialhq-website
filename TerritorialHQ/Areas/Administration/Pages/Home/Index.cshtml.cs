@@ -8,7 +8,7 @@ using TerritorialHQ_Library.DTO;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Home
 {
-    [Authorize(Roles ="Administrator, Staff, Journalist")]
+    [Authorize(Roles ="Administrator, Staff, Journalist, Editor")]
     public class IndexModel : PageModel
     {
         private readonly IMemoryCache _memoryCache;
@@ -25,11 +25,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.Home
 
         public async Task<IActionResult> OnGet()
         {
+            if (User.IsInRole("Journalist") || User.IsInRole("Editor"))
+                return RedirectToPage("/Journal/Index");
+
             if (User.IsInRole("Staff"))
                 return RedirectToPage("/Clans/Index");
-
-            if (User.IsInRole("Journalist"))
-                return RedirectToPage("/Journal/Index");
 
             if (_memoryCache.TryGetValue("login-stats", out List<LoginStat>? logins))
             {

@@ -2,7 +2,7 @@
     font-weight: 700;
     display: block;
     margin-bottom: 0.25rem;
-    color: #64748b;
+    color: #9f8420 /*#64748b*/;
     font-size: 0.8rem;
     text-transform: uppercase;
 }
@@ -188,6 +188,15 @@ textarea.form-control {
     text-align: center;
 }
 
+.label-sm {
+    font-size: 0.9em;
+    display: inline-block;
+    padding: 3px 6px;
+    color: white;
+    background-color: #64748b;
+    text-align: center;
+}
+
 .label-block {
     display: block;
 }
@@ -202,6 +211,15 @@ textarea.form-control {
 
 .label-success {
     background-color: #2b9837;
+}
+
+.label-primary {
+    background-color: #EACF69;
+    color: #020617;
+}
+
+.label-dark {
+    background-color: #020617;
 }
 
 .alert {

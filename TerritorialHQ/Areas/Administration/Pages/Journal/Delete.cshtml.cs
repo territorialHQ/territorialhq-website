@@ -10,7 +10,7 @@ using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Journal
 {
-    [Authorize(Roles ="Administrator, Journalist")]
+    [Authorize(Roles = "Administrator, Journalist, Editor")]
     public class DeleteModel : PageModel
     {
         private readonly JournalArticleService _service;

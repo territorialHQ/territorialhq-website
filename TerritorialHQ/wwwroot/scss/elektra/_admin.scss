@@ -1,5 +1,5 @@
 ﻿.admin {
-    padding: 40px 0;
+    padding: 40px;
 
 
     h1 {
@@ -52,6 +52,7 @@
     .admin-table > thead th {
         padding: 6px 12px;
         color: #64748b;
+        vertical-align: top;
     }
 
     .admin-table > tbody tr {
@@ -61,6 +62,7 @@
     .admin-table > tbody td {
         padding: 12px 8px;
         background-color: #1e293b;
+        vertical-align: top;
     }
 
     .admin-table-alt {
@@ -88,8 +90,36 @@
         padding: 12px 8px;
         background-color: transparent;
     }
+
+    .admin-table-firstbold tbody tr td:first-child {
+        font-weight: 700;
+        color: #EACF69;
+    }
+
+    .admin-table-fixed {
+        table-layout: fixed;
+
+        td {
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .swatch {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 8px;
+        margin-right: 5px;
+    }
 }
 
+@media (max-width: 991px) {
+    .admin {
+        padding: 20px;
+    }
+}
 
 .ck-editor__editable_inline {
     min-height: 400px;

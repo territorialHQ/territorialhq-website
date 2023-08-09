@@ -13,6 +13,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="Image" />
+
     <div class="form-group">
         <label asp-for="Image" class="control-label"></label>
         @if (!string.IsNullOrEmpty(Model.Image))
@@ -33,7 +34,16 @@
         <input asp-for="Subtitle" class="form-control" />
         <span asp-validation-for="Subtitle" class="text-danger"></span>
     </div>
-
+    @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+    {
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input asp-for="IsCleared" /> @Html.DisplayNameFor(model => model.IsCleared)
+                </label>
+            </div>
+        </div>
+    }
     <div class="pure-g">
         <div class="form-group pure-u-1-1 pure-u-md-1-2">
             <label asp-for="PublishFrom" class="control-label"></label>

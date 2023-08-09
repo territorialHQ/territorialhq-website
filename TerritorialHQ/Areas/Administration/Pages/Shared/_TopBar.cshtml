@@ -34,7 +34,7 @@
                             <a class="menu-link" asp-page="/Clans/Index">Clans</a>
                         </li>
                     }
-                    @if (User.IsInRole("Administrator") || User.IsInRole("Journal"))
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Journalist") || User.IsInRole("Editor"))
                     {
                         <li class="menu-item">
                             <a class="menu-link" asp-page="/Journal/Index">Journal</a>

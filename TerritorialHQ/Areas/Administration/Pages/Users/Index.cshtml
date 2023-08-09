@@ -15,7 +15,7 @@
         @foreach (var keyVauePair in Model.UsersInRoles)
         {
             <h3>@Enum.GetName(typeof(AppUserRole), keyVauePair.Key)</h3>
-            <table class="admin-table">
+            <table class="admin-table mb-20">
                 <thead>
                     <tr>
                         <th>User</th>
@@ -48,7 +48,7 @@
                                     else
                                     {
                                         <form asp-page-handler="RemoveAppUser" method="post">
-                                            <input type="hidden" name="userId" value="@item.Id" />
+                                            <input type="hidden" name="id" value="@item.Roles.FirstOrDefault(r => r.Role == keyVauePair.Key)?.Id" />
                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Remove user from role? The user will be signed out automatically.')">Remove</button>
                                         </form>
                                     }
@@ -64,7 +64,7 @@
     </div>
     <div class="pure-u-1-1 pure-u-md-1-2">
         <div>
-            <h2>Add Users to Backend</h2> 
+            <h2>Add Users to Backend</h2>
 
             <form method="post" asp-page-handler="Search">
                 <div class="form-group">
@@ -95,19 +95,13 @@
                                     <span class="name-@(Model.QueryResult.UserName)">@Model.QueryResult.UserName</span>
                                 </td>
                                 <td style="white-space: nowrap; text-align: right">
-                                    @if (Model.QueryResult.Role != null)
-                                    {
-                                        <span>(User is already in another role)</span>
-                                    }
-                                    else
-                                    {
-                                        <form asp-page-handler="AddAppUser">
-                                            <input type="hidden" name="userId" value="@Model.QueryResult.Id" />
-                                            <select class="form-control inline-block w-[200px]" name="role" asp-items="@Html.GetEnumSelectList<AppUserRole>()"></select>
-                                            <button class="btn btn-primary" type="submit">Add to role</button>
-                                        </form>
-                                    }
-
+                                    <form asp-page-handler="AddAppUser">
+                                        <input type="hidden" name="userId" value="@Model.QueryResult.Id" />
+                                        <div class="form-group">
+                                            <select class="form-control" name="role" asp-items="@Html.GetEnumSelectList<AppUserRole>()"></select>
+                                        </div>
+                                        <button class="btn btn-primary btn-block" type="submit">Add to role</button>
+                                    </form>
                                 </td>
                             </tr>
                         </tbody>

@@ -50,17 +50,19 @@ namespace TerritorialHQ.Pages.Authentication
 
                 var userId = jwtClaims.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
                 var discordId = jwtClaims.Claims.FirstOrDefault(c => c.Type == "DiscordId")?.Value;
-                var role = jwtClaims.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                var roles = jwtClaims.Claims.Where(c => c.Type == ClaimTypes.Role);
 
                 var claims = new List<Claim>
                 {
                     new Claim("Id", userId ?? string.Empty),
                     new Claim(ClaimTypes.Name, discordId ?? string.Empty),
-                    new Claim(ClaimTypes.Role, role ?? string.Empty)
                 };
 
+                foreach (var role in roles)
+                    claims.Add(new Claim(ClaimTypes.Role, role.Value));
+
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties();
+                var authProperties = new AuthenticationProperties() {  AllowRefresh = false, IsPersistent = true };
 
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
@@ -70,7 +72,7 @@ namespace TerritorialHQ.Pages.Authentication
                 // Store the token in a cookie  
                 CookieOptions cookieOptions = new()
                 {
-                    Expires = DateTime.Now.AddHours(8),
+                    Expires = DateTime.Now.AddDays(7),
                     HttpOnly = true,
                     Secure = true,
                     IsEssential = true

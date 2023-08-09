@@ -129,7 +129,7 @@
             {
                 foreach (var item in Model.JournalArticles.OrderByDescending(o => o.PublishFrom))
                 {
-                    if (!item.IsPublished) { continue; }
+                    if (!item.IsPublished || !item.IsCleared) { continue; }
 
                     <div class="news-item">
                         <div class="news-image" style="background-image: url(/Data/Uploads/System/@(item.Image))">
@@ -153,7 +153,9 @@
         <h2 class="h2"><img src="/img/tv.svg" />Content Creators</h2>
         @if (Model.ContentCreators != null && Model.ContentCreators.Count > 0)
         {
-            var creator = @Model.ContentCreators?.FirstOrDefault();
+            var rnd = new Random();
+            var creator = @Model.ContentCreators[rnd.Next(Model.ContentCreators.Count)];
+
             <div class="yembed" data-banner="/Data/Uploads/System/@creator?.BannerFile">@creator?.ChannelLink</div>
             <div class="yembed-caption">Featured creator: <img class="yembed-creator-logo" src="/Data/Uploads/System/@(creator?.LogoFile)" /> @creator?.Name</div>
         }

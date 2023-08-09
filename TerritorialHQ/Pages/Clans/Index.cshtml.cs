@@ -31,7 +31,7 @@ namespace TerritorialHQ.Pages.Clans
                     var content = await request.Content.ReadAsStringAsync();
                     var lines = content.Split(System.Environment.NewLine);
 
-                    for (int i = 4; i <= 24; i++)
+                    for (int i = 4; i <= 204; i++)
                     {
                         var fields = lines[i].Split(',');
                         if (fields.Length != 3)
@@ -42,6 +42,9 @@ namespace TerritorialHQ.Pages.Clans
                             clan.Position = i - 3;
                     }
                 }
+
+                foreach (var clan in ClanListings.Where(c => c.Position == null))
+                    clan.Position = int.MaxValue;
 
                 ClanListings = ClanListings.OrderBy(o => o.Position).ThenBy(o => o.Name).ToList();
             }
