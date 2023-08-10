@@ -33,6 +33,9 @@
                         <li class="menu-item">
                             <a class="menu-link" asp-page="/Clans/Index">Clans</a>
                         </li>
+                        <li class="menu-item">
+                            <a class="menu-link" asp-page="/CommunityEvents/Index">Events</a>
+                        </li>
                     }
                     @if (User.IsInRole("Administrator") || User.IsInRole("Journalist") || User.IsInRole("Editor"))
                     {

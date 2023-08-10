@@ -1,0 +1,20 @@
+﻿@model List<TerritorialHQ_Library.DTO.DTOCommunityEvent>
+
+<div class="clan-quickfacts-container">
+    <table class="tthq-table mb-0">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="news-content">
+                    <h4>@item.Title
+                        @if (item.Start <= DateTime.Now && item.End >= DateTime.Now)
+                        {
+                            <span class="label label-danger label-sm">STARTED</span>
+                        }
+                    </h4>
+                    <strong>@string.Format("{0:HH:mm}", item.Start.Value) GMT</strong> <span class="local-date" data-date="@string.Format("{0:yyyy-MM-ddTHH:mmZ}", item.Start.Value)">?</span>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

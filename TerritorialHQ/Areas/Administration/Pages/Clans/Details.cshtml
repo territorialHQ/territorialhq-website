@@ -10,12 +10,12 @@
 @if (!string.IsNullOrEmpty(Model.Clan?.BannerFile))
 {
     <div class="fader" style="background-image: url(/Data/Uploads/System/@Model.Clan?.BannerFile)"></div>
+
+<h1>@Model.Clan?.Name</h1>
     <div class="fader-soft">
     </div>
 
 }
-
-<h1>@Model.Clan?.Name</h1>
 
 <div class="pure-g">
 

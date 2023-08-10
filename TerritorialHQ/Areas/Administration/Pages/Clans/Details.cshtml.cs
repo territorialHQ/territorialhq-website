@@ -86,7 +86,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
             if (!(await _service.Update<DTOClan>("Clan", Clan)))
                 throw new Exception("Error while saving data set.");
 
-            await _discordBotService.SendReviewNotificationAsync(User.Identity?.Name, id);
+            await _discordBotService.SendClanReviewNotificationAsync(User.Identity?.Name, id);
 
             await FillStaffUserSelect();
             await FillRelationSelects();

@@ -37,6 +37,7 @@ namespace TerritorialHQ
             builder.Services.AddScoped(typeof(ContentCreatorService));
             builder.Services.AddScoped(typeof(ClanRelationService));
             builder.Services.AddScoped(typeof(AppUserRoleRelationService));
+            builder.Services.AddScoped(typeof(CommunityEventService));
 
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

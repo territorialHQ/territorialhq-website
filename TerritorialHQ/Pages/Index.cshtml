@@ -157,8 +157,10 @@
             var creator = @Model.ContentCreators[rnd.Next(Model.ContentCreators.Count)];
 
             <div class="yembed" data-banner="/Data/Uploads/System/@creator?.BannerFile">@creator?.ChannelLink</div>
-            <div class="yembed-caption">Featured creator: <img class="yembed-creator-logo" src="/Data/Uploads/System/@(creator?.LogoFile)" /> @creator?.Name</div>
+            <div class="yembed-caption mb-30">Featured creator: <img class="yembed-creator-logo" src="/Data/Uploads/System/@(creator?.LogoFile)" /> @creator?.Name</div>
         }
+        <h2 class="h2">Upcoming Community Events</h2>
+        @await Component.InvokeAsync("CommunityEventOverview")
     </div>
 </div>
 
@@ -169,4 +171,5 @@
 @section Scripts {
     <script src="~/js/leaderboard.js" asp-append-version="true"></script>
     <script src="~/lib/yembed/yembed.js" asp-append-version="true"></script>
+    <script src="~/js/local-time.js"></script>
 }

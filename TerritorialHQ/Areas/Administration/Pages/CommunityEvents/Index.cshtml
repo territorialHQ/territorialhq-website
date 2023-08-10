@@ -1,0 +1,71 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.CommunityEvents.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+
+    var userId = User.GetId();
+}
+
+<h1>Community Events</h1>
+
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">
+        <svg class="icon" fill="none" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Create new event
+    </a>
+</p>
+
+<div>
+    <table class="admin-table">
+        <thead class="">
+            <tr>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.CommunityEvents![0].Title)
+                </th>
+                <th scope="col" class="hidden-sm-down">
+                    @Html.DisplayNameFor(model => model.CommunityEvents![0].Start)
+                </th>
+                <th scope="col" class="hidden-sm-down">
+                    @Html.DisplayNameFor(model => model.CommunityEvents![0].End)
+                </th>
+                <th scope="col" class="hidden-sm-down">
+                    @Html.DisplayNameFor(model => model.CommunityEvents![0].Recurring)
+                </th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CommunityEvents.OrderByDescending(o => o.Start))
+            {
+                if (!User.IsInRole("Administrator") && item.Creator != User.Identity.Name)
+                    continue;
+
+                <tr class="">
+                    <td class="font-bold">
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td class="font-bold hidden-sm-down">
+                        @Html.DisplayFor(modelItem => item.Start)
+                    </td>
+                    <td class="font-bold hidden-sm-down">
+                        @Html.DisplayFor(modelItem => item.End)
+                    </td>
+                    <td class="hidden-sm-down">
+                        @Html.DisplayFor(modelItem => item.Recurring)
+                    </td>
+                    <td style="width: 1%; white-space: nowrap">
+                        <a class="btn btn-primary btn-sm" asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <a class="btn btn-danger btn-sm" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

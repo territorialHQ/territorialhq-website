@@ -1,0 +1,183 @@
+﻿@page
+@model TerritorialHQ.Areas.Administration.Pages.CommunityEvents.DetailsModel
+@{
+}
+
+
+<h1>@Model.CommunityEvent!.Title</h1>
+
+<div class="pure-g">
+    <div class="pure-u-1-1 pure-u-md-3-4">
+        <h3>Event Details</h3>
+        <table class="admin-table admin-table-firstbold admin-table-fixed mb-20">
+            <tbody>
+                <tr>
+                    <td>Image</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(Model.CommunityEvent!.ImageFile))
+                        {
+                            <img src="/Data/Uploads/System/@Model.CommunityEvent!.ImageFile" style="max-height: 150px" class="block mb-2" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.CommunityEvent!.Start)</td>
+                    <td>@Html.DisplayFor(model => model.CommunityEvent!.Start)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.CommunityEvent!.End)</td>
+                    <td>@Html.DisplayFor(model => model.CommunityEvent!.End)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.CommunityEvent!.Description)</td>
+                    <td>@Html.DisplayFor(model => model.CommunityEvent!.Description)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.CommunityEvent!.Recurring)</td>
+                    <td>@Html.DisplayFor(model => model.CommunityEvent!.Recurring)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.CommunityEvent!.Interval)</td>
+                    <td>@Html.DisplayFor(model => model.CommunityEvent!.Interval)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.CommunityEvent!.Host)</td>
+                    <td>@Html.DisplayFor(model => model.CommunityEvent!.Host)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.CommunityEvent!.Location)</td>
+                    <td>@Html.DisplayFor(model => model.CommunityEvent!.Location)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayNameFor(model => model.CommunityEvent!.DiscordServerLink)</td>
+                    <td>@Html.DisplayFor(model => model.CommunityEvent!.DiscordServerLink)</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="pure-u-1-1 pure-u-md-1-4">
+        <h3>Management</h3>
+        <div class="ml-6 pl-6 border-l-2 border-l-slate-600">
+            @if (User.IsInRole("Administrator") || Model.CommunityEvent.Creator == User.Identity.Name)
+            {
+                <a class="btn btn-primary btn-block mb-20" asp-page="./Edit" asp-route-id="@Model.CommunityEvent?.Id">
+                    <svg class="icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>
+                    </svg>
+                    Edit
+                </a>
+            }
+            else
+            {
+                <div class="alert alert-warning mb-20">You cannot edit events created by other users.</div>
+            }
+
+            @if (User.IsInRole("Administrator"))
+            {
+                if (Model.CommunityEvent!.IsPublished)
+                {
+                    <div class="alert alert-success text-center">
+                        <strong>This event is published.</strong>
+                    </div>
+                }
+                else
+                {
+                    if (Model.CommunityEvent!.InReview)
+                    {
+                        <div class="alert alert-warning">
+                            <p><strong>This event is currently pending review.</strong></p>
+                            <p>
+                                Please check the content of this event with regards to the community guidelines. If there are no concerns, click the button below to
+                                publish the listing.
+                            </p>
+                            <form method="post" asp-page-handler="Publish">
+                                <input type="hidden" name="id" value="@Model.CommunityEvent.Id">
+                                <button type="submit" class="btn btn-secondary btn-block">Publish</button>
+                            </form>
+                        </div>
+
+                    }
+                }
+            }
+            else
+            {
+                if (Model.CommunityEvent!.IsPublished)
+                {
+                    <div class="alert alert-success">
+                        <p><strong>This event is published.</strong></p>
+                        <p>Saving changes to this event will unpublish until it has been reviewed again by an administrator.</p>
+                        <a href="jacascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline"><strong>Learn more</strong></a>
+                    </div>
+                }
+                else
+                {
+                    if (Model.CommunityEvent!.InReview)
+                    {
+                        <div class="alert alert-warning">
+                            <p><strong>This event is currently in review.</strong></p>
+                            <p>
+                                An administrator will review and publish the event shortly.
+                            </p>
+                            <p>
+                                You may edit the page at any time. This will stop the review process until you mark the event for review again.
+                            </p>
+                            <a href="javascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();"><strong>Learn more</strong></a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert">
+                            <p><strong>This event is currently unlisted.</strong></p>
+                            <p>
+                                When you are done and happy with your edits, click the button below to mark your event as ready for review.
+                            </p>
+                            <p><a href="javascript:void(0);" onclick="javascript:document.getElementById('reviewInfo').showModal();" class="underline">Learn more</a></p>
+                            <form method="post" asp-page-handler="MarkForReview">
+                                <input type="hidden" name="id" value="@Model.CommunityEvent!.Id">
+                                <button type="submit" class="btn btn-primary btn-block">Mark for Review</button>
+                            </form>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+<dialog id="reviewInfo">
+    <h1>
+        Review System for events
+    </h1>
+    <p>
+        Since the event will be publicly visible, we must ensure that the text and images you provide do not violate the community standards of
+        TerritorialHQ. This means that each event listing will undergo a quick check before becoming publicly visible.
+    </p>
+    <div class="pure-g">
+        <div class="pure-u-1-1 pure-u-md-1-2">
+            <p><strong>These images are not allowed:</strong></p>
+            <ul class="ml-5 list-disc">
+                <li class="mb-2">Images containing NSFW content, violence, hate speech, symbols of extremist or terrorist organizations or copyrighted material</li>
+            </ul>
+        </div>
+        <div class="pure-u-1-1 pure-u-md-1-2">
+            <p><strong>These texts are now allowed:</strong></p>
+            <ul class="ml-5 list-disc">
+                <li class="mb-2">Texts containing NSFW content, graphic description of violence, hate speech, political messages, misinformation or copyrighted material</li>
+            </ul>
+        </div>
+    </div>
+    <p>
+        Other than that, our administrators <strong>will not interfere with your event</strong>.
+    </p>
+    <p>
+        In case your listing can't be published, we will try to get in touch with you via Discord, let you know the reasons for the rejection and give you advice on how to change
+        the content to have it pass the review.
+    </p>
+    <form method="dialog">
+        <p class="text-center">
+            <button class="btn-admin-secondary w-full mx-auto">Close</button>
+        </p>
+    </form>
+</dialog>
