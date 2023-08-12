@@ -31,7 +31,16 @@ else
             <p class="news-header-details">
                 <img src="/img/calendar.svg" /> @string.Format("{0:d}", Model.Article.PublishFrom) | by
                 <img style="width: 24px; height: 24px; border-radius: 12px; margin-left: 4px" class="avatar avatar-@(Model.Article?.Author) discord-loader" src="~/img/loading_symbol.gif" data-id="@(Model.Article?.Author)" />
-                <span class="name-@(Model.Article?.Author)">@Model.Article?.Author</span>
+                @if (Model.Article is null)
+                {
+                    <span class="name-@(Model.Article?.Author)">@Model.Article?.Author</span>
+                }
+                else
+                {
+                    <a asp-page="/Profiles/Index" asp-route-id="@Model.Article?.Author" class="name-@(Model.Article?.Author)"> @Model.Article?.Author </a>
+                }
+                    
+                <!-- <a href="/Profiles/@Model.Article?.Author" class="name-@(Model.Article?.Author)">@Model.Article?.Author </a> -->
             </p>
         </div>
     </div>
