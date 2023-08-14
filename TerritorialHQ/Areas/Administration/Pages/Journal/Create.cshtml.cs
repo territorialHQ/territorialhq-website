@@ -87,7 +87,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Journal
                 item.Image = ImageHelper.ProcessImage(imageFile, _env.WebRootPath + "/Data/Uploads/System/", true, null, true);
             }
 
-            if (!(await _service.Add<DTOJournalArticle>("JournalArticle", item)))
+            if (await _service.Add<DTOJournalArticle>("JournalArticle", item) == null)
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

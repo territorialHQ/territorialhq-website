@@ -71,6 +71,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.CommunityEvents
             }
 
             var item = new DTOCommunityEvent();
+
             _mapper.Map(this, item);
 
             if (imageFile != null)
@@ -78,10 +79,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.CommunityEvents
                 item.ImageFile = ImageHelper.ProcessImage(imageFile, _env.WebRootPath + "/Data/Uploads/System/", true, null, true);
             }
 
-            if (!(await _service.Add<DTOCommunityEvent>("CommunityEvent", item)))
+            var id = await _service.Add<DTOCommunityEvent>("CommunityEvent", item);
+            if (id == null)
                 throw new Exception("Error while saving data set.");
 
-            return RedirectToPage("./Details", new { id = item.Id });
+            return RedirectToPage("./Details", new { id });
         }
     }
 }

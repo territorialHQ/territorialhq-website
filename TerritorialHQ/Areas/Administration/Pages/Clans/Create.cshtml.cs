@@ -109,7 +109,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                 item.BannerFile = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerFile, false);
             }
 
-            if (!(await _service.Add<DTOClan>("Clan", item)))
+            if (await _service.Add<DTOClan>("Clan", item) == null)
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

@@ -19,6 +19,11 @@
         DateTime currentDate = DateTime.MinValue;
     }
 
+    @if (Model.CommunityEvents?.Count == 0)
+    {
+           <p>No events planned.</p>
+    }
+
     @foreach (var item in Model.CommunityEvents)
     {
         if (item.Start.Value.Date != currentDate)
@@ -33,6 +38,7 @@
 
         <div class="events-container">
 
+            <a name="@(item.Id + "-" + item.Start.Value.Ticks)"></a>
             <h4>
                 @item.Title 
                 @if (item.Start <= DateTime.Now && item.End >= DateTime.Now)
@@ -89,6 +95,7 @@
     {
         @Html.Raw("</div>")
     }
+
 </div>
 
 

@@ -61,7 +61,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Users
                     Role = role
                 };
 
-                if (!(await _appUserRoleRelationService.Add<DTOAppUserRoleRelation>("AppUserRoleRelation", userRoleRelation)))
+                if (await _appUserRoleRelationService.Add<DTOAppUserRoleRelation>("AppUserRoleRelation", userRoleRelation) == null)
                     throw new Exception("Error while saving data set.");
             }
 

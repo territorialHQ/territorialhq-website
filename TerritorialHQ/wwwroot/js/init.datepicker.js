@@ -9,6 +9,7 @@ $(document).ready(function () {
     $(".datetimepicker").flatpickr({
         locale: "en",
         enableTime: true,
-        dateFormat: "m/d/Y H:i"
+        dateFormat: "m/d/Y H:i",
+        time_24hr: true
     });
 });

@@ -69,14 +69,14 @@ namespace TerritorialHQ.Services.Base
         }
 
         [Authorize]
-        public async Task<bool> Add<T>(string endpoint, T item) where T : IDto
+        public async Task<string?> Add<T>(string endpoint, T item) where T : IDto
         {
             AddTokenHeader();
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(endpoint, item);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                return true;
+                return await response.Content.ReadFromJsonAsync<string>();
             else
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
         }

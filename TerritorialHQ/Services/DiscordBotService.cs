@@ -60,7 +60,7 @@ public class DiscordBotService
 #if (DEBUG)
             var link = "https://localhost:32770/Administration/CommunityEvents/Details?id=" + eventId;
 #else
-            var link = "https://preview.territorial-hq.com/Administration/CommunityEvents/Details?id=" + clanId;
+            var link = "https://preview.territorial-hq.com/Administration/CommunityEvents/Details?id=" + eventId;
 #endif
             await _discordClient.SendMessageAsync(channel, "User " + userId + " has marked an event for review: " + link);
         }

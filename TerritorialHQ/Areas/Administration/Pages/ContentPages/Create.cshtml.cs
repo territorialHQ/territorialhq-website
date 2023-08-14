@@ -61,7 +61,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.ContentPages
                 item.BannerImage = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerImage, false);
             }
 
-            if (!(await _service.Add<DTOContentPage>("ContentPage", item)))
+            if (await _service.Add<DTOContentPage>("ContentPage", item) == null)
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

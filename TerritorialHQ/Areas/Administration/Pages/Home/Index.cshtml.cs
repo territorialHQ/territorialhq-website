@@ -8,7 +8,7 @@ using TerritorialHQ_Library.DTO;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Home
 {
-    [Authorize(Roles ="Administrator, Staff, Journalist, Editor")]
+    [Authorize(Roles = "Administrator, Staff, Journalist, Editor")]
     public class IndexModel : PageModel
     {
         private readonly IMemoryCache _memoryCache;
@@ -25,17 +25,20 @@ namespace TerritorialHQ.Areas.Administration.Pages.Home
 
         public async Task<IActionResult> OnGet()
         {
-            if (User.IsInRole("Journalist") || User.IsInRole("Editor"))
-                return RedirectToPage("/Journal/Index");
+            if (!User.IsInRole("Administrator"))
+            {
+                if (User.IsInRole("Journalist") || User.IsInRole("Editor"))
+                    return RedirectToPage("/Journal/Index");
 
-            if (User.IsInRole("Staff"))
-                return RedirectToPage("/Clans/Index");
+                if (User.IsInRole("Staff"))
+                    return RedirectToPage("/Clans/Index");
+            }
 
             if (_memoryCache.TryGetValue("login-stats", out List<LoginStat>? logins))
             {
                 if (logins != null)
                     logins.RemoveAll(s => s.Timestamp < DateTime.Now.AddDays(-1));
-    
+
                 _memoryCache.Set("login-stats", logins);
 
                 LoginStats = logins;

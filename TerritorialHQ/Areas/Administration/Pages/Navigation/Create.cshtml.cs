@@ -73,7 +73,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Navigation
             var item = new DTONavigationEntry();
             _mapper.Map(this, item);
 
-            if (!(await _service.Add<DTONavigationEntry>("NavigationEntry", item)))
+            if (await _service.Add<DTONavigationEntry>("NavigationEntry", item) == null)
                 throw new Exception("Error while saving data set.");
 
             return RedirectToPage("./Index");

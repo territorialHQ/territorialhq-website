@@ -59,7 +59,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
                     AppUserId = userId
                 };
 
-                if (!(await _service.Add<DTOClanUserRelation>("ClanUserRelation", relation)))
+                if (await _service.Add<DTOClanUserRelation>("ClanUserRelation", relation) == null)
                     throw new Exception("Error while saving relation data set.");
             }
 
@@ -124,7 +124,7 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
             {
                 var relation = new DTOClanRelation() { ClanId = id, TargetClanId = targetClanId, DiplomaticRelation = relationType };
 
-                if (!(await _clanRelationService.Add<DTOClanRelation>("ClanRelation", relation)))
+                if (await _clanRelationService.Add<DTOClanRelation>("ClanRelation", relation) == null)
                     throw new Exception("Error while saving data set.");
 
             }

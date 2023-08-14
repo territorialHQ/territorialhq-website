@@ -1,20 +1,72 @@
 ﻿@model List<TerritorialHQ_Library.DTO.DTOCommunityEvent>
 
-<div class="clan-quickfacts-container">
-    <table class="tthq-table mb-0">
-        @foreach (var item in Model)
+<div class="events-overview-container pb-0 mb-20">
+    @{
+        var today = DateTime.Today;
+        var tomorrow = DateTime.Today.AddDays(1);
+
+        DateTime currentDate = DateTime.MinValue;
+
+    }
+    @if (Model.Count == 0)
+    {
+        <div class="events-overview-item">
+            No events planned
+        </div>
+    }
+    @foreach (var item in Model)
+    {
+        if (item.Start.Value.Date != currentDate)
         {
-            <tr>
-                <td class="news-content">
-                    <h4>@item.Title
-                        @if (item.Start <= DateTime.Now && item.End >= DateTime.Now)
-                        {
-                            <span class="label label-danger label-sm">STARTED</span>
-                        }
-                    </h4>
-                    <strong>@string.Format("{0:HH:mm}", item.Start.Value) GMT</strong> <span class="local-date" data-date="@string.Format("{0:yyyy-MM-ddTHH:mmZ}", item.Start.Value)">?</span>
-                </td>
-            </tr>
+            if (currentDate != DateTime.MinValue)
+            {
+                @Html.Raw("</div>")
+            }
+            <h3>
+                @if (item.Start.Value.Date == today)
+                {
+                    <span>Today</span>
+                }
+                else if (item.Start.Value.Date == tomorrow)
+                {
+                    <span>Tomorrow</span>
+                }
+                else
+                {
+                    @string.Format("{0:dddd, dd MMMM yyyy}", item.Start.Value)
+                }
+            </h3>
+            @Html.Raw("<div class=\"events-overview-section\">")
         }
-    </table>
+
+        <div class="events-overview-item">
+
+            <h4>
+                @if (item.Start <= DateTime.Now && item.End >= DateTime.Now)
+                {
+                    <span class="label label-danger label-sm">STARTED</span>
+                    <br />
+                }
+                <a href="/Calendar#@(item.Id + "-" + item.Start.Value.Ticks)">@item.Title</a>
+            </h4>
+            <p class="event-date">
+
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+
+                @string.Format("{0:HH:mm}", item.Start.Value) GMT <span class="local-date" data-date="@string.Format("{0:yyyy-MM-ddTHH:mmZ}", item.Start.Value)">?</span>
+            </p>
+        </div>
+
+        if (item.Start.Value.Date != currentDate)
+        {
+            currentDate = item.Start.Value.Date;
+        }
+    }
+    @if (Model.Count > 0)
+    {
+        @Html.Raw("</div>")
+    }
+    <a class="btn btn-primary btn-block mb-20" href="/Calendar">View all events</a>
 </div>
