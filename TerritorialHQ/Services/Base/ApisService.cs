@@ -36,7 +36,7 @@ namespace TerritorialHQ.Services.Base
 
         }
 
-        public async Task<List<T>?> GetAllAsync<T>(string endpoint) where T : IEntity
+        public virtual async Task<List<T>?> GetAllAsync<T>(string endpoint) where T : IEntity
         {
             AddTokenHeader();
 
@@ -51,7 +51,7 @@ namespace TerritorialHQ.Services.Base
             return result;
         }
 
-        public async Task<T?> FindAsync<T>(string endpoint, string id) where T : IEntity
+        public virtual async Task<T?> FindAsync<T>(string endpoint, string id) where T : IEntity
         {
             AddTokenHeader();
 
@@ -66,7 +66,7 @@ namespace TerritorialHQ.Services.Base
             return result;
         }
 
-        public async Task<bool> Add<T>(string endpoint, T item) where T : IEntity
+        public virtual async Task<bool> Add<T>(string endpoint, T item) where T : IEntity
         {
             AddTokenHeader();
 
@@ -78,7 +78,7 @@ namespace TerritorialHQ.Services.Base
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
         }
 
-        public async Task<bool> Update<T>(string endpoint, T item) where T : IEntity
+        public virtual async Task<bool> Update<T>(string endpoint, T item) where T : IEntity
         {
             AddTokenHeader();
 
@@ -95,7 +95,7 @@ namespace TerritorialHQ.Services.Base
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
         }
 
-        public async Task<bool> Remove<T>(string? endpoint, string? id) where T : IEntity
+        public virtual async Task<bool> Remove<T>(string? endpoint, string? id) where T : IEntity
         {
             AddTokenHeader();
 

@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.StaticFiles;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Drawing;
 using System.IO.Compression;
+using TerritorialHQ.Services;
 
 namespace TerritorialHQ.Areas.Administration.Pages.Logs
 {
@@ -12,58 +16,72 @@ namespace TerritorialHQ.Areas.Administration.Pages.Logs
     {
         private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _config;
+        private readonly LogFileService _logFileService;
 
-        public IndexModel(IWebHostEnvironment env, IConfiguration config)
+        public IndexModel(IWebHostEnvironment env, IConfiguration config, LogFileService logFileService)
         {
             _env = env;
             _config = config;
+            _logFileService = logFileService;
         }
 
-        public List<string> Files { get; set; } = new List<string>();
+        public List<string> TthqFiles { get; set; } = new List<string>();
+        public List<string> ApisFiles { get; set; } = new List<string>();
 
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
             var dir = _env.WebRootPath + "/Data/Logs";
-
             if (!System.IO.Directory.Exists(dir))
                 System.IO.Directory.CreateDirectory(dir);
 
             var files = System.IO.Directory.GetFiles(dir);
             foreach (var file in files)
             {
-                Files.Add(System.IO.Path.GetFileName(file));
+                TthqFiles.Add(System.IO.Path.GetFileName(file));
             }
+            TthqFiles = TthqFiles.OrderByDescending(o => o).ToList();
 
-            Files = Files.OrderByDescending(o => o).ToList();
+            ApisFiles = await _logFileService.GetFilesAsync() ?? new();
+            return Page();
         }
 
-        public IActionResult OnGetDbBackup()
+        public async Task<IActionResult> OnGetLocalDownload(string fileName)
         {
-            var db_server = ConfigurationBinder.GetValue<string>(_config, "DB_SERVER");
-            var db_port = ConfigurationBinder.GetValue<string>(_config, "DB_PORT") ?? "3306";
-            var db_cat = ConfigurationBinder.GetValue<string>(_config, "DB_CATALOGUE");
-            var db_user = ConfigurationBinder.GetValue<string>(_config, "DB_USER");
-            var db_pw = ConfigurationBinder.GetValue<string>(_config, "DB_PASSWORD");
+            var path = _env.WebRootPath + "/Data/Logs/" + fileName;
+            if (!System.IO.File.Exists(path))
+                return NotFound();
 
-            var connectionString = $"Server={db_server};Port={db_port};Database={db_cat};Uid={db_user};Pwd={db_pw};";
-
-            using var conn = new MySqlConnection(connectionString);
-            conn.Open();
-
-            var fileName = "territorialhq-db-" + DateTime.Now.Ticks.ToString() + ".sql";
-            var tempFilePath = System.IO.Path.GetTempPath() + fileName;
-
-            using (var cmd = new MySqlCommand())
+            try
             {
-                cmd.Connection = conn;
-                using var mb = new MySqlBackup(cmd);
-                mb.ExportToFile(tempFilePath);
+                var content = await System.IO.File.ReadAllBytesAsync(path);
+                new FileExtensionContentTypeProvider().TryGetContentType(fileName, out string contentType);
+
+                return File(content, contentType);
             }
+            catch
+            {
+                return NotFound();
+            }
+        }
 
-            var fileBytes = System.IO.File.ReadAllBytes(tempFilePath);
-            System.IO.File.Delete(tempFilePath);
+        public async Task<IActionResult> OnGetDownload(string fileName)
+        {
+            var fileBytes = await _logFileService.GetFile(fileName);
 
-            return File(fileBytes, "application/octet-stream", fileName);
+            if (fileBytes == null)
+                return NotFound();
+
+            return File(fileBytes, "text/plain");
+        }
+
+        public async Task<IActionResult> OnGetSqlBackup()
+        {
+            var fileBytes = await _logFileService.GetSqlBackup();
+
+            if (fileBytes == null)
+                return NotFound();
+
+            return File(fileBytes, "application/octet-stream", "tthq-backup-" + DateTime.Now.Ticks + ".sql");
         }
 
         public IActionResult OnGetFileBackup()

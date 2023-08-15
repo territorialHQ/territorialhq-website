@@ -6,26 +6,47 @@
 <h1>Log Files & Backups</h1>
 
 
-<div class="mb-3">
-    <a asp-page="./Index" asp-page-handler="FileBackup" class="btn-admin-secondary">Download File Backup</a>
-</div>
-
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>File</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var file in Model.Files)
-            {
+<div class="pure-g">
+    <div class="pure-u-1-1 pure-u-md-1-2">
+        <h3>TTHQ</h3>
+        <a asp-page-handler="FileBackup" class="btn btn-secondary mb-20">Download TTHQ File Backup</a>
+        <table class="admin-table">
+            <thead>
                 <tr>
-                    <td>
-                        <a href="~/Data/Logs/@file" target="_blank">@file</a>
-                    </td>
+                    <th>Log Files</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var file in Model.TthqFiles)
+                {
+                    <tr>
+                        <td>
+                            <a asp-page-handler="LocalDownload" asp-route-fileName="@file" target="_blank">@file</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="pure-u-1-1 pure-u-md-1-2">
+        <h3>APIS</h3>
+        <a asp-page-handler="SqlBackup" class="btn btn-secondary mb-20">Download SQL Database Backup</a>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Log Files</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var file in Model.ApisFiles)
+                {
+                    <tr>
+                        <td>
+                            <a asp-page-handler="Download" asp-route-fileName="@file" target="_blank">@file</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
