@@ -8,29 +8,27 @@ namespace TerritorialHQ.Services;
 
 public class NavigationEntryService : ApisDtoService
 {
-    private readonly IMemoryCache _memoryCache;
-    public NavigationEntryService(IHttpContextAccessor contextAccessor, IConfiguration configuration, MemoryCache memoryCache) : base(contextAccessor, configuration)
+    public NavigationEntryService(IHttpContextAccessor contextAccessor, IConfiguration configuration, IMemoryCache memoryCache) : base(contextAccessor, configuration, memoryCache)
     {
-        _memoryCache = memoryCache;
     }
 
     public override async Task<List<DTONavigationEntry>?> GetAllAsync<DTONavigationEntry>(string endpoint) 
     {
-        var model = new List<DTONavigationEntry>();
+        var navigationEntries = new List<DTONavigationEntry>();
         if (_memoryCache.TryGetValue("dtonavigationentry", out List<DTONavigationEntry>? cachedNavigationEntries))
         {
 
-            model = cachedNavigationEntries;
+            navigationEntries = cachedNavigationEntries;
         }
         else
         {
-            model = await base.GetAllAsync<DTONavigationEntry>(endpoint) ?? new List<DTONavigationEntry>();
-            if (model != null)
+            navigationEntries = await base.GetAllAsync<DTONavigationEntry>(endpoint);
+            if (navigationEntries != null)
             {
-                _memoryCache.Set<List<DTONavigationEntry>>("dtonavigationentry", model, new TimeSpan(0, 1, 0, 0));
+                _memoryCache.Set<List<DTONavigationEntry>>("dtonavigationentry", navigationEntries, new TimeSpan(0, 0, 20, 0));
             }
         }
 
-        return model ?? new List<DTONavigationEntry>();
+        return navigationEntries ?? new List<DTONavigationEntry>();
     }
 }

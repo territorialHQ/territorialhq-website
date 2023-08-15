@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Org.BouncyCastle.Asn1.X500;
 using TerritorialHQ.Services;
-using TerritorialHQ.ViewModels;
+using TerritorialHQ.Models.ViewModels;
 using TerritorialHQ_Library.DTO;
 
 namespace TerritorialHQ.Models.ViewComponents

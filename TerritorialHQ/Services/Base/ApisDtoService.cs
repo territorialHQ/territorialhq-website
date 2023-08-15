@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -11,13 +12,15 @@ namespace TerritorialHQ.Services.Base
     public class ApisDtoService
     {
         protected readonly HttpClient _httpClient;
+        protected readonly IMemoryCache _memoryCache;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public ApisDtoService(IHttpContextAccessor contextAccessor, IConfiguration configuration)
+        public ApisDtoService(IHttpContextAccessor contextAccessor, IConfiguration configuration, IMemoryCache memoryCache)
         {
             _contextAccessor = contextAccessor;
             _configuration = configuration;
+            _memoryCache = memoryCache;
 
 #if (DEBUG)
             // Deactivate any SSL certificate validation in development because it never fucking works 
@@ -35,8 +38,8 @@ namespace TerritorialHQ.Services.Base
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
-
         }
+
 
         public virtual async Task<List<T>?> GetAllAsync<T>(string endpoint) where T : IDto
         {
