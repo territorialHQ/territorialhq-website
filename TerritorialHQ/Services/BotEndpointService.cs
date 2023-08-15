@@ -32,22 +32,31 @@ public class BotEndpointService
         if (endpoint == null || playerId == null)
             return 0;
 
-        var request = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri(endpoint + (endpoint.EndsWith("/") ? "" : "/") + playerId),
-        };
 
-        var response = await _httpClient.SendAsync(request);
-
-        uint result = 0;
-        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        try
         {
-            var content = await response.Content.ReadAsStringAsync();
-            _ = uint.TryParse(content, out result);
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(endpoint + (endpoint.EndsWith("/") ? "" : "/") + playerId),
+            };
+
+            var response = await _httpClient.SendAsync(request);
+
+            uint result = 0;
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                _ = uint.TryParse(content, out result);
+            }
+
+            return result;
+
         }
-
-        return result;
+        catch
+        {
+            return 0;
+        }
     }
 
     public async Task<DiscordServerInfo> GetServerStats(string? invite)
