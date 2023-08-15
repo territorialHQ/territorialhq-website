@@ -38,7 +38,7 @@ namespace TerritorialHQ.Services.Base
 
         }
 
-        public async Task<List<T>?> GetAllAsync<T>(string endpoint) where T : IDto
+        public virtual async Task<List<T>?> GetAllAsync<T>(string endpoint) where T : IDto
         {
             AddTokenHeader();
 
