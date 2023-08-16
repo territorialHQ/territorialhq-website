@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
 using TerritorialHQ.Services;
-using TerritorialHQ.ViewModels;
 using TerritorialHQ_Library.DTO;
 
 namespace TerritorialHQ.Pages.Clans

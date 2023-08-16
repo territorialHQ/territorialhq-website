@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using System.Net.Http;
 using TerritorialHQ.Services.Base;
 using TerritorialHQ_Library.DTO;
@@ -8,7 +9,7 @@ namespace TerritorialHQ.Services;
 
 public class AppUserService : ApisDtoService
 {
-    public AppUserService(IHttpContextAccessor contextAccessor, IConfiguration configuration) : base(contextAccessor, configuration)
+    public AppUserService(IHttpContextAccessor contextAccessor, IConfiguration configuration, IMemoryCache memoryCache) : base(contextAccessor, configuration, memoryCache)
     {
     }
 

@@ -141,7 +141,7 @@
                             <p>@item.Teaser</p>
                             <p class="news-by">
                                 by <img style="width: 24px; height: 24px; border-radius: 12px; margin-left: 4px" class="avatar avatar-@(item.Author) discord-loader" src="~/img/loading_symbol.gif" data-id="@(item.Author)" />
-                                <span class="name-@(item.Author)">@item.Author</span>
+                                <a asp-page="/Profiles/Index" asp-route-id="@item.Author" class="name-@(item.Author)"> @item.Author </a>
                             </p>
                         </div>
                     </div>

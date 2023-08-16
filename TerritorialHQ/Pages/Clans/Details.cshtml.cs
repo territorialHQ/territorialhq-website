@@ -24,6 +24,7 @@ namespace TerritorialHQ.Pages.Clans
 
         public DTOClan? Clan { get; set; }
         public DiscordServerInfo? ServerInfo { get; set; }
+        public LeaderboardEntry leaderboardEntry { get; set; }
 
         public async Task<IActionResult> OnGet(string id)
         {
@@ -48,6 +49,11 @@ namespace TerritorialHQ.Pages.Clans
 
                 ServerInfo = await _botEndpointService.GetServerStats(inviteCode);
             }
+
+            decimal points = await _clanService.GetPointsAtRank(250);
+
+            leaderboardEntry = await _clanService.GetLeaderboardEntry(id) ?? new LeaderboardEntry();
+            leaderboardEntry.RankThreshold = points;
 
             return Page();
         }
