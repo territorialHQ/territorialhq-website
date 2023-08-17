@@ -49,7 +49,7 @@
         <tbody>
             @foreach (var item in Model.Clans!.OrderBy(o => o.Name))
             {
-                if (!User.IsInRole("Administrator") && !item.AssignedAppUsers.Any(u => u.Id == userId))
+                if (!User.IsInRole("Administrator") && !item.AssignedAppUsers.Any(u => u.AppUserId == userId))
                     continue;
 
                 <tr class="">

@@ -56,7 +56,7 @@ namespace TerritorialHQ.Services.Base
             return result;
         }
 
-        public async Task<T?> FindAsync<T>(string endpoint, string id) where T : IDto
+        public virtual async Task<T?> FindAsync<T>(string endpoint, string id) where T : IDto
         {
             AddTokenHeader();
 
@@ -72,7 +72,7 @@ namespace TerritorialHQ.Services.Base
         }
 
         [Authorize]
-        public async Task<string?> Add<T>(string endpoint, T item) where T : IDto
+        public virtual async Task<string?> Add<T>(string endpoint, T item) where T : IDto
         {
             AddTokenHeader();
 
@@ -85,7 +85,7 @@ namespace TerritorialHQ.Services.Base
         }
 
         [Authorize]
-        public async Task<bool> Update<T>(string endpoint, T item) where T : IDto
+        public virtual async Task<bool> Update<T>(string endpoint, T item) where T : IDto
         {
             AddTokenHeader();
 
@@ -103,7 +103,7 @@ namespace TerritorialHQ.Services.Base
         }
 
         [Authorize(Roles = "Administrator")]
-        public async Task<bool> Remove(string? endpoint, string? id)
+        public virtual async Task<bool> Remove(string? endpoint, string? id)
         {
             AddTokenHeader();
 

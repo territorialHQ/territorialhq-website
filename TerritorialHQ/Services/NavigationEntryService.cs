@@ -31,4 +31,22 @@ public class NavigationEntryService : ApisDtoService
 
         return navigationEntries ?? new List<DTONavigationEntry>();
     }
+
+    public override async Task<string?> Add<T>(string endpoint, T item)
+    {
+        _memoryCache.Remove("dtonavigationentry");
+        return await base.Add(endpoint, item);
+    }
+
+    public override async Task<bool> Update<T>(string endpoint, T item)
+    {
+        _memoryCache.Remove("dtonavigationentry");
+        return await base.Update(endpoint, item);
+    }
+
+    public override async Task<bool> Remove(string? endpoint, string? id)
+    {
+        _memoryCache.Remove("dtonavigationentry");
+        return await base.Remove(endpoint, id);
+    }
 }

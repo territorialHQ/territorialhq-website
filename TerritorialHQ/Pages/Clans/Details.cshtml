@@ -113,29 +113,29 @@ else
             <table class="tthq-table">
                 <tbody>
                     <tr>
-                        <td>Clan Tag</td>
+                        <td style="white-space: nowrap">Clan Tag</td>
                         <td>[@Model.Clan?.Tag]</td>
                     </tr>
                     <tr>
-                        <td>Ranking</td>
-                        <td>@Model.leaderboardEntry?.PointsDiplay (@Model.leaderboardEntry?.OrdinalRank)</td>
+                        <td style="white-space: nowrap">Ranking</td>
+                        <td>@Model.leaderboardEntry?.PointsDiplay points (@Model.leaderboardEntry?.OrdinalRank place)</td>
                     </tr>
                     <tr>
-                        <td>Founded</td>
+                        <td style="white-space: nowrap">Founded</td>
                         <td>@Model.Clan?.Foundation</td>
                     </tr>
                     <tr>
-                        <td>Founded by</td>
+                        <td style="white-space: nowrap">Founded by</td>
                         <td>@Model.Clan?.Founders</td>
                     </tr>
                     <tr>
-                        <td>Discord Server</td>
+                        <td style="white-space: nowrap">Discord Server</td>
                         <td><a href="@Model.Clan?.DiscordLink" target="_blank">@Model.Clan?.DiscordLink</a></td>
                     </tr>
                     @if (Model.ServerInfo != null)
                     {
                         <tr>
-                            <td>Server Info</td>
+                            <td style="white-space: nowrap">Server Info</td>
                             <td><span class="label label-sm label-dark"> @Model.ServerInfo.approximate_member_count members</span><span class="label label-sm label-primary">@Model.ServerInfo.approximate_presence_count online</span></td>
                         </tr>
                     }

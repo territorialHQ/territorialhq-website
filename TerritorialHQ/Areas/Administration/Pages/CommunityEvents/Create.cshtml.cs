@@ -12,7 +12,7 @@ using TerritorialHQ_Library.Entities;
 
 namespace TerritorialHQ.Areas.Administration.Pages.CommunityEvents
 {
-    [Authorize(Roles ="Administrator, Journalist, Editor")]
+    [Authorize(Roles ="Administrator, Staff")]
     public class CreateModel : PageModel
     {
         private readonly IMapper _mapper;

@@ -56,7 +56,16 @@
                         <div class="profile-grid-item" style="border-color: @(keyValuePair.Key.Color1 ?? "#3A5A82")50;
                             background-image: linear-gradient(120deg, @(keyValuePair.Key.Color1 ?? "#3A5A82")28 0%, @(keyValuePair.Key.Color2 ?? "#3A5A82")28 100%), url(/img/pattern2.png)">
                             <img src="@(string.IsNullOrEmpty(keyValuePair.Key.LogoFile) ? "/img/clan-placeholder.png" : "/Data/Uploads/System/" + keyValuePair.Key.LogoFile)">
-                            <strong>@keyValuePair.Key.Tag</strong><br />
+                            <strong>
+                                @if (@keyValuePair.Key.IsPublished)
+                                {
+                                    <a asp-page="/Clans/Details" asp-route-id="@keyValuePair.Key.Id">@keyValuePair.Key.Tag</a>
+                                }
+                                else
+                                {
+                                    @keyValuePair.Key.Tag
+                                }
+                            </strong><br />
                             @string.Format("{0:#,0}", @keyValuePair.Value)
                         </div>
                     }
