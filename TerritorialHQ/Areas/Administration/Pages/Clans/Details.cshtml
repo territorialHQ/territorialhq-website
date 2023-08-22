@@ -9,9 +9,20 @@
 
 @if (!string.IsNullOrEmpty(Model.Clan?.BannerFile))
 {
-    <div class="fader" style="background-image: url(/Data/Uploads/System/@Model.Clan?.BannerFile)"></div>
+    if (Model.Clan.BannerFile.EndsWith(".mp4"))
+    {
+        <div class="start-video">
+            <video autoplay muted loop>
+                <source src="/Data/Uploads/System/@Model.Clan?.BannerFile" type="video/mp4">
+            </video>
+        </div>
+    }
+    else
+    {
+        <div class="fader" style="background-image: url(/Data/Uploads/System/@Model.Clan?.BannerFile)"></div>
+    }
 
-<h1>@Model.Clan?.Name</h1>
+    <h1>@Model.Clan?.Name</h1>
     <div class="fader-soft">
     </div>
 

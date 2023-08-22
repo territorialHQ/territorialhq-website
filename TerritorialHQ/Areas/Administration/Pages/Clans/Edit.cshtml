@@ -71,6 +71,7 @@
                         <img src="/Data/Uploads/System/@Model.LogoFile" style="max-height: 150px" class="block mb-2" /><br />
                         }
                         <input type="file" name="fileLogo" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
+                        <span asp-validation-for="LogoFile" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label><input type="checkbox" asp-for="RemoveLogo" /> Remove logo image on save</label>
@@ -82,9 +83,20 @@
                         <label asp-for="BannerFile" class="control-label"></label>
                         @if (!string.IsNullOrEmpty(Model.BannerFile))
                         {
-                        <img src="/Data/Uploads/System/@Model.BannerFile" style="max-height: 150px" class="block mb-2" /><br />
+                            if(Model.BannerFile.EndsWith(".mp4"))
+                            {
+                                <video autoplay muted loop style="max-height: 150px;">
+                                    <source src="/Data/Uploads/System/@Model.BannerFile" type="video/mp4">
+                                </video>
+                            }
+                            else
+                            {
+                                <img src="/Data/Uploads/System/@Model.BannerFile" style="max-height: 150px" class="block mb-2" />
+                            }
+                            <br />
                         }
-                        <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png" class="text-slate-400" />
+                        <input type="file" name="fileBanner" accept=".jpg,.jpeg,.gif,.png, .mp4" class="text-slate-400" />
+                        <span asp-validation-for="BannerFile" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label><input type="checkbox" asp-for="RemoveBanner" /> Remove banner image on save</label>

@@ -55,10 +55,10 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
         [Display(Name = "Custom Bot HttpGet Endpoint")]
         public string? BotEndpoint { get; set; }
         [BindProperty]
-        [Display(Name = "Logo file")]
+        [Display(Name = "Logo file (1 MB max)")]
         public string? LogoFile { get; set; }
         [BindProperty]
-        [Display(Name = "Banner file")]
+        [Display(Name = "Banner file / video (5 MB max)")]
         public string? BannerFile { get; set; }
         [BindProperty]
         [Display(Name = "Discord server link")]
@@ -91,6 +91,11 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
         public async Task<IActionResult> OnPostAsync(IFormFile? fileLogo, IFormFile? fileBanner)
         {
+            if (fileLogo != null && fileLogo.Length > 1048576)
+                ModelState.AddModelError("LogoFile", "Logo file too large (max. 1MB)");
+            if (fileBanner != null && fileBanner.Length > 5242880)
+                ModelState.AddModelError("BannerFile", "Banner file too large (max. 5MB)");
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -106,7 +111,20 @@ namespace TerritorialHQ.Areas.Administration.Pages.Clans
 
             if (fileBanner != null)
             {
-                item.BannerFile = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerFile, false);
+                if (fileBanner.FileName.EndsWith(".mp4"))
+                {
+                    var filename = Guid.NewGuid().ToString() + ".mp4";
+                    string filePath = _env.WebRootPath + "/Data/Uploads/System/" + filename;
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await fileBanner.CopyToAsync(fileStream);
+                    }
+                    item.BannerFile = filename;
+                }
+                else
+                {
+                    item.BannerFile = ImageHelper.ProcessImage(fileBanner, _env.WebRootPath + "/Data/Uploads/System/", true, item.BannerFile, false);
+                }
             }
 
             if (await _service.Add<DTOClan>("Clan", item) == null)
