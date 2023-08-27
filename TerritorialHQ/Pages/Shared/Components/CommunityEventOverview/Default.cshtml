@@ -44,18 +44,28 @@
             <h4>
                 @if (item.Start <= DateTime.Now && item.End >= DateTime.Now)
                 {
-                    <span class="label label-danger label-sm">STARTED</span>
+                    <span class="label label-danger label-sm">
+                        STARTED
+                    </span>
                     <br />
                 }
                 <a href="/Calendar#@(item.Id + "-" + item.Start.Value.Ticks)">@item.Title</a>
             </h4>
             <p class="event-date">
 
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-
-                @string.Format("{0:HH:mm}", item.Start.Value) GMT <span class="local-date" data-date="@string.Format("{0:yyyy-MM-ddTHH:mmZ}", item.Start.Value)">?</span>
+                
+                @if (item.Start.Value < DateTime.Today)
+                {
+                    <span>Ends @string.Format("{0:d}", item.End.Value)</span>
+                    <span>@string.Format("{0:HH:mm}", item.End.Value) GMT</span> <span class="local-date" data-date="@string.Format("{0:yyyy-MM-ddTHH:mmZ}", item.End.Value)">?</span>
+                }
+                else
+                {
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>@string.Format("{0:HH:mm}", item.Start.Value) GMT</span> <span class="local-date" data-date="@string.Format("{0:yyyy-MM-ddTHH:mmZ}", item.Start.Value)">?</span>
+                }
             </p>
         </div>
 
